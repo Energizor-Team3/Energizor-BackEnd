@@ -1,8 +1,8 @@
 package com.energizor.restapi.reservation.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,18 +11,19 @@ import lombok.ToString;
 import java.sql.Time;
 
 @Entity
-@Table(name = "meetingtime")
+@Table(name = "reservation_time")
 @AllArgsConstructor
 @Getter
 @ToString
-public class MeetingTime {
-    @Id
-    @Column(name = "meet_time")
-    private int meet_time;
-    @Column(name = "time")
-    private Time time;
+public class ReservationTimeFK {
 
-    public MeetingTime() {
+    @EmbeddedId
+    private ReservationTimePK id;
 
+    @Column(name = "meet_time", insertable=false, updatable=false)
+    private Time meet_time;
+
+    public ReservationTimeFK() {
     }
 }
+

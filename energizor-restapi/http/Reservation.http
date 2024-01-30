@@ -1,0 +1,7 @@
+
+GET http://localhost:8031/reservation/attendee/1
+Accept: application/json
+Content-Type: application/json
+
+
+

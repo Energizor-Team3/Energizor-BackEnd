@@ -10,6 +10,6 @@ import lombok.*;
 public class AttendeeDTO {
     private int att_code;
     private int reservation_code;
-    private int user_id;
+    private int user_code;
 
 }
