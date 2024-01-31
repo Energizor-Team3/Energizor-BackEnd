@@ -1,1 +1,10 @@
 ### 로그인
+POST http://localhost:8031/auth/login
+Content-Type: application/json
+Accept: */*
+Access-Control-Allow-Origin: *
+
+{
+  "userId": "200302001",
+  "userPw": "1234"
+}
