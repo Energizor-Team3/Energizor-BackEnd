@@ -14,21 +14,21 @@ public class Calendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cal_no")
-    private int cal_no;
+    private int calNo;
 
     @Column(name = "cal_type", length = 255, nullable = false)
-    private String cal_type;
+    private String calType;
 
     @Column(name = "cal_color", length = 255, nullable = false)
-    private String cal_color;
+    private String calColor;
 
     @Column(name = "cal_name", length = 255, nullable = false)
-    private String cal_name;
+    private String calName;
 
     protected Calendar() {}
 
 
     public Calendar build() {
-        return new Calendar(cal_no, cal_type,cal_color,cal_name);
+        return new Calendar(calNo,calType,calColor,calName);
     }
 }

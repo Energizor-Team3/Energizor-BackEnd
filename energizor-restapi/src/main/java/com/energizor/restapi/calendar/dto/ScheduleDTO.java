@@ -10,12 +10,12 @@ import java.util.Date;
 @ToString
 
 public class ScheduleDTO {
-    private int sch_no;
-    private String sch_title;
-    private String sch_detail;
-    private Date sch_sdate;
-    private Date sch_edate;
-    private String sch_allday;
-    private String sch_local;
+    private int schNo;
+    private String schTitle;
+    private String schDetail;
+    private Date schStartDate;
+    private Date schEndDate;
+    private String schAllDay;
+    private String schLocal;
 
 }

@@ -9,9 +9,9 @@ import lombok.*;
 @ToString
 public class CalendarDTO {
 
-    private int cal_no;
-    private String cal_type;
-    private String cal_color;
-    private String cal_name;
+    private int calNo;
+    private String calType;
+    private String calColor;
+    private String calName;
 
 }

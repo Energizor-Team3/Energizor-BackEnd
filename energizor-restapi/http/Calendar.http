@@ -1,0 +1,19 @@
+
+###캘린더 목록 조회
+GET http://localhost:8031/calendar/calendar/1
+Accept: */*
+Content-Type: application/json
+
+###전체 목록 조회
+GET http://localhost:8031/calendar/calendars
+Accept: */*
+Content-Type: application/json
+
+###캘린더 타입으로 조회
+GET http://localhost:8031/calendar/calendarByType/개인캘린더
+Accept: */*
+Content-Type: application/json
+
+
+
+
