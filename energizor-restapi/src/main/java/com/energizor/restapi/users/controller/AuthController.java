@@ -23,7 +23,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO userDTO){
         // 멤버의 기본 상태값 설정
-//        userDTO.setMemberStatus("Y");
+        userDTO.setUserStatus("Y");
         return ResponseEntity
                 .ok()
                 .body(new ResponseDTO(HttpStatus.CREATED, "회원가입 성공", authService.signup(userDTO)));

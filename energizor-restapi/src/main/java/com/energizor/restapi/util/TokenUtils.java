@@ -47,7 +47,7 @@ public class TokenUtils {
     }
 
     /**
-     * 유요한 토큰인지 확인하는 메서드
+     * 유효한 토큰인지 확인하는 메서드
      * @param token : 토큰
      * @return boolean : 유효 여부
      * @throws ExpiredJwtException, {@link JwtException} {@link NullPointerException}
@@ -123,7 +123,7 @@ public class TokenUtils {
     private static Map<String, Object> createClaims(UserDTO user){
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("userrName", user.getUsername());
+        claims.put("userName", user.getUsername());
         claims.put("userRole", user.getUserRole());
         claims.put("email", user.getEmail());
 

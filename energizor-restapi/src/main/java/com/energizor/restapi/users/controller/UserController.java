@@ -21,7 +21,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<ResponseDTO> selectMyUserInfo(@PathVariable String userId){
 
         log.info("[MemberController]  selectMyMemberInfo   Start =============== ");

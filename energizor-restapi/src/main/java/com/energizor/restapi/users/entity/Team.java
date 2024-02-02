@@ -22,7 +22,7 @@ public class Team {
 
 
     @JoinColumn(name = "dept_code")
-    @OneToOne
+    @ManyToOne
     private Dept dept;
 
     @Column(name = "team_name", length = 20, nullable = false)

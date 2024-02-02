@@ -16,41 +16,61 @@ import java.util.List;
 public class User {
 
     @Id
-    @Column(name = "user_code")
+    @Column(name = "user_code", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userCode;
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private String userId;
 
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "user_pw")
+    @Column(name = "user_pw", nullable = false)
     private String userPw;
 
-    @Column(name = "user_rank")
+    @Column(name = "user_rank", nullable = false)
     private String userRank;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "ent_date")
+    @Column(name = "ent_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date entDate;
 
-    @Column(name = "resign_date")
+    @Column(name = "resign_date", columnDefinition = "DATE DEFAULT '9999-12-31'", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date resignDate;
 
-    @Column(name = "user_status")
+    @Column(name = "user_status", nullable = false)
     private String userStatus;
 
     @OneToMany
     @JoinColumn(name = "user_code")
     private List<UserRole> userRole;
 
+    @ManyToOne
+    @JoinColumn(name = "team_code")
+    private Team team;
+
+    @OneToOne
+    @JoinColumn(name = "off_code")
+    private Dayoff dayoff;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.resignDate == null) {
+            this.resignDate = java.sql.Date.valueOf("9999-12-31");
+        }
+    }
+
+
     public User() {
+        this.resignDate = java.sql.Date.valueOf("9999-12-31");
     }
 
     public User userCode(int userCode) {
@@ -108,8 +128,18 @@ public class User {
         return this;
     }
 
+    public User team(Team team) {
+        this.team = team;
+        return this;
+    }
+
+    public User dayoff(Dayoff dayoff) {
+        this.dayoff = dayoff;
+        return this;
+    }
+
     public User build() {
-        return new User(userCode, userId, userName, userPw, userRank, email, phone, entDate, resignDate, userStatus, userRole);
+        return new User(userCode, userId, userName, userPw, userRank, email, phone, entDate, resignDate, userStatus, userRole, team, dayoff);
     }
 
 }

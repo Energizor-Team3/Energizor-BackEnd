@@ -28,7 +28,9 @@ public class UserDTO implements UserDetails {
     private String userStatus;
     private List<UserRoleDTO> userRole;
     private Collection<GrantedAuthority> authorities;
-    // 부서, 팀, 연차
+
+    private int teamCode;
+    private int offCode;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
