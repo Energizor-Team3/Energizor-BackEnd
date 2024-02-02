@@ -1,1 +1,26 @@
 ### 전자결재
+GET http://localhost:8031/approval/document
+Content-Type: application/json
+Accept: */*
+
+### 기안양식들
+
+### 일반기안
+GET http://localhost:8031/approval/generalDraft
+Content-Type: application/json
+Accept: */*
+
+### 교육기안
+GET http://localhost:8031/approval/education
+Content-Type: application/json
+Accept: */*
+
+### 출장기안
+GET http://localhost:8031/approval/businessTrip
+Content-Type: application/json
+Accept: */*
+
+### 휴가기안
+GET http://localhost:8031/approval/dayOffApply
+Content-Type: application/json
+Accept: */*

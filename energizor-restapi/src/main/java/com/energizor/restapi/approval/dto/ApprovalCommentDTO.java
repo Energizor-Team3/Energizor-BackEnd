@@ -4,6 +4,7 @@ import com.energizor.restapi.users.dto.UserDTO;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +15,8 @@ public class ApprovalCommentDTO {
     private int acCode;
     private String acContent;
     private Date acDate;
-    private int documentCode;
-    private int userId;
+    private List<DocumentDTO> documentDTO;
+    private List<UserDTO> userDTO;
+
 
 }
