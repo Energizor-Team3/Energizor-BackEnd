@@ -1,11 +1,11 @@
 package com.energizor.restapi.calendar.entity;
 
+import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @Table(name="CAL_PARTICIPANT")
-@IdClass(CalendarParticipantPK.class)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -13,15 +13,7 @@ import lombok.*;
 @ToString
 public class CalendarParticipant {
 
-//
-//    @Id
-//    @ManyToOne
-//    @JoinColumn(name = "user_code")
-//    private User  user;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "cal_no")
-    private Calendar calendar;
+    @EmbeddedId
+    private CalendarParticipantPK calParticipant;
 
 }

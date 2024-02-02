@@ -3,6 +3,7 @@ package com.energizor.restapi.calendar.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -10,6 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
+@Setter
 public class Calendar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,5 @@ public class Calendar {
     protected Calendar() {}
 
 
-    public Calendar build() {
-        return new Calendar(calNo,calType,calColor,calName);
-    }
+
 }

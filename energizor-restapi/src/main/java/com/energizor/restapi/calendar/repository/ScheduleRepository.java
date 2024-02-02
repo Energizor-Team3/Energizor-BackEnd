@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Calendar, Integer> {
     List<Calendar> findBycalType(String calType);
+
+
 }
