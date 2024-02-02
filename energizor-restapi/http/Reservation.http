@@ -1,17 +1,17 @@
 ### 예약내역 전체조회
 GET http://localhost:8031/reservation/all
-Accept: application/json
-Content-Type: /*/
+Content-Type: application/json
+Accept: */*
 
 ### 예약내역 상세조회
 GET http://localhost:8031/reservation/2
-Accept: application/json
-Content-Type: /*/
+Content-Type: application/json
+Accept: */*
 
 ### 예약내역 추가
 POST http://localhost:8031/reservation/create
-Accept: */*
 Content-Type: application/json
+Accept: */*
 
 {
   "reservationDate": "2024-02-02T00:00:00",
@@ -19,5 +19,24 @@ Content-Type: application/json
   "userCode": 3,
   "meetCode": 3
 }
+
+### 예약내역 수정
+PUT http://localhost:8031/reservation/modify
+Content-Type: application/json
+Accept: */*
+
+{
+  "reservationCode": 1,
+  "reservationDate": "1996-02-02T13:00:00",
+  "reservationContent": "어됐다",
+  "userCode": 3,
+  "meetCode": 4
+}
+
+### 예약내역 삭제
+DELETE http://localhost:8031/reservation/delete/13
+Content-Type: application/json
+Accept: */*
+
 
 

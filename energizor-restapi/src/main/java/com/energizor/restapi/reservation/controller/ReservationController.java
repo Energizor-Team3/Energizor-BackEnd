@@ -57,4 +57,28 @@ public class ReservationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", reservationService.createReservation(reservationDTO)));
     }
 
+    //예약내역 수정
+    @PutMapping("/modify")
+    public ResponseEntity<ResponseDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) {
+        String result = reservationService.updateReservation(reservationDTO);
+        if (result.equals("Reservation updated successfully")) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 수정 성공", null));
+        } else {
+            // 예약이 실패한 경우를 처리할 수 있도록 적절한 응답을 반환합니다.
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "예약 수정 실패", null));
+        }
+    }
+    // 예약내역 삭제
+    @DeleteMapping("/delete/{reservation_code}")
+    public ResponseEntity<ResponseDTO> deleteReservation(@PathVariable int reservation_code) {
+        String result = reservationService.deleteReservation(reservation_code);
+        if (result.equals("Reservation delete successfully")) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 삭제 성공", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "예약이 존재하지 않습니다", null));
+        }
+    }
+
 }
+
+

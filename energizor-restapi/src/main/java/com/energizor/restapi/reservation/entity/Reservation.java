@@ -31,4 +31,25 @@ public class Reservation {
     public Reservation() {
 
     }
+
+    public Reservation(int reservationCode, Date reservationDate, String reservationContent) {
+    }
+
+    public Reservation reservationCode(int reservationCode){
+        this.reservationCode = reservationCode;
+        return this;
+    }
+    public Reservation reservationDate(Date reservationDate){
+        this.reservationDate = reservationDate;
+        return this;
+    }
+    public Reservation reservationContent(String reservationContent){
+        this.reservationContent = reservationContent;
+        return this;
+    }
+
+    public Reservation build() {
+        return new Reservation(reservationCode,reservationDate,reservationContent );
+    }
+
 }

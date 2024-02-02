@@ -6,8 +6,6 @@ import com.energizor.restapi.reservation.entity.Attendee;
 import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.repository.AttendeeRepository;
 import com.energizor.restapi.reservation.repository.ReservationRepository;
-import com.energizor.restapi.users.dto.UserDTO;
-import com.energizor.restapi.users.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -33,13 +31,13 @@ public class ReservationService {
         this.attendeeRepository = attendeeRepository;
         this.modelMapper = modelMapper;
     }
-
+    //참석자 코드로 조회
     public AttendeeDTO selectAttendee(int att_code){
         Reservation attendee = reservationRepository.findById(att_code).get();
         AttendeeDTO attendeeDTO = modelMapper.map(attendee, AttendeeDTO.class);
         return attendeeDTO;
     }
-
+    //참석자 전체 조회
     public List<AttendeeDTO> selectAllAttendees() {
         List<Attendee> allReservations = attendeeRepository.findAll();
         return allReservations.stream()
@@ -69,4 +67,39 @@ public class ReservationService {
         return "등록성공";
     }
 
+    //예약 수정
+    @Transactional
+    public String updateReservation(ReservationDTO reservationDTO) {
+
+        log.info("[ReservationService] updateReservation Start ===================================");
+        log.info("[ReservationService] ReservationDTO : " + reservationDTO);
+
+        Reservation reservation = reservationRepository.findById(reservationDTO.getReservationCode()).get();
+        /* update를 위한 엔티티 값 수정 */
+        reservation = reservation.reservationCode(reservationDTO.getReservationCode())
+                .reservationDate(reservationDTO.getReservationDate())
+                .reservationContent(reservationDTO.getReservationContent()).build();
+
+        return "Reservation updated successfully";
+    }
+    //예약내역삭제
+    @Transactional
+    public String deleteReservation(int reservationCode) {
+        log.info("[ReservationService] deleteReservation Start ===================================");
+        log.info("[ReservationService] Reservation Code : " + reservationCode);
+
+        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationCode);
+        if (optionalReservation.isPresent()) {
+            reservationRepository.delete(optionalReservation.get());
+            return "Reservation delete successfully";
+        } else {
+            return "Reservation not found";
+        }
+    }
+
+
+
 }
+
+
+
