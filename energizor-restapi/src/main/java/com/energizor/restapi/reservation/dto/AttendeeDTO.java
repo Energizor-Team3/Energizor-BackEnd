@@ -8,8 +8,8 @@ import lombok.*;
 @Setter
 @ToString
 public class AttendeeDTO {
-    private int att_code;
-    private int reservation_code;
-    private int user_code;
+    private int attCode;
+    private int reservationCode;
+    private int userCode;
 
 }

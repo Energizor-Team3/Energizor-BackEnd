@@ -1,7 +1,23 @@
-
-GET http://localhost:8031/reservation/attendee/1
+### 예약내역 전체조회
+GET http://localhost:8031/reservation/all
 Accept: application/json
+Content-Type: /*/
+
+### 예약내역 상세조회
+GET http://localhost:8031/reservation/2
+Accept: application/json
+Content-Type: /*/
+
+### 예약내역 추가
+POST http://localhost:8031/reservation/create
+Accept: */*
 Content-Type: application/json
 
+{
+  "reservationDate": "2024-02-02T00:00:00",
+  "reservationContent": "Conference Room Booking",
+  "userCode": 3,
+  "meetCode": 3
+}
 
 

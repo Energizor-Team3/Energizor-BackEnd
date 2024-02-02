@@ -16,9 +16,9 @@ import lombok.ToString;
 public class Meet {
     @Id
     @Column(name = "meet_code")
-    private int meet_code;
+    private int meetCode;
     @Column(name = "meet_name")
-    private String meet_name;
+    private String meetName;
 
     public Meet() {
 

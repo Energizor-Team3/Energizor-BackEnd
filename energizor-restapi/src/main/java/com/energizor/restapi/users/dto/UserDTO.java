@@ -2,13 +2,15 @@ package com.energizor.restapi.users.dto;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
-
+@ToString
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
     private int userCode;
     private String userId;
@@ -20,5 +22,5 @@ public class UserDTO {
     private Date entDate;
     private Date resignDate;
 
-    public UserDTO() {}
+
 }

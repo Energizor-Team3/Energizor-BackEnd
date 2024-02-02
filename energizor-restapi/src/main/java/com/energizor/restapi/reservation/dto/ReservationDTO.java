@@ -10,11 +10,11 @@ import java.util.Date;
 @ToString
 public class ReservationDTO {
 
-    private int reservation_code;
-    private Date reservation_date;
-    private String reservation_content;
-    private int user_code;
-    private int meet_code;
+    private int reservationCode;
+    private Date reservationDate;
+    private String reservationContent;
+    private int userCode;
+    private int meetCode;
 
 
 

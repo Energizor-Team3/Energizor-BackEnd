@@ -16,13 +16,13 @@ public class Reservation {
 
     @Id
     @Column(name = "reservation_code")
-    private int reservation_code;
+    private int reservationCode;
     @Column(name = "reservation_date")
-    private Date reservation_date;
+    private Date reservationDate;
     @Column(name = "reservation_content")
-    private String reservation_content;
+    private String reservationContent;
     @ManyToOne
-    @JoinColumn(name = "user_code", referencedColumnName = "user_code", nullable = false)
+    @JoinColumn(name = "user_code")
     private User user;
     @ManyToOne
     @JoinColumn(name = "meet_code", referencedColumnName = "meet_code", nullable = false)

@@ -21,7 +21,7 @@ public class ReservationTimeFK {
     private ReservationTimePK id;
 
     @Column(name = "meet_time", insertable=false, updatable=false)
-    private Time meet_time;
+    private Time meetTime;
 
     public ReservationTimeFK() {
     }

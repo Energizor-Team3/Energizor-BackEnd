@@ -18,9 +18,9 @@ import java.sql.Time;
 public class ReservationTimePK implements Serializable {
 
     @Column(name = "reservation_code")
-    private int reservation_code;
+    private int reservationCode;
 
     @Column(name = "meet_time")
-    private Time meet_time;
+    private Time meetTime;
 
 }

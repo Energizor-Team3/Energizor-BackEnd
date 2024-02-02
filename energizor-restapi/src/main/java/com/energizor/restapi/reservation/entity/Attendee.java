@@ -15,7 +15,7 @@ public class Attendee {
     @Id
     @Column(name = "att_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int att_code;
+    private int attCode;
     // reservation_code를 외래 키로 매핑
     @ManyToOne
     @JoinColumn(name = "reservation_code", referencedColumnName = "reservation_code", nullable = false)

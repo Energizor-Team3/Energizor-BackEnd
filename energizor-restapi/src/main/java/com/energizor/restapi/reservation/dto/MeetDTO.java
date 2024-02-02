@@ -8,6 +8,6 @@ import lombok.*;
 @Setter
 @ToString
 public class MeetDTO {
-    private int meet_code;
-    private String meet_name;
+    private int meetCode;
+    private String meetName;
 }

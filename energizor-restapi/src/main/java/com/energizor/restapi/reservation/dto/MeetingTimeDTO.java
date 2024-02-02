@@ -10,6 +10,6 @@ import java.sql.Time;
 @Setter
 @ToString
 public class MeetingTimeDTO {
-    private int meet_time;
+    private int meetTime;
     private Time time; //localTime? String? Time?
 }

@@ -18,7 +18,7 @@ import java.sql.Time;
 public class MeetingTime {
     @Id
     @Column(name = "meet_time")
-    private int meet_time;
+    private int meetTime;
     @Column(name = "time")
     private Time time;
 
