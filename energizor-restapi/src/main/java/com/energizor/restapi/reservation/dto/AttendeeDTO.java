@@ -11,7 +11,7 @@ import lombok.*;
 @ToString
 public class AttendeeDTO {
     private int attCode;
-    private Reservation reservationCode;
-    private User userCode;
+    private int reservationCode;
+    private int userCode;
 
 }

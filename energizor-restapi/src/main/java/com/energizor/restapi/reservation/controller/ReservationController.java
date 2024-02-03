@@ -4,6 +4,7 @@ import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.reservation.dto.AttendeeDTO;
 import com.energizor.restapi.reservation.dto.ReservationDTO;
 import com.energizor.restapi.reservation.entity.Attendee;
+import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.service.ReservationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -72,14 +73,23 @@ public class ReservationController {
 
     //참석자 예약코드로 조회
     @GetMapping("/attendee/{reservation_code}")
-    public ResponseEntity<ResponseDTO> attendeeByReservationCode(@PathVariable int reservation_code){
-        AttendeeDTO attendeeDTO = reservationService.attendeeByReservationCode(reservation_code);
-        if (attendeeDTO != null){
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "예약 코드를 활용한 참석자 조회 성공", attendeeDTO));
-        }else {
+    public ResponseEntity<ResponseDTO> attendeeByReservationCode(@PathVariable("reservation_code") int reservation_code) {
+        List<AttendeeDTO> attendeeDTOs = reservationService.attendeesByReservationCode(reservation_code);
+        if (!attendeeDTOs.isEmpty()) {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "예약 코드를 활용한 참석자 조회 성공", attendeeDTOs));
+        } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "해당 예약 코드에 대한 정보를 찾을 수 없습니다.", null));
         }
     }
+
+    //참석자 추가
+    @PostMapping("/attendee/create")
+    public ResponseEntity<ResponseDTO> createAttendee(@RequestBody AttendeeDTO attendeeDTO){
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "참석자 추가 성공", reservationService.createAttendee(attendeeDTO)));
+    }
+
+    //참석자 수정
+
 
 }
 

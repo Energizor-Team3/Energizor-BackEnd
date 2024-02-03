@@ -26,15 +26,15 @@ Content-Type: application/json
 Accept: */*
 
 {
-  "reservationCode": 3,
+  "reservationCode": 4,
   "reservationDate": "1996-04-24",
   "reservationContent": "어됐다",
-  "userCode": 1,
-  "meetCode": 1
+  "userCode": 2,
+  "meetCode": 2
 }
 
 ### 예약내역 삭제
-DELETE http://localhost:8031/reservation/delete/
+DELETE http://localhost:8031/reservation/delete/5
 Content-Type: application/json
 Accept: */*
 
@@ -44,3 +44,15 @@ Content-Type: application/json
 Accept: */*
 
 
+### 참석자 추가
+POST http://localhost:8031/reservation/attendee/create
+Content-Type: application/json
+Accept: */*
+
+{
+  "attCode": 4,
+  "reservationCode": 1,
+  "userCode": 19
+}
+
+### 참석자 수정

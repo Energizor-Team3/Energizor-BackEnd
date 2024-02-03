@@ -32,7 +32,7 @@ public class ReservationService {
         this.modelMapper = modelMapper;
     }
 
-    //전체 예약내역 조회
+    //예약내역 전체조회
     public List<ReservationDTO> selectAllReservations() {
         List<Reservation> allReservations = reservationRepository.findAll();
         return allReservations.stream()
@@ -46,7 +46,7 @@ public class ReservationService {
         return optionalReservation.map(reservation -> modelMapper.map(reservation, ReservationDTO.class)).orElse(null);
     }
 
-    //예약 추가
+    //예약내역 추가
     @Transactional
     public String createReservation(ReservationDTO reservationDTO) {
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
@@ -54,7 +54,7 @@ public class ReservationService {
         return "등록성공";
     }
 
-    //예약 수정
+    //예약내역 수정
     @Transactional
     public String updateReservation(ReservationDTO reservationDTO) {
 
@@ -65,11 +65,12 @@ public class ReservationService {
         /* update를 위한 엔티티 값 수정 */
         reservation = reservation.reservationCode(reservationDTO.getReservationCode())
                 .reservationDate(reservationDTO.getReservationDate())
-                .reservationContent(reservationDTO.getReservationContent()).build();
+                .reservationContent(reservationDTO.getReservationContent())
+                .build();
 
         return "Reservation updated successfully";
     }
-    //예약내역삭제
+    //예약내역 삭제
     @Transactional
     public String deleteReservation(int reservationCode) {
         log.info("[ReservationService] deleteReservation Start ===================================");
@@ -85,10 +86,24 @@ public class ReservationService {
     }
 
     //참석자 예약코드로 조회
-    public AttendeeDTO attendeeByReservationCode(int reservationCode) {
-        Optional<Attendee> optionalAttendee = attendeeRepository.findById(reservationCode);
-        return optionalAttendee.map(attendee -> modelMapper.map(attendee, AttendeeDTO.class)).orElse(null);
+    public List<AttendeeDTO> attendeesByReservationCode(int reservationCode) {
+        List<Attendee> attendees = attendeeRepository.findByReservationReservationCode(reservationCode);
+        return attendees.stream()
+                .map(attendee -> modelMapper.map(attendee, AttendeeDTO.class))
+                .collect(Collectors.toList());
     }
+
+    //참석자 추가
+    @Transactional
+    public Object createAttendee(AttendeeDTO attendeeDTO) {
+        Attendee attendee = modelMapper.map(attendeeDTO, Attendee.class);
+        attendeeRepository.save(attendee);
+        return "참석자 추가 성공";
+    }
+
+    //참석자 수정
+
+
 
 
 
