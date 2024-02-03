@@ -31,19 +31,6 @@ public class ReservationService {
         this.attendeeRepository = attendeeRepository;
         this.modelMapper = modelMapper;
     }
-    //참석자 코드로 조회
-    public AttendeeDTO selectAttendee(int att_code){
-        Reservation attendee = reservationRepository.findById(att_code).get();
-        AttendeeDTO attendeeDTO = modelMapper.map(attendee, AttendeeDTO.class);
-        return attendeeDTO;
-    }
-    //참석자 전체 조회
-    public List<AttendeeDTO> selectAllAttendees() {
-        List<Attendee> allReservations = attendeeRepository.findAll();
-        return allReservations.stream()
-                .map(reservation -> modelMapper.map(reservation, AttendeeDTO.class))
-                .collect(Collectors.toList());
-    }
 
     //전체 예약내역 조회
     public List<ReservationDTO> selectAllReservations() {
@@ -96,6 +83,14 @@ public class ReservationService {
             return "Reservation not found";
         }
     }
+
+    //참석자 예약코드로 조회
+    public AttendeeDTO attendeeByReservationCode(int reservationCode) {
+        Optional<Attendee> optionalAttendee = attendeeRepository.findById(reservationCode);
+        return optionalAttendee.map(attendee -> modelMapper.map(attendee, AttendeeDTO.class)).orElse(null);
+    }
+
+
 
 
 

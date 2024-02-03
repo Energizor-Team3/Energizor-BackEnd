@@ -16,15 +16,15 @@ public class Attendee {
     @Column(name = "att_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int attCode;
-    // reservation_code를 외래 키로 매핑
-    @ManyToOne
-    @JoinColumn(name = "reservation_code", referencedColumnName = "reservation_code", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "reservation_code", referencedColumnName = "reservation_code")
     private Reservation reservation;
 
-    // user_code를 외래 키로 매핑
-    @ManyToOne
-    @JoinColumn(name = "user_code", referencedColumnName = "user_code", nullable = false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_code", referencedColumnName = "user_code") // 수정된 부분
     private User user;
+
 
     public Attendee() {}
 
