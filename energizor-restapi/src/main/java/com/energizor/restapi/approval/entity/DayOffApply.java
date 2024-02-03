@@ -2,6 +2,7 @@ package com.energizor.restapi.approval.entity;
 
 import com.energizor.restapi.approval.dto.DayOffDTO;
 import com.energizor.restapi.approval.dto.DocumentDTO;
+import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,11 @@ public class DayOffApply {
     @JoinColumn(name = "document_code")
     @OneToOne
     private Document document;
+    @JoinColumn(name = "user_code")
+    @OneToOne
+    private User user;
+    @Column(name = "off_apply_title")
+    private String offApplyTitle;
 
 
     public DayOffApply() {
@@ -78,10 +84,19 @@ public class DayOffApply {
         this.document = document;
         return this;
     }
+    public DayOffApply user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public DayOffApply offApplyTitle(String offApplyTitle) {
+        this.offApplyTitle = offApplyTitle;
+        return this;
+    }
 
 
 
     public DayOffApply build() {
-        return new DayOffApply(offApplyCode, offApplyDate, offStart, offEnd, offDay, offReason, offState, dayOff, document);
+        return new DayOffApply(offApplyCode, offApplyDate, offStart, offEnd, offDay, offReason, offState, dayOff, document, user, offApplyTitle);
     }
 }

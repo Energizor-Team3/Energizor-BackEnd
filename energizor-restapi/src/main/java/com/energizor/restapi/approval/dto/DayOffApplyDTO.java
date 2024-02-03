@@ -1,5 +1,6 @@
 package com.energizor.restapi.approval.dto;
 
+import com.energizor.restapi.users.dto.UserDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -19,4 +20,6 @@ public class DayOffApplyDTO {
     private String offState;
     private DayOffDTO dayOffDTO;
     private DocumentDTO documentDTO;
+    private UserDTO userDTO;
+    private String offApplyTitle;
 }

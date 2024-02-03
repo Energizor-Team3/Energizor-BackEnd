@@ -5,6 +5,7 @@ import com.energizor.restapi.users.entity.User;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,7 +16,7 @@ public class DocumentDTO {
     private int documentCode;
     private String documentTitle;
     private String documentContent;
-    private UserDTO userDTO;
+    private List<UserDTO> userDTO;
     private Date draftDay;
     private String form;
 

@@ -1,26 +1,76 @@
-### 전자결재
-GET http://localhost:8031/approval/document
-Content-Type: application/json
-Accept: */*
-
-### 기안양식들
+### 기안양식들 전체조회
 
 ### 일반기안
 GET http://localhost:8031/approval/generalDraft
 Content-Type: application/json
 Accept: */*
 
-### 교육기안
+### 교육기안 전체조회
 GET http://localhost:8031/approval/education
 Content-Type: application/json
 Accept: */*
 
-### 출장기안
+### 출장기안 전체조회
 GET http://localhost:8031/approval/businessTrip
 Content-Type: application/json
 Accept: */*
 
-### 휴가기안
+### 휴가기안 전체조회
 GET http://localhost:8031/approval/dayOffApply
 Content-Type: application/json
 Accept: */*
+
+### 참조자, 결재자, 공유 문서 전체 조회
+
+### 참조자문서 전체조회
+GET http://localhost:8031/approval/reference
+Content-Type: application/json
+Accept: */*
+
+### 공유문서 전체조회
+GET http://localhost:8031/approval/sharedDocument
+Content-Type: application/json
+Accept: */*
+
+### 결재자문서 전체조회
+GET http://localhost:8031/approval/approvalLine
+Content-Type: application/json
+Accept: */*
+
+### 모든문서 전체조회
+GET http://localhost:8031/approval/document
+Content-Type: application/json
+Accept: */*
+
+### 기타(댓글, 결재위임), 첨부파일 전체조회
+
+### 기안댓글 전체조회
+GET http://localhost:8031/approval/approvalComment
+Content-Type: application/json
+Accept: */*
+
+### 첨부파일 전체조회
+GET http://localhost:8031/approval/approvalFile
+Content-Type: application/json
+Accept: */*
+
+### 결재위임 전체조회
+GET http://localhost:8031/approval/proxyApproval
+Content-Type: application/json
+Accept: */*
+
+### 휴가기안 작성
+POST http://localhost:8031/reservation/dayOffApply
+Accept: */*
+Content-Type: application/json
+
+{
+  "offApplyDate": "2024-02-02",
+  "offStart": "2024-02-15",
+  "offEnd": "2024-02-18",
+  "offDay": "4",
+  "offReason": "개인사정",
+  "offState": "대기"
+
+}
+

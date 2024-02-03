@@ -1,6 +1,6 @@
 package com.energizor.restapi.approval.entity;
 
-import com.energizor.restapi.users.dto.UserDTO;
+
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
