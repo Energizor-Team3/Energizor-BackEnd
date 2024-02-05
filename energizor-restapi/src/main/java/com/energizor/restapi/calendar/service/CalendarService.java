@@ -37,13 +37,13 @@ public class CalendarService {
         this.modelMapper = modelMapper;
     }
 
-
+//캘린더 코드로 조회
     public CalendarDTO findCalendar(int calNo){
         Calendar schedule = calendarRepository.findById(calNo).get();
         CalendarDTO calendarDTO = modelMapper.map(schedule, CalendarDTO.class);
         return calendarDTO;
     }
-
+//모든 캘린더 조회
     public List<CalendarDTO> findAllCalendars() {
         List<Calendar> calendars = calendarRepository.findAll();
         return calendars.stream()
@@ -52,6 +52,7 @@ public class CalendarService {
     }
 
 
+    //    캘린더 타입으로 조회
     public List<CalendarDTO> findCalendarsByType(String calType) {
         List<Calendar> calendarType = calendarRepository.findBycalType(calType);
         return calendarType.stream()
@@ -59,6 +60,8 @@ public class CalendarService {
                 .collect(Collectors.toList());
     }
 
+
+    // 유저 코드로 캘린더 조회
     public List<CalendarDTO> findCalendarsByUserCode(int userCode) {
         List<CalendarParticipant> calendarParticipants = calendarParticipantRepository.findByCalParticipant_UserCode(userCode);
         List<Calendar> calendars = calendarParticipants.stream().map(participant -> participant.getCalParticipant().getCalNo()).map(calendarRepository::findById).flatMap(Optional::stream).collect(Collectors.toList());
@@ -67,6 +70,8 @@ public class CalendarService {
                 .collect(Collectors.toList());
     }
 
+
+    // 캘린더 추가
     @Transactional
     public String addNewCalendar(CalendarAndParticipantDTO  calendarAndParticipantDTO) {
         Calendar calendar = new Calendar();
@@ -86,6 +91,9 @@ public class CalendarService {
 
         return "캘린더 추가 성공";
     }
+
+
+    // 캘린더 수정
     @Transactional
     public void updateCalendar(Calendar calendar, CalendarAndParticipantDTO calendarAndParticipantDTO) {
         if (calendarAndParticipantDTO.getCalType() != null) {
@@ -109,6 +117,8 @@ public class CalendarService {
         }
     }
 
+
+    // 캘린더 삭제
     @Transactional
     public void updateParticipantInCalendar(Calendar calendar, List<Integer> newUserCodes) {
         // 기존 참석자 정보 삭제
