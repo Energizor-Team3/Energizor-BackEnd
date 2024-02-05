@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Table(name = "businesstrip")
@@ -18,13 +19,13 @@ public class BusinessTrip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int btCode;
     @Column(name = "bt_date")
-    private Date btDate;
+    private LocalDate btDate;
     @Column(name = "bt_phone")
     private String btPhone;
     @Column(name = "bt_start")
-    private Date btStart;
+    private LocalDate btStart;
     @Column(name = "bt_finish")
-    private Date btFinish;
+    private LocalDate btFinish;
     @Column(name = "bt_place")
     private String btPlace;
     @Column(name = "bt_content")
@@ -46,7 +47,7 @@ public class BusinessTrip {
         return this;
     }
 
-    public BusinessTrip btDate(Date btDate) {
+    public BusinessTrip btDate(LocalDate btDate) {
         this.btDate = btDate;
         return this;
     }
@@ -54,11 +55,11 @@ public class BusinessTrip {
         this.btPhone = btPhone;
         return this;
     }
-    public BusinessTrip btStart(Date btStart) {
+    public BusinessTrip btStart(LocalDate btStart) {
         this.btStart = btStart;
         return this;
     }
-    public BusinessTrip btFinish(Date btFinish) {
+    public BusinessTrip btFinish(LocalDate btFinish) {
         this.btFinish = btFinish;
         return this;
     }

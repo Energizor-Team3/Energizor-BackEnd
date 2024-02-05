@@ -3,16 +3,15 @@ package com.energizor.restapi.approval.service;
 import com.energizor.restapi.approval.dto.*;
 import com.energizor.restapi.approval.entity.*;
 import com.energizor.restapi.approval.repository.*;
-import com.energizor.restapi.common.ResponseDTO;
+import com.energizor.restapi.users.dto.UserDTO;
+import com.energizor.restapi.users.entity.User;
+import com.energizor.restapi.users.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,9 +32,13 @@ public class ApprovalService {
     private final ProxyApprovalRepository proxyApprovalRepository;
     private final SharedDocumentRepository sharedDocumentRepository;
 
+    private final DayOffRepository dayOffRepository;
+
     private final ModelMapper modelMapper;
 
-    public ApprovalService(BusinessTripRepository businessTripRepository, DayOffApplyRepository dayOffApplyRepository, EducationRepository educationRepository, GeneralDraftRepository generalDraftRepository, ReferenceRepository referenceRepository, DocumentRepository documentRepository, ApprovalLineRepository approvalLineRepository, ApprovalCommentRepository approvalCommentRepository, ApprovalFileRepository approvalFileRepository, ProxyApprovalRepository proxyApprovalRepository, SharedDocumentRepository sharedDocumentRepository, ModelMapper modelMapper) {
+    private final UserRepository userRepository;
+
+    public ApprovalService(BusinessTripRepository businessTripRepository, DayOffApplyRepository dayOffApplyRepository, EducationRepository educationRepository, GeneralDraftRepository generalDraftRepository, ReferenceRepository referenceRepository, DocumentRepository documentRepository, ApprovalLineRepository approvalLineRepository, ApprovalCommentRepository approvalCommentRepository, ApprovalFileRepository approvalFileRepository, ProxyApprovalRepository proxyApprovalRepository, SharedDocumentRepository sharedDocumentRepository, DayOffRepository dayOffRepository, ModelMapper modelMapper, UserRepository userRepository) {
 
         this.businessTripRepository = businessTripRepository;
         this.dayOffApplyRepository = dayOffApplyRepository;
@@ -48,7 +51,9 @@ public class ApprovalService {
         this.approvalFileRepository = approvalFileRepository;
         this.proxyApprovalRepository = proxyApprovalRepository;
         this.sharedDocumentRepository = sharedDocumentRepository;
+        this.dayOffRepository = dayOffRepository;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
     }
 
 
@@ -156,13 +161,70 @@ public class ApprovalService {
     }
 
     @Transactional
-    public String insertDayOffApply(DayOffApplyDTO dayOffApplyDTO) {
+    public String insertDayOffApply(DayOffApplyDTO dayOffApplyDTO, UserDTO principal) {
+        System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
 
+        User user1 = userRepository.findByUserCode(principal.getUserCode());
+        User user = modelMapper.map(user1, User.class);
+
+        LocalDate now =LocalDate.now();
+        dayOffApplyDTO.setOffApplyDate(now);
         // 기안 -> 기안번호 조회
+        Document document = new Document();
+        document.documentTitle(dayOffApplyDTO.getOffApplyTitle())
+                        .userDTO(user)
+                        .draftDay(dayOffApplyDTO.getOffApplyDate())
+                .form("휴가신청서").build();
+
+        System.out.println("document = " + document);
+
+        Document result = documentRepository.save(document);
+//        DocumentDTO documentDTO1 = modelMapper.map(result, DocumentDTO.class);
+//        System.out.println("documentDTO1 : " + documentDTO1);
+
+        // 기안코드를 휴가신청
+
+
+        // 현재 년도 계산
+
+
+        // 현재 년도와 사용자 정보를 기반으로 offCode 조회
+
+
+
+
+
+
+        // 휴가신청서
+        DayOffApply dayOffApply = new DayOffApply();
+        dayOffApply.document(result);
+        dayOffApply.user(user);
+        dayOffApply.dayoff(user.getDayoff());
+        dayOffApply.offApplyTitle(dayOffApplyDTO.getOffApplyTitle());
+        dayOffApply.offApplyDate(dayOffApplyDTO.getOffApplyDate());
+        dayOffApply.offStart(dayOffApplyDTO.getOffStart());
+        dayOffApply.offEnd(dayOffApplyDTO.getOffEnd());
+        dayOffApply.offDay(dayOffApplyDTO.getOffDay());
+        dayOffApply.offReason(dayOffApplyDTO.getOffReason());
+        dayOffApply.offState(dayOffApplyDTO.getOffState());
+
+        System.out.println("dayOffApply : " + dayOffApply);
+
+        DayOffApply result2 = dayOffApplyRepository.save(dayOffApply);
+        return "휴가신청서 기안 성공";
+    }
+    @Transactional
+    public String insertBusinessTrip(BusinessTripDTO businessTripDTO) {
+        // 기안 -> 기안번호 조회
+        String form1 = "출장신청서";
         DocumentDTO documentDTO = new DocumentDTO();
-        documentDTO.setDocumentTitle(dayOffApplyDTO.getOffApplyTitle());
-        documentDTO.setDraftDay(dayOffApplyDTO.getOffApplyDate());
-        
+        documentDTO.getUserDTO().setUserCode(1);
+        documentDTO.setDocumentTitle(businessTripDTO.getBtTitle());
+        documentDTO.setDraftDay(businessTripDTO.getBtDate());
+        documentDTO.setForm(form1);
+        documentDTO.setUserDTO(businessTripDTO.getUserDTO());
+        log.info("======================================== documentDTO", documentDTO.getUserDTO());
+
         Document document = modelMapper.map(documentDTO, Document.class);
         Document result = documentRepository.save(document);
 
@@ -171,10 +233,10 @@ public class ApprovalService {
 
         // 휴가신청서
 
-        dayOffApplyDTO.setOffApplyCode(result.getDocumentCode());
-
-        DayOffApply dayOffApply = modelMapper.map(dayOffApplyDTO, DayOffApply.class);
-        DayOffApply result2 = dayOffApplyRepository.save(dayOffApply);
+        businessTripDTO.setBtCode(result.getDocumentCode());
+        businessTripDTO.getUserDTO().setUserCode(result.getUserDTO().getUserCode());
+        BusinessTrip businessTrip = modelMapper.map(businessTripDTO, BusinessTrip.class);
+        BusinessTrip result2 = businessTripRepository.save(businessTrip);
         return "";
     }
 }

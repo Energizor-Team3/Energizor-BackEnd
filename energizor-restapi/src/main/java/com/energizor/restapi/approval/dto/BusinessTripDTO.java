@@ -3,6 +3,7 @@ package com.energizor.restapi.approval.dto;
 import com.energizor.restapi.users.dto.UserDTO;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,10 @@ import java.util.List;
 @NoArgsConstructor
 public class BusinessTripDTO {
     private int btCode;
-    private Date btDate;
+    private LocalDate btDate;
     private String btPhone;
-    private Date btStart;
-    private Date btFinish;
+    private LocalDate btStart;
+    private LocalDate btFinish;
     private String btPlace;
     private String btContent;
     private List<DocumentDTO> documentDTO;

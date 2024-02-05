@@ -4,6 +4,7 @@ import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +13,13 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+
 public class DocumentDTO {
     private int documentCode;
     private String documentTitle;
-    private String documentContent;
-    private List<UserDTO> userDTO;
-    private Date draftDay;
+    private UserDTO userDTO;
+    private LocalDate draftDay;
     private String form;
+
 
 }
