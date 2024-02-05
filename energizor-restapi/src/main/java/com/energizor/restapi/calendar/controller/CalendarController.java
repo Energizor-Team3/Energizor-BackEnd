@@ -22,7 +22,7 @@ public class CalendarController {
         this.calendarService = calendarService;
     }
 
-//    캘린더 목록 조회
+//    캘린더 조회
     @GetMapping("/calendar/{calNo}")
     public ResponseEntity<ResponseDTO> getCalendar(@PathVariable int calNo) {
 
