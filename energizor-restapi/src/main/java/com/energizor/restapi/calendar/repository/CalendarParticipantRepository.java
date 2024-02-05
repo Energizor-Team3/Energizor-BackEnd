@@ -17,4 +17,5 @@ public interface CalendarParticipantRepository extends JpaRepository<CalendarPar
     void deleteByCalParticipant_CalNo(@Param("calNo") int calNo);
 
 
+    List<CalendarParticipant> findByCalParticipant_CalNo(int calNo);
 }
