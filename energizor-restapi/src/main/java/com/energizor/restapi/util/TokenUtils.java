@@ -125,7 +125,7 @@ public class TokenUtils {
 
         claims.put("userCode", user.getUserCode());
         claims.put("userId", user.getUserId());
-        claims.put("userName", user.getUserName());
+        claims.put("userName", user.getUsername());
         claims.put("userRank", user.getUserRank());
         claims.put("userRole", user.getUserRole());
         claims.put("email", user.getEmail());

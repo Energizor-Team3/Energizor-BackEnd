@@ -1,11 +1,14 @@
 package com.energizor.restapi.approval.controller;
 
+import com.energizor.restapi.approval.dto.BusinessTripDTO;
 import com.energizor.restapi.approval.dto.DayOffApplyDTO;
 import com.energizor.restapi.approval.service.ApprovalService;
 import com.energizor.restapi.common.ResponseDTO;
+import com.energizor.restapi.users.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,9 +45,17 @@ public class ApprovalController {
     //기안추가
 
     @PostMapping("/dayOffApply")
-    public ResponseEntity<ResponseDTO> insertDayOffApply(@RequestBody DayOffApplyDTO dayOffApplyDTO) {
+    public ResponseEntity<ResponseDTO> insertDayOffApply(@RequestBody DayOffApplyDTO dayOffApplyDTO,  @AuthenticationPrincipal UserDTO principal) {
+        System.out.println("principal=============================================================== = " + principal);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", approvalService.insertDayOffApply(dayOffApplyDTO)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertDayOffApply(dayOffApplyDTO, principal)));
+    }
+
+    @PostMapping("/businessTrip")
+    public ResponseEntity<ResponseDTO> insertBusinessTrip(@RequestBody BusinessTripDTO businessTripDTO) {
+
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertBusinessTrip(businessTripDTO)));
     }
 
     // 참조자, 결재자, 공유 문서 전체 조회

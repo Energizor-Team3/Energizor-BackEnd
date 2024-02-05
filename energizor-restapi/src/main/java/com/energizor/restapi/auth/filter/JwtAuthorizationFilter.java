@@ -36,8 +36,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         /*
-        * 권한이 필요없는 리소스    ---> 추후 수정 (로그인만!!!!!!!!!!!!!!!!!!!!!!!!!!) 비밀번호 찾기?
-        * */
+         * 권한이 필요없는 리소스    ---> 추후 수정 (로그인만!!!!!!!!!!!!!!!!!!!!!!!!!!) 비밀번호 찾기?
+         * */
 
         List<String> roleLeessList = Arrays.asList(
                 "/auth/login"

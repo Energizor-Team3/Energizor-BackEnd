@@ -1,30 +1,30 @@
 package com.energizor.restapi.approval.entity;
 
-import com.energizor.restapi.approval.dto.DayOffDTO;
-import com.energizor.restapi.approval.dto.DocumentDTO;
+import com.energizor.restapi.users.entity.Dayoff;
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Table(name = "dayoff_apply")
 @AllArgsConstructor
 @Getter
-@ToString
+
 public class DayOffApply {
     @Id
     @Column(name = "off_apply_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int offApplyCode;
     @Column(name = "off_apply_date")
-    private Date offApplyDate;
+    private LocalDate offApplyDate;
     @Column(name = "off_start")
-    private Date offStart;
+    private LocalDate offStart;
     @Column(name = "off_end")
-    private Date offEnd;
+    private LocalDate offEnd;
     @Column(name = "off_day")
     private int offDay;
     @Column(name = "off_reason")
@@ -33,7 +33,7 @@ public class DayOffApply {
     private String offState;
     @JoinColumn(name = "off_code")
     @OneToOne
-    private DayOff dayOff;
+    private Dayoff dayoff;
     @JoinColumn(name = "document_code")
     @OneToOne
     private Document document;
@@ -47,20 +47,35 @@ public class DayOffApply {
     public DayOffApply() {
     }
 
+    @Override
+    public String toString() {
+        return "DayOffApply{" +
+                "offApplyCode=" + offApplyCode +
+                ", offApplyDate=" + offApplyDate +
+                ", offStart=" + offStart +
+                ", offEnd=" + offEnd +
+                ", offDay=" + offDay +
+                ", offReason='" + offReason + '\'' +
+                ", offState='" + offState + '\'' +
+                ", document=" + document +
+                ", offApplyTitle='" + offApplyTitle + '\'' +
+                '}';
+    }
+
     public DayOffApply offApplyCode(int offApplyCode) {
         this.offApplyCode = offApplyCode;
         return this;
     }
 
-    public DayOffApply offApplyDate(Date offApplyDate) {
+    public DayOffApply offApplyDate(LocalDate offApplyDate) {
         this.offApplyDate = offApplyDate;
         return this;
     }
-    public DayOffApply offStart(Date offStart) {
+    public DayOffApply offStart(LocalDate offStart) {
         this.offStart = offStart;
         return this;
     }
-    public DayOffApply offEnd(Date offEnd) {
+    public DayOffApply offEnd(LocalDate offEnd) {
         this.offEnd = offEnd;
         return this;
     }
@@ -76,8 +91,8 @@ public class DayOffApply {
         this.offState = offState;
         return this;
     }
-    public DayOffApply dayOff(DayOff dayOff) {
-        this.dayOff = dayOff;
+    public DayOffApply dayoff(Dayoff dayoff) {
+        this.dayoff = dayoff;
         return this;
     }
     public DayOffApply document(Document document) {
@@ -97,6 +112,6 @@ public class DayOffApply {
 
 
     public DayOffApply build() {
-        return new DayOffApply(offApplyCode, offApplyDate, offStart, offEnd, offDay, offReason, offState, dayOff, document, user, offApplyTitle);
+        return new DayOffApply(offApplyCode, offApplyDate, offStart, offEnd, offDay, offReason, offState, dayoff, document, user, offApplyTitle);
     }
 }

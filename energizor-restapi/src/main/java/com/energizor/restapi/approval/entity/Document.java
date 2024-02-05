@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import javax.naming.Name;
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Table(name = "document")
@@ -21,20 +22,16 @@ public class  Document {
     private int documentCode;
     @Column(name = "document_title")
     private String documentTitle;
-    @Column(name = "document_content")
-    private String documentContent;
     @ManyToOne
     @JoinColumn(name = "user_code" )
-    private User user;
+    private User userDTO;
     @Column(name = "draftday")
-    private Date draftDay;
+    private LocalDate draftDay;
     @Column(name = "form")
     private String form;
 
     public Document() {
     }
-
-
 
     public Document documentCode(int documentCode) {
         this.documentCode = documentCode;
@@ -45,17 +42,12 @@ public class  Document {
         return this;
     }
 
-    public Document documentContent(String documentContent) {
-        this.documentContent = documentContent;
+    public Document userDTO(User userDTO) {
+        this.userDTO = userDTO;
         return this;
     }
 
-    public Document user(User user) {
-        this.user = user;
-        return this;
-    }
-
-    public Document draftDay(Date draftDay) {
+    public Document draftDay(LocalDate draftDay) {
         this.draftDay = draftDay;
         return this;
     }
@@ -64,10 +56,7 @@ public class  Document {
         return this;
     }
 
-
-
-
     public Document build() {
-        return new Document(documentCode, documentTitle, documentContent, user, draftDay, form);
+        return new Document(documentCode, documentTitle, userDTO, draftDay, form);
     }
 }

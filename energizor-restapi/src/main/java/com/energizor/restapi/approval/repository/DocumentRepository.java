@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface DocumentRepository extends JpaRepository<Document, Integer> {
-    @Query(value = "SELECT * FROM ",
-            nativeQuery = true)
-    List<Document> x();
+//    @Query(value = "SELECT * FROM ",
+//            nativeQuery = true)
+//    List<Document> x();
 }

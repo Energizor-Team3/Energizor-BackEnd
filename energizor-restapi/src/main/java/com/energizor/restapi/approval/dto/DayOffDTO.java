@@ -7,7 +7,7 @@ import java.time.Year;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+
 @Setter
 @Getter
 public class DayOffDTO {
@@ -16,4 +16,14 @@ public class DayOffDTO {
     private int offCount;
     private int offUsed;
     private UserDTO userDTO;
+
+    @Override
+    public String toString() {
+        return "DayOffDTO{" +
+                "offCode=" + offCode +
+                ", offYear=" + offYear +
+                ", offCount=" + offCount +
+                ", offUsed=" + offUsed +
+                '}';
+    }
 }

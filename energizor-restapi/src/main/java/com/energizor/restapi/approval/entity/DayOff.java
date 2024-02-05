@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @AllArgsConstructor
-@ToString
+
 @Getter
 @Table(name = "dayoff")
 public class DayOff {
@@ -60,5 +60,15 @@ public class DayOff {
 
     public DayOff build() {
         return new DayOff(offCode, offYear, offCount, offUsed, user);
+    }
+
+    @Override
+    public String toString() {
+        return "DayOff{" +
+                "offCode=" + offCode +
+                ", offYear=" + offYear +
+                ", offCount=" + offCount +
+                ", offUsed=" + offUsed +
+                '}';
     }
 }
