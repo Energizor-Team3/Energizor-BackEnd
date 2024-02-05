@@ -1,9 +1,11 @@
 package com.energizor.restapi.calendar.controller;
 
 
+import com.energizor.restapi.calendar.dto.CalendarAndParticipantDTO;
 import com.energizor.restapi.calendar.dto.CalendarDTO;
 import com.energizor.restapi.calendar.entity.Calendar;
 import com.energizor.restapi.calendar.service.CalendarService;
+import com.energizor.restapi.calendar.service.ScheduleService;
 import com.energizor.restapi.common.ResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,11 +19,15 @@ public class CalendarController {
 
 
     private final CalendarService calendarService;
+    private final ScheduleService scheduleService;
 
-    public CalendarController(CalendarService calendarService) {
+    public CalendarController(CalendarService calendarService, ScheduleService scheduleService) {
         this.calendarService = calendarService;
+        this.scheduleService = scheduleService;
     }
 
+
+//----------------------------------------** 캘린더 **-----------------------------------------------------
 //    캘린더 목록 조회
     @GetMapping("/calendar/{calNo}")
     public ResponseEntity<ResponseDTO> getCalendar(@PathVariable int calNo) {
@@ -36,6 +42,8 @@ public class CalendarController {
     }
 
 
+
+
 //    캘린더 타입으로 조회
 
     @GetMapping("/calendarByType/{calType}")
@@ -43,26 +51,20 @@ public class CalendarController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 정보 조회 성공", calendarService.findCalendarsByType(calType)));
     }
 
-
+// 유저 코드로 캘린더 조회
     @GetMapping("/calendarsByUserCode/{userCode}")
     public ResponseEntity<ResponseDTO> getCalendarsByUserCode(@PathVariable int userCode) {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "유저코드로 캘린더 조회 성공", calendarService.findCalendarsByUserCode(userCode)));
     }
 
-    @GetMapping("/calendarSetting")
-    public void calendarSettingPage() {}
+// 캘린더 추가
+@PostMapping("/addCalendar")
+public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO){
+    // 캘린더 및 참석자 정보를 함께 저장
+    String result = calendarService.addNewCalendar(calendarAndParticipantDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK,result,null));
+}
 
-
-
-    @PostMapping("/addCalendar")
-    public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarDTO calendarDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK,"캘린더 추가 성공",calendarService.addNewCalendar(calendarDTO)));
-    }
-
-
-
-
-    //  부분수정은 patch
     @PatchMapping("/updateCalendar/{calNo}")
     public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo, @RequestBody CalendarDTO calendarDTO) {
         Calendar existingCalendar = calendarService.findCalendarEntity(calNo);
@@ -81,15 +83,44 @@ public class CalendarController {
             existingCalendar.setCalName(calendarDTO.getCalName());
         }
 
-
-        // 수정된 캘린더 저장
         calendarService.updateCalendar(existingCalendar);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
     }
+
+
+// 캘린더 삭제
+@DeleteMapping("/deleteCalendar/{calNo}")
+public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo) {
+    // 캘린더 서비스를 통해 캘린더 삭제 요청
+    boolean deleted = calendarService.deleteCalendar(calNo);
+    if (deleted) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 삭제 성공", null));
+    } else {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "캘린더를 찾을 수 없거나 삭제 실패", null));
+    }
+  }
+
+
+
+
+//----------------------------------------** 스케줄 **-----------------------------------------------------
+
+
+
+
+// 캘린더 코드로 해당 캘린더 일정 조회
+    @GetMapping("/schedule/{calNo}")
+    public ResponseEntity<ResponseDTO> getScheduleByCalendarCode(@PathVariable int calNo) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  calNo + "번 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByCalNo(calNo)));
+    }
+
+
+//    @GetMapping("/schedule/{calNo}")
+//    public ResponseEntity<ResponseDTO> getScheduleByCalendarCode(@PathVariable int calNo) {
+//        CalendarDTO calendar = calendarService.findCalendar(calNo);
+//        String calName = calendar != null ? calendar.getCalName() : "Unknown";
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, calNo+ "번캘린더" + calName + " 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByCalNo(calNo)));
+//    }
+
 }
-
-
-
-
-
