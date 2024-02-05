@@ -2,6 +2,7 @@ package com.energizor.restapi.auth.filter;
 
 import com.energizor.restapi.common.AuthConstants;
 import com.energizor.restapi.users.dto.UserDTO;
+import com.energizor.restapi.users.dto.UserRoleDTO;
 import com.energizor.restapi.util.TokenUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -35,19 +36,11 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         /*
-        * 권한이 필요없는 리소스    ---> 추후 수정 (로그인만!!!!!!!!!!!!!!!!!!!!!!!!!!)
+        * 권한이 필요없는 리소스    ---> 추후 수정 (로그인만!!!!!!!!!!!!!!!!!!!!!!!!!!) 비밀번호 찾기?
         * */
 
         List<String> roleLeessList = Arrays.asList(
-//                "/api/v1/products/\\d+",
-//                "/api/v1/products/\\w+",
-//                "/api/v1/products",
-//                "/api/v1/reviews/product/\\d+",
-//                "/api/v1/products/search?s=\\w+",
-                "/auth/signup","/auth/login"
-//                "/api/v1/reviews",
-//                "/api/v1/reviews/\\d++",
-//                "/api/v1/reviews/(\\d+)?offset=\\d+"
+                "/auth/login"
         );
 
         if(roleLeessList.stream().anyMatch(uri -> roleLeessList.stream().anyMatch(pattern -> Pattern.matches(pattern, request.getRequestURI())))){
@@ -64,8 +57,12 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 if(TokenUtils.isValidToken(token)){
                     Claims claims = TokenUtils.getClaimsFromToken(token);
                     System.out.println("claims ===============> " + claims);
+
                     UserDTO authentication = new UserDTO();
+                    authentication.setUserCode((Integer) claims.get("userCode"));
+                    authentication.setUserId(claims.get("userId").toString());
                     authentication.setUserName(claims.get("userName").toString());
+                    authentication.setUserRank(claims.get("userRank").toString());
                     authentication.setEmail(claims.get("email").toString());
                     System.out.println("claims ==================== " + claims.get("userRole"));
 

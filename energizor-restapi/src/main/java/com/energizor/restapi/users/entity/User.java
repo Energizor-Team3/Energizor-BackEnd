@@ -133,6 +133,11 @@ public class User {
         return this;
     }
 
+    public User team(int teamCode) {
+        this.team = team.teamCode(teamCode);
+        return this;
+    }
+
     public User dayoff(Dayoff dayoff) {
         this.dayoff = dayoff;
         return this;
