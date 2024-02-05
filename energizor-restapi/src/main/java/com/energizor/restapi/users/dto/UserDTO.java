@@ -1,8 +1,8 @@
 package com.energizor.restapi.users.dto;
 
 import lombok.*;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class UserDTO /*implements UserDetails*/ {
+public class UserDTO implements UserDetails {
 
     private int userCode;
     private String userId;
@@ -26,50 +26,60 @@ public class UserDTO /*implements UserDetails*/ {
     private Date entDate;
     private Date resignDate;
     private String userStatus;
-//    private List<UserRoleDTO> userRole;
-//    private Collection<GrantedAuthority> authorities;
-    // 부서, 팀, 연차
+    private List<UserRoleDTO> userRole;
+    private Collection<GrantedAuthority> authorities;
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        Collection<GrantedAuthority> authorities = new ArrayList<>();
-//        if(userRole != null) {
-//            userRole.forEach(role -> {
-//                authorities.add(() -> role.getAuthority().getAuthName());
-//            });
-//            return authorities;
-//        }
-//        return new ArrayList<>();
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return this.userPw;
-//    }
-//
-//    @Override
-//    public String getUsername() {
-//        return this.userId;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return false;
-//    }
+    private int teamCode;
+    private DayOffDTO dayoff;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        if(userRole != null) {
+            userRole.forEach(role -> {
+                authorities.add(() -> role.getAuthority().getAuthName());
+            });
+            return authorities;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String getPassword() {
+        return this.userPw;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userId;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 
 }

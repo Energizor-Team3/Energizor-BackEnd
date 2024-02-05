@@ -14,6 +14,7 @@ import java.util.Objects;
 @Setter
 @ToString
 public class CalendarParticipantPK implements Serializable {
+
     @Column(name="user_code")
     private int userCode;
 
@@ -32,4 +33,6 @@ public class CalendarParticipantPK implements Serializable {
     public int hashCode() {
         return Objects.hash(userCode, calNo);
     }
+
+
 }
