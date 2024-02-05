@@ -3,6 +3,7 @@ package com.energizor.restapi.calendar.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -24,11 +25,10 @@ public class Schedule {
     private String schDetail;
 
     @Column(name = "sch_sdate", nullable = false)
-    private Date schStartDate; // 또는 LocalDateTime schStartDate;
+    private LocalDateTime schStartDate;
 
     @Column(name = "sch_edate")
-    private Date schEndDate; // 또는 LocalDateTime schEndDate;
-
+    private LocalDateTime schEndDate;
     @Column(name = "sch_allday", length = 5, nullable = false)
     private String schAllDay;
 

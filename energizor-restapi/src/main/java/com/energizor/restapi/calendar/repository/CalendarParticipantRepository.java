@@ -15,4 +15,6 @@ public interface CalendarParticipantRepository extends JpaRepository<CalendarPar
     @Modifying
     @Query("DELETE FROM CalendarParticipant cp WHERE cp.calParticipant.calNo = :calNo")
     void deleteByCalParticipant_CalNo(@Param("calNo") int calNo);
+
+
 }

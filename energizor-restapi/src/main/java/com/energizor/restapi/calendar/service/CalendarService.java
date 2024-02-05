@@ -13,6 +13,9 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 
@@ -83,17 +86,56 @@ public class CalendarService {
 
         return "캘린더 추가 성공";
     }
-
-
     @Transactional
-    public String updateCalendar(Calendar calendar) {
-        Calendar updatedCalendar = calendarRepository.save(calendar);
-        if (updatedCalendar != null) {
-            return "캘린더 수정 성공";
-        } else {
-            return "캘린더 수정 실패";
+    public void updateCalendar(Calendar calendar, CalendarAndParticipantDTO calendarAndParticipantDTO) {
+        if (calendarAndParticipantDTO.getCalType() != null) {
+            calendar.setCalType(calendarAndParticipantDTO.getCalType());
+        }
+        if (calendarAndParticipantDTO.getCalColor() != null) {
+            calendar.setCalColor(calendarAndParticipantDTO.getCalColor());
+        }
+        if (calendarAndParticipantDTO.getCalName() != null) {
+            calendar.setCalName(calendarAndParticipantDTO.getCalName());
+        }
+
+        calendarRepository.save(calendar);
+
+        if (calendarAndParticipantDTO.getUserCode() != null) {
+            updateParticipantInCalendar(calendar, calendarAndParticipantDTO.getUserCode());
+        }
+
+        if (calendarAndParticipantDTO.getUserCodes() != null && !calendarAndParticipantDTO.getUserCodes().isEmpty()) {
+            updateParticipantInCalendar(calendar, calendarAndParticipantDTO.getUserCodes());
         }
     }
+
+    @Transactional
+    public void updateParticipantInCalendar(Calendar calendar, List<Integer> newUserCodes) {
+        // 기존 참석자 정보 삭제
+        calendarParticipantRepository.deleteByCalParticipant_CalNo(calendar.getCalNo());
+
+        // 새로운 사용자 코드로 참석자 정보 추가
+        for (Integer newUserCode : newUserCodes) {
+            CalendarParticipantPK participantPK = new CalendarParticipantPK();
+            participantPK.setCalNo(calendar.getCalNo());
+            participantPK.setUserCode(newUserCode);
+
+            CalendarParticipant participant = new CalendarParticipant();
+            participant.setCalParticipant(participantPK);
+            calendarParticipantRepository.save(participant);
+        }
+    }
+
+    // 사용자 코드를 단일로 업데이트하는 메서드
+    @Transactional
+    public void updateParticipantInCalendar(Calendar calendar, Integer newUserCode) {
+        List<Integer> newUserCodes = Collections.singletonList(newUserCode);
+        updateParticipantInCalendar(calendar, newUserCodes);
+    }
+
+
+
+
     public Calendar findCalendarEntity(int calNo) {
 
         return calendarRepository.findById(calNo).orElse(null);

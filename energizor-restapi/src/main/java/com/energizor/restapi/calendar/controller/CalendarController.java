@@ -65,28 +65,19 @@ public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarAndPartic
     return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK,result,null));
 }
 
-    @PatchMapping("/updateCalendar/{calNo}")
-    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo, @RequestBody CalendarDTO calendarDTO) {
-        Calendar existingCalendar = calendarService.findCalendarEntity(calNo);
+// 캘린더 수정
+@PatchMapping("/updateCalendar/{calNo}")
+public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo, @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO) {
+    Calendar existingCalendar = calendarService.findCalendarEntity(calNo);
 
-        if (existingCalendar == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "캘린더를 찾을 수 없습니다", null));
-        }
-
-        if (calendarDTO.getCalType() != null) {
-            existingCalendar.setCalType(calendarDTO.getCalType());
-        }
-        if (calendarDTO.getCalColor() != null) {
-            existingCalendar.setCalColor(calendarDTO.getCalColor());
-        }
-        if (calendarDTO.getCalName() != null) {
-            existingCalendar.setCalName(calendarDTO.getCalName());
-        }
-
-        calendarService.updateCalendar(existingCalendar);
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
+    if (existingCalendar == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "캘린더를 찾을 수 없습니다", null));
     }
+
+    calendarService.updateCalendar(existingCalendar, calendarAndParticipantDTO);
+
+    return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
+}
 
 
 // 캘린더 삭제

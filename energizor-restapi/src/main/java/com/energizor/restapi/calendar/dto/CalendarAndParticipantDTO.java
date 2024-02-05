@@ -2,6 +2,8 @@ package com.energizor.restapi.calendar.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -13,4 +15,6 @@ public class CalendarAndParticipantDTO {
     private String calColor;
     private String calName;
     private Integer userCode;
+    private List<Integer> userCodes;
+
 }
