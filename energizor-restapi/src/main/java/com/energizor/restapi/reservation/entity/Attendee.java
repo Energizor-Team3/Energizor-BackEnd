@@ -37,11 +37,11 @@ public class Attendee {
         this.reservation= reservation;
         return this;
     }
-
     public Attendee userCode(User userCode){
         this.userCode = userCode;
         return this;
     }
+
 
     public Attendee build() {
         return new Attendee(attCode, reservation, userCode);

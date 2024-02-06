@@ -1,6 +1,7 @@
 package com.energizor.restapi.reservation.dto;
 
 import com.energizor.restapi.reservation.entity.Reservation;
+import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 @ToString
 public class AttendeeDTO {
     private int attCode;
-    private int reservationCode;
-    private int userCode;
+    private ReservationDTO reservationCode;
+    private UserDTO userCode;
 
 }
