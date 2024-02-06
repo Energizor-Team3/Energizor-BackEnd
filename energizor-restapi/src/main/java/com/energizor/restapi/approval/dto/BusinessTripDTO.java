@@ -20,7 +20,7 @@ public class BusinessTripDTO {
     private LocalDate btFinish;
     private String btPlace;
     private String btContent;
-    private List<DocumentDTO> documentDTO;
+    private DocumentDTO documentDTO;
     private UserDTO userDTO;
     private String btTitle;
 }

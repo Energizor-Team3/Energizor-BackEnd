@@ -1,0 +1,8 @@
+
+
+###프로젝트 전체목록 조회
+
+GET http://localhost:8031/project/projects
+Accept: */*
+Content-Type: application/json
+

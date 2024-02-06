@@ -2,6 +2,7 @@ package com.energizor.restapi.approval.controller;
 
 import com.energizor.restapi.approval.dto.BusinessTripDTO;
 import com.energizor.restapi.approval.dto.DayOffApplyDTO;
+import com.energizor.restapi.approval.dto.EducationDTO;
 import com.energizor.restapi.approval.service.ApprovalService;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.users.dto.UserDTO;
@@ -47,15 +48,17 @@ public class ApprovalController {
     @PostMapping("/dayOffApply")
     public ResponseEntity<ResponseDTO> insertDayOffApply(@RequestBody DayOffApplyDTO dayOffApplyDTO,  @AuthenticationPrincipal UserDTO principal) {
         System.out.println("principal=============================================================== = " + principal);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertDayOffApply(dayOffApplyDTO, principal)));
     }
 
     @PostMapping("/businessTrip")
-    public ResponseEntity<ResponseDTO> insertBusinessTrip(@RequestBody BusinessTripDTO businessTripDTO) {
+    public ResponseEntity<ResponseDTO> insertBusinessTrip(@RequestBody BusinessTripDTO businessTripDTO, @AuthenticationPrincipal UserDTO principal) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertBusinessTrip(businessTripDTO, principal)));
+    }
 
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertBusinessTrip(businessTripDTO)));
+    @PostMapping("/education")
+    public ResponseEntity<ResponseDTO> insertEducation(@RequestBody EducationDTO educationDTO, @AuthenticationPrincipal UserDTO principal) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertEducation(educationDTO, principal)));
     }
 
     // 참조자, 결재자, 공유 문서 전체 조회

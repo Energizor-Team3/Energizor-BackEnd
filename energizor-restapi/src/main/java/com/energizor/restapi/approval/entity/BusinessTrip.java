@@ -32,7 +32,7 @@ public class BusinessTrip {
     private String btContent;
     @JoinColumn(name = "document_code")
     @ManyToOne
-    private Document document;
+    private Document documentDTO;
     @JoinColumn(name = "user_code")
     @ManyToOne
     private User user;
@@ -71,8 +71,8 @@ public class BusinessTrip {
         this.btContent = btContent;
         return this;
     }
-    public BusinessTrip document(Document document) {
-        this.document = document;
+    public BusinessTrip documentDTO(Document documentDTO) {
+        this.documentDTO = documentDTO;
         return this;
     }
     public BusinessTrip user(User user) {
@@ -87,6 +87,6 @@ public class BusinessTrip {
 
 
     public BusinessTrip build() {
-        return new BusinessTrip(btCode, btDate, btPhone, btStart, btFinish, btPlace, btContent, document, user, btTitle);
+        return new BusinessTrip(btCode, btDate, btPhone, btStart, btFinish, btPlace, btContent, documentDTO, user, btTitle);
     }
 }

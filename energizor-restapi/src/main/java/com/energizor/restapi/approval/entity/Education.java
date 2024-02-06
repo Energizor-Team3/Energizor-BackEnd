@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 @Entity
@@ -17,27 +18,30 @@ import java.util.List;
 public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "")
+    @Column(name = "edu_code")
     private int eduCode;
-    @Column(name = "")
+    @Column(name = "edu_title")
     private String eduTitle;
-    @Column(name = "")
-    private Date eduDate;
-    @Column(name = "")
+    @Column(name = "edu_date")
+    private LocalDate eduDate;
+    @Column(name = "edu_name")
     private String eduName;
-    @Column(name = "")
-    private Date eduStart;
-    @Column(name = "")
-    private Date eduFinish;
-    @Column(name = "")
+    @Column(name = "edu_start")
+    private LocalDate eduStart;
+    @Column(name = "edu_finish")
+    private LocalDate eduFinish;
+    @Column(name = "edu_institution")
     private String eduInstitution;
-    @Column(name = "")
+    @Column(name = "edu_price")
     private int eduPrice;
-    @Column(name = "")
+    @Column(name = "edu_content")
     private String eduContent;
     @JoinColumn(name = "document_code")
     @ManyToOne
     private Document document;
+    @JoinColumn(name = "user_code")
+    @OneToOne
+    private User user;
 
     public Education() {
     }
@@ -51,7 +55,7 @@ public class Education {
         this.eduTitle = eduTitle;
         return this;
     }
-    public Education eduDate(Date eduDate) {
+    public Education eduDate(LocalDate eduDate) {
         this.eduDate = eduDate;
         return this;
     }
@@ -59,11 +63,11 @@ public class Education {
         this.eduName = eduName;
         return this;
     }
-    public Education eduStart(Date eduStart) {
+    public Education eduStart(LocalDate eduStart) {
         this.eduStart = eduStart;
         return this;
     }
-    public Education eduFinish(Date eduFinish) {
+    public Education eduFinish(LocalDate eduFinish) {
         this.eduFinish = eduFinish;
         return this;
     }
@@ -84,9 +88,13 @@ public class Education {
         this.document = document;
         return this;
     }
+    public Education user(User user) {
+        this.user = user;
+        return this;
+    }
 
 
     public Education build() {
-        return new Education(eduCode, eduTitle, eduDate, eduName, eduStart, eduFinish, eduInstitution, eduPrice, eduContent, document);
+        return new Education(eduCode, eduTitle, eduDate, eduName, eduStart, eduFinish, eduInstitution, eduPrice, eduContent, document, user);
     }
 }

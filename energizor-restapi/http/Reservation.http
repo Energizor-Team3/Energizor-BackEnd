@@ -1,0 +1,65 @@
+### 예약내역 전체조회
+GET http://localhost:8031/reservation/all
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAwMTc5ODgzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTgxNzksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fe5NBUwx-b48bHXI3PnVZRf9VedO1bK0BjelvY0U2dU
+
+### 예약내역 상세조회
+GET http://localhost:8031/reservation/3
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAwMTc5ODgzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTgxNzksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fe5NBUwx-b48bHXI3PnVZRf9VedO1bK0BjelvY0U2dU
+
+
+### 예약내역 추가
+POST http://localhost:8031/reservation/create
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MTg4MTk2NzU3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMDYxOTYsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.jJ0DDGTm7eEjeajwcn3XXXC9JEHpmro7sggKlCrm9i0
+
+
+{
+  "reservationDate": "2024-02-02T00:00:00",
+  "reservationContent": "Conference Room Booking",
+  "meetCode": 3
+}
+
+### 예약내역 수정
+PUT http://localhost:8031/reservation/modify
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MTgxMjc2MDQ1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyTmFtZSI6IjIwMDMwMjAwMSIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX0seyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjIsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MiwiYXV0aE5hbWUiOiJST0xFX0FETUlOIn19XSwiZXhwIjoxNzA3MTgzMDc2LCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.Pm6nW6fJOuBBNSq9CqC0CwH9qIw8ujcUyVrMUUGIghM
+
+{
+  "reservationCode": 4,
+  "reservationDate": "1996-04-24",
+  "reservationContent": "어됐다",
+  "userCode": 2,
+  "meetCode": 2
+}
+
+
+### 예약내역 삭제
+DELETE http://localhost:8031/reservation/delete/5
+Content-Type: application/json
+Accept: */*
+
+### 참석자 예약코드로 조회
+GET http://localhost:8031/reservation/attendee/1
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAwMTc5ODgzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTgxNzksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fe5NBUwx-b48bHXI3PnVZRf9VedO1bK0BjelvY0U2dU
+
+
+### 참석자 추가
+POST http://localhost:8031/reservation/attendee/create
+Content-Type: application/json
+Accept: */*
+
+{
+  "attCode": 4,
+  "reservationCode": 1,
+  "userCode": 19
+}
+
+### 참석자 수정
