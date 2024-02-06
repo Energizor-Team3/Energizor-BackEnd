@@ -17,23 +17,26 @@ public class Reservation {
     @Id
     @Column(name = "reservation_code")
     private int reservationCode;
+
     @Column(name = "reservation_date")
     private Date reservationDate;
+
     @Column(name = "reservation_content")
     private String reservationContent;
+
     @ManyToOne
     @JoinColumn(name = "user_code")
     private User user;
+
     @ManyToOne
-    @JoinColumn(name = "meet_code", referencedColumnName = "meet_code", nullable = false)
+    @JoinColumn(name = "meet_code")
     private Meet meet;
 
     public Reservation() {
 
     }
 
-    public Reservation(int reservationCode, Date reservationDate, String reservationContent) {
-    }
+
 
     public Reservation reservationCode(int reservationCode){
         this.reservationCode = reservationCode;
@@ -47,9 +50,17 @@ public class Reservation {
         this.reservationContent = reservationContent;
         return this;
     }
+    public Reservation user(User user){
+        this.user = user;
+        return this;
+    }
+    public Reservation meet(Meet meet){
+        this.meet = meet;
+        return this;
+    }
 
     public Reservation build() {
-        return new Reservation(reservationCode,reservationDate,reservationContent );
+        return new Reservation(reservationCode,reservationDate,reservationContent,user,meet );
     }
 
 

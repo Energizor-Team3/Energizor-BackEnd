@@ -6,6 +6,7 @@ import com.energizor.restapi.reservation.entity.Attendee;
 import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.repository.AttendeeRepository;
 import com.energizor.restapi.reservation.repository.ReservationRepository;
+import com.energizor.restapi.users.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,8 @@ public class ReservationService {
 
     //예약내역 추가
     @Transactional
-    public String createReservation(ReservationDTO reservationDTO) {
+    public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO) {
+        reservationDTO.getUser().setUserCode(userDTO.getUserCode());
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
         reservationRepository.save(reservation);
         return "등록성공";
