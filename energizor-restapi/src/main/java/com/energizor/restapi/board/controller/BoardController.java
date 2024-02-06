@@ -3,6 +3,7 @@ package com.energizor.restapi.board.controller;
 import com.energizor.restapi.board.dto.*;
 import com.energizor.restapi.board.entity.Board;
 import com.energizor.restapi.board.entity.InterestBoard;
+import com.energizor.restapi.board.entity.User;
 import com.energizor.restapi.board.service.BoardService;
 import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.common.PageDTO;
@@ -13,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +28,8 @@ public class BoardController {
 
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO> findAllList(@RequestParam(name = "boardTypeCode") int boardTypeCode,
-                                                   @RequestParam(name = "offset", defaultValue = "1") String offset) {
+                                                   @RequestParam(name = "offset", defaultValue = "1") String offset,
+                                                   @AuthenticationPrincipal UserDTO principal) {
         /* offset : 특정 페이지의 데이터를 조회할 때 사용
                     특정 페이지의 시작 인덱스를 나타낸다. 페이지의 크기가 10이고 offset이 1이면 1번부터 10번까지의 데이터를 가져오고 offset이 2이면
                     11번부터 20번까지의 데이터를 가져온다.
@@ -34,6 +37,7 @@ public class BoardController {
         log.info("[BoardController] findAllList ==========");
         log.info("[BoardController] boardTypeCode : "+boardTypeCode);
         log.info("[BoardController] offset : "+offset);
+        log.info("principal : "+principal);
 
         Criteria cri=new Criteria(Integer.valueOf(offset),10);
         PagingResponseDTO pagingResponseDTO=new PagingResponseDTO();
