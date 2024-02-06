@@ -46,7 +46,7 @@ Authorization: Bearer eyJkYXRlIjoxNzA2OTMwMDI3MTM2LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 PUT http://localhost:8031/users/user-update
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA3MTA0MzQ3Mzk0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcxMDYxNDcsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.eubmSq-O_4Oc9Ccm_IFMm8tEx7m0XkK0gcUgiyWQD94
+Authorization: Bearer eyJkYXRlIjoxNzA3MTIwMjU1MzIyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcxMzgyNTUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.F69syzx6hG-f7OKpFz1CtTGX8PXTTbr2tnZFCtyEwHY
 
 {
   "userCode": "22",
@@ -59,14 +59,6 @@ Authorization: Bearer eyJkYXRlIjoxNzA3MTA0MzQ3Mzk0LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
   "teamCode": "2",
   "resignDate": "9999-12-31",
   "userRole": [
-    {
-      "userCode": 1,
-      "authCode": 1,
-      "authority": {
-        "authCode": 1,
-        "authName": "ROLE_USER"
-      }
-    },
     {
       "userCode": 1,
       "authCode": 2,

@@ -22,7 +22,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +91,7 @@ public class UserService {
         log.info("[UserService] userDTO : " + userDTO);
         log.info("[UserService] principal : " + principal);
 
-        User user = userRepository.findById(userDTO.getUserCode()).get();
+        User user = userRepository.findById(userDTO.getUserCode()).orElseThrow(() -> new RuntimeException("해당 직원을 찾을 수 없습니다."));
 
         user.userCode(userDTO.getUserCode());
         user.userId(userDTO.getUserId());
@@ -122,7 +126,11 @@ public class UserService {
 
         if (userDTO.getResignDate() != null) {
             user.resignDate(userDTO.getResignDate());
-            if (userDTO.getResignDate().equals(java.sql.Date.valueOf("9999-12-31"))) {
+
+            Instant instant = userDTO.getResignDate().toInstant();
+            LocalDate resignDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+
+            if (resignDate.equals(LocalDate.of(9999, 12, 31))) {
                 user.userStatus("Y");
             } else {
                 user.userStatus("N");
@@ -130,22 +138,22 @@ public class UserService {
         }
 
         // UserRole 업데이트
-        if (userDTO.getUserRole() != null) {
-            // 기존의 역할 삭제
-            for (UserRoleDTO roleDTO : userDTO.getUserRole()) {
-                deleteByUserCodeAndAuthCode(user.getUserCode(), roleDTO.getAuthCode());
-            }
+        if (userDTO.getUserRole() != null && !userDTO.getUserRole().isEmpty()) {
+            AuthorityDTO authorityDTO = userDTO.getUserRole().get(0).getAuthority();
+            System.out.println("authorityDTO = " + authorityDTO);
+            Authority authority = new Authority(authorityDTO.getAuthCode(), authorityDTO.getAuthName());
 
-            // 새로운 역할 추가
-            List<UserRole> userRoles = userDTO.getUserRole().stream()
-                    .map(roleDTO -> {
-                        AuthorityDTO authorityDTO = roleDTO.getAuthority();
-                        Authority authority = new Authority(authorityDTO.getAuthCode(), authorityDTO.getAuthName());
-                        UserRole userRole = new UserRole(user.getUserCode(), roleDTO.getAuthCode(), authority);
-                        return userRoleRepository.save(userRole);
-                    })
-                    .collect(Collectors.toList());
-            user.userRole(userRoles);
+            // 이미 존재하는 UserRole 조회
+            UserRole existingUserRole = userRoleRepository.findByUserCodeAndAuthCode(user.getUserCode(), authorityDTO.getAuthCode());
+
+            if (existingUserRole == null) {
+                // 새로운 역할 추가
+                UserRole newUserRole = new UserRole(user.getUserCode(), authorityDTO.getAuthCode(), authority);
+                System.out.println("newUserRole = " + newUserRole);
+                userRoleRepository.insertUserRole(user.getUserCode(), authorityDTO.getAuthCode());
+            } else {
+                System.out.println("이미 해당 권한이 부여되어 있습니다.");
+            }
         }
 
         // Dayoff 업데이트
@@ -160,62 +168,9 @@ public class UserService {
         }
 
         userRepository.save(user);
+        log.info("After saving user: {}", user);
 
-        return (user != null)? "직원 정보 업데이트 성공" : "직원 정보 업데이트 실패";
-
-//        User user = userRepository.findById(userDTO.getUserCode()).orElse(null);
-//
-//        if (user != null) {
-//            // 엔터티 객체와 DTO 객체 간의 매핑
-//            modelMapper.map(userDTO, user);
-//            modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//
-//
-//            if (userDTO.getResignDate() != null) {
-//                user.resignDate(userDTO.getResignDate());
-//                if (userDTO.getResignDate().equals(java.sql.Date.valueOf("9999-12-31"))) {
-//                    user.userStatus("Y");
-//                } else {
-//                    user.userStatus("N");
-//                }
-//            }
-
-//            // UserRole 업데이트
-//            if (userDTO.getUserRole() != null) {
-//                // 기존의 역할 삭제
-//                for (UserRoleDTO roleDTO : userDTO.getUserRole()) {
-//                    deleteByUserCodeAndAuthCode(user.getUserCode(), roleDTO.getAuthCode());
-//                }
-//
-//                // 새로운 역할 추가
-//                List<UserRole> userRoles = userDTO.getUserRole().stream()
-//                        .map(roleDTO -> {
-//                            AuthorityDTO authorityDTO = roleDTO.getAuthority();
-//                            Authority authority = new Authority(authorityDTO.getAuthCode(), authorityDTO.getAuthName());
-//                            UserRole userRole = new UserRole(user.getUserCode(), roleDTO.getAuthCode(), authority);
-//                            return userRoleRepository.save(userRole);
-//                        })
-//                        .collect(Collectors.toList());
-//                user.userRole(userRoles);
-//            }
-//
-//            // Dayoff 업데이트
-//            if (userDTO.getDayoff() != null) {
-//                DayOffDTO dayoffDTO = userDTO.getDayoff();
-//                Dayoff dayoff = new Dayoff()
-//                        .offYear(dayoffDTO.getOffYear())
-//                        .offCount(dayoffDTO.getOffCount())
-//                        .offUsed(dayoffDTO.getOffUsed())
-//                        .user(user);
-//                user.dayoff(dayoffRepository.save(dayoff));
-//            }
-//
-//            userRepository.save(user);
-//
-//            return "직원 정보 업데이트 성공";
-//        } else {
-//            return "직원 정보 업데이트 실패";
-//        }
+        return "직원 정보 업데이트 성공";
     }
 
 
@@ -228,8 +183,4 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
-    @Transactional
-    public void deleteByUserCodeAndAuthCode(int userCode, int authCode) {
-        userRoleRepository.deleteByUserCodeAndAuthCode(userCode, authCode);
-    }
 }

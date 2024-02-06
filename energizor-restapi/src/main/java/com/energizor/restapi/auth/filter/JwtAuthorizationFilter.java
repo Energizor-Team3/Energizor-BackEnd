@@ -1,6 +1,7 @@
 package com.energizor.restapi.auth.filter;
 
 import com.energizor.restapi.common.AuthConstants;
+import com.energizor.restapi.users.dto.DayOffDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.dto.UserRoleDTO;
 import com.energizor.restapi.util.TokenUtils;
@@ -22,9 +23,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -64,7 +63,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     authentication.setUserName(claims.get("userName").toString());
                     authentication.setUserRank(claims.get("userRank").toString());
                     authentication.setEmail(claims.get("email").toString());
-                    System.out.println("claims ==================== " + claims.get("userRole"));
+                    System.out.println("claims userRole ==================== " + claims.get("userRole"));
+                    System.out.println("claims offCode ==================== " + claims.get("dayoff"));
+
+                    // List<UserRoleDTO> 설정
+                    List<UserRoleDTO> userRoles = mapToUserRoleList(claims.get("userRole"));
+                    System.out.println("userRoles = " + userRoles);
+                    authentication.setUserRole(userRoles);
+
 
                     AbstractAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.authenticated(authentication, token, authentication.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetails(request));
@@ -86,6 +92,23 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             printWriter.flush();
             printWriter.close();
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<UserRoleDTO> mapToUserRoleList(Object userRoleObject) {
+        List<UserRoleDTO> userRoles = new ArrayList<>();
+        if (userRoleObject instanceof List<?>) {
+            for (Map<String, Object> roleMap : (List<Map<String, Object>>) userRoleObject) {
+                UserRoleDTO userRole = new UserRoleDTO();
+                userRole.setUserCode((Integer) roleMap.get("userCode"));
+                userRole.setAuthCode((Integer) roleMap.get("authCode"));
+                // 다른 필드들도 필요에 따라 추가
+
+                userRoles.add(userRole);
+            }
+            System.out.println("userRoles =========== " + userRoles);
+        }
+        return userRoles;
     }
 
     /**
