@@ -1,10 +1,7 @@
 package com.energizor.restapi.calendar.service;
-
 import com.energizor.restapi.calendar.dto.CalendarAndParticipantDTO;
 import com.energizor.restapi.calendar.dto.CalendarDTO;
-
 import com.energizor.restapi.calendar.entity.Calendar;
-
 import com.energizor.restapi.calendar.entity.CalendarParticipant;
 import com.energizor.restapi.calendar.entity.CalendarParticipantPK;
 import com.energizor.restapi.calendar.repository.CalendarParticipantRepository;
@@ -15,15 +12,9 @@ import com.energizor.restapi.users.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.util.Collections;
 import java.util.Optional;
-
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,13 +35,14 @@ public class CalendarService {
         this.userRepository = userRepository;
     }
 
-//캘린더 코드로 조회
+    //캘린더 코드로 조회
     public CalendarDTO findCalendar(int calNo){
         Calendar schedule = calendarRepository.findById(calNo).get();
         CalendarDTO calendarDTO = modelMapper.map(schedule, CalendarDTO.class);
         return calendarDTO;
     }
-//모든 캘린더 조회
+
+    //모든 캘린더 조회
     public List<CalendarDTO> findAllCalendars() {
         List<Calendar> calendars = calendarRepository.findAll();
         return calendars.stream()
@@ -59,7 +51,7 @@ public class CalendarService {
     }
 
 
-    //    캘린더 타입으로 조회
+    // 캘린더 타입으로 조회
     public List<CalendarDTO> findCalendarsByType(String calType) {
         List<Calendar> calendarType = calendarRepository.findBycalType(calType);
         return calendarType.stream()
@@ -76,9 +68,6 @@ public class CalendarService {
                 .map(calendar -> modelMapper.map(calendar, CalendarDTO.class))
                 .collect(Collectors.toList());
     }
-
-
-
 
 
 //    // 로그인한 유저 코드로 캘린더 추가
@@ -173,7 +162,22 @@ public class CalendarService {
     // 로그인한 유저 코드로 캘린더 수정
 
 
-    public void updateCalendar(Calendar calendar, CalendarAndParticipantDTO calendarAndParticipantDTO) {
+    @Transactional
+    public void updateCalendar(int calNo, CalendarAndParticipantDTO calendarAndParticipantDTO,UserDTO principal) {
+        // 로그인한 사용자의 캘린더 목록 조회
+        List<CalendarDTO> userCalendars = findCalendarsForLoggedInUser(principal);
+
+        // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
+        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
+
+        // 캘린더가 존재하는지 확인
+        Calendar calendar = findCalendarEntity(calNo);
+
+        // 캘린더가 존재하지 않거나 해당 사용자의 캘린더 목록에 없으면 수정하지 않음
+        if (calendar == null || !calendarExists) {
+            return; // 캘린더가 존재하지 않거나 사용자의 캘린더 목록에 없으면 수정하지 않음
+        }
+
         if (calendarAndParticipantDTO.getCalType() != null) {
             calendar.setCalType(calendarAndParticipantDTO.getCalType());
         }
@@ -184,7 +188,7 @@ public class CalendarService {
             calendar.setCalName(calendarAndParticipantDTO.getCalName());
         }
 
-        calendarRepository.save(calendar);
+        calendarRepository.save(calendar); // 수정된 캘린더 저장
 
         if (calendarAndParticipantDTO.getUserCode() != null) {
             updateParticipantInCalendar(calendar, calendarAndParticipantDTO.getUserCode());
@@ -232,7 +236,7 @@ public class CalendarService {
     // 캘린더 삭제
 
     @Transactional
-    public boolean deleteCalendar(int calNo) {
+    public boolean deleteCalendar(int calNo, UserDTO principal) {
         // 캘린더가 존재하는지 확인
         Calendar calendar = findCalendarEntity(calNo);
         if (calendar == null) {
@@ -240,6 +244,14 @@ public class CalendarService {
         }
 
         try {
+            // 로그인한 사용자의 캘린더 목록 조회
+            List<CalendarDTO> userCalendars = findCalendarsForLoggedInUser(principal);
+            // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
+            boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
+            if (!calendarExists) {
+                return false; // 캘린더가 해당 사용자의 목록에 없으면 삭제 실패
+            }
+
             // 관련된 참가자 정보 삭제
             calendarParticipantRepository.deleteByCalParticipant_CalNo(calNo);
 
@@ -251,8 +263,7 @@ public class CalendarService {
             e.printStackTrace();
             return false; // 삭제 실패
         }
-
-}
+    }
 
 
 }
