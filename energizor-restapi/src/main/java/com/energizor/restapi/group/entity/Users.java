@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "GroupUsers")
+@Table(name = "Users")
 @AllArgsConstructor
 @Getter
 @ToString
