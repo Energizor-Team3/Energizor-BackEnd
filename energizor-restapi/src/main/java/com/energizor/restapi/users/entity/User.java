@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "users")
 @AllArgsConstructor
 @Getter
-@ToString
+//@ToString
 public class User {
 
     @Id
