@@ -17,6 +17,7 @@ public class Team {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamCode;
 
+
     @Column(name = "team_name", length = 20, nullable = false)
     private String teamName;
 

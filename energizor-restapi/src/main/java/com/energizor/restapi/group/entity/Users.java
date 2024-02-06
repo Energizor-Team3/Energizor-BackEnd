@@ -1,12 +1,13 @@
 package com.energizor.restapi.group.entity;
 
+import com.energizor.restapi.users.entity.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "users")
+@Table(name = "GroupUsers")
 @AllArgsConstructor
 @Getter
 @ToString

@@ -1,13 +1,13 @@
 package com.energizor.restapi.group.controller;
 import com.energizor.restapi.common.ResponseDTO;
+import com.energizor.restapi.group.dto.DeptDTO;
+import com.energizor.restapi.group.dto.TeamDTO;
 import com.energizor.restapi.group.service.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/group")
 @Slf4j
@@ -35,6 +35,30 @@ public class GroupController {
     public ResponseEntity<ResponseDTO> selectUser(@PathVariable int userCode) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조직도 유저 조회 성공" , groupService.selectUsers(userCode)));
+    }
+
+    /* insert */
+    @PostMapping("/dept-insert")
+    public ResponseEntity<ResponseDTO> insertDept(@RequestBody DeptDTO deptDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertDept(deptDTO)));
+    }
+
+    @PostMapping("/team-insert")
+    public ResponseEntity<ResponseDTO> insertTeam(@RequestBody TeamDTO teamDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertTeam(teamDTO)));
+    }
+
+    /* update */
+
+    @PostMapping("/dept-update")
+    public ResponseEntity<ResponseDTO> updateDept(@RequestBody DeptDTO deptDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "부서 수정 성공" , groupService.updateDept(deptDTO)));
     }
 
 }
