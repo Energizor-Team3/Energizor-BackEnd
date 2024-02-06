@@ -113,7 +113,7 @@ public class BoardController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"관심게시글 상세 조회",boardService.findDetailInterestBoard(interestCode)));
     }
-
+//hhh
 
 
     @PostMapping("/interest/register")
