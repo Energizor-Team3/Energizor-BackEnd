@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "GroupUsers")
+@Entity(name="groupUsers")
+@Table(name = "users")
 @AllArgsConstructor
 @Getter
 @ToString

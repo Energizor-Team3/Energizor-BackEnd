@@ -24,7 +24,7 @@ public class TeamAndUsers {
 
     @OneToMany
     @JoinColumn(name = "team_code")
-    private List<User> userlist;
+    private List<Users> userlist;
 
     public TeamAndUsers() {}
 
@@ -38,7 +38,7 @@ public class TeamAndUsers {
         return this;
     }
 
-    public TeamAndUsers userlist(List<User> userlist) {
+    public TeamAndUsers userlist(List<Users> userlist) {
         this.userlist = userlist;
         return this;
     }
