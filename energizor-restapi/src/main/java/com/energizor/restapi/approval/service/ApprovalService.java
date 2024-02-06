@@ -190,11 +190,6 @@ public class ApprovalService {
 
         // 현재 년도와 사용자 정보를 기반으로 offCode 조회
 
-
-
-
-
-
         // 휴가신청서
         DayOffApply dayOffApply = new DayOffApply();
         dayOffApply.document(result);
@@ -214,29 +209,91 @@ public class ApprovalService {
         return "휴가신청서 기안 성공";
     }
     @Transactional
-    public String insertBusinessTrip(BusinessTripDTO businessTripDTO) {
+    public String insertBusinessTrip(BusinessTripDTO businessTripDTO, UserDTO principal) {
         // 기안 -> 기안번호 조회
-        String form1 = "출장신청서";
-        DocumentDTO documentDTO = new DocumentDTO();
-        documentDTO.getUserDTO().setUserCode(1);
-        documentDTO.setDocumentTitle(businessTripDTO.getBtTitle());
-        documentDTO.setDraftDay(businessTripDTO.getBtDate());
-        documentDTO.setForm(form1);
-        documentDTO.setUserDTO(businessTripDTO.getUserDTO());
-        log.info("======================================== documentDTO", documentDTO.getUserDTO());
 
-        Document document = modelMapper.map(documentDTO, Document.class);
+        System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
+        System.out.println("businessTripDTO@@@@@@@@@@@@@@@@@@@@@@@@@@@@ = " + businessTripDTO);
+
+
+        User user = modelMapper.map(principal, User.class);
+
+        LocalDate now = LocalDate.now();
+        businessTripDTO.setBtDate(now);
+        // 기안 -> 기안번호 조회
+        Document document = new Document();
+        document.documentTitle(businessTripDTO.getBtTitle())
+                .userDTO(user)
+                .draftDay(businessTripDTO.getBtDate())
+                .form("출장신청서").build();
+
+        System.out.println("document = " + document);
+
         Document result = documentRepository.save(document);
 
+        System.out.println("result = " + result);
 
         // 기안코드를 휴가신청
 
         // 휴가신청서
+        BusinessTrip businessTrip = new BusinessTrip();
 
-        businessTripDTO.setBtCode(result.getDocumentCode());
-        businessTripDTO.getUserDTO().setUserCode(result.getUserDTO().getUserCode());
-        BusinessTrip businessTrip = modelMapper.map(businessTripDTO, BusinessTrip.class);
+
+        businessTrip.documentDTO(result);
+        businessTrip.user(user);
+        businessTrip.btDate(businessTripDTO.getBtDate());
+        businessTrip.btPhone(businessTripDTO.getBtPhone());
+        businessTrip.btStart(businessTripDTO.getBtStart());
+        businessTrip.btFinish(businessTripDTO.getBtFinish());
+        businessTrip.btPlace(businessTripDTO.getBtPlace());
+        businessTrip.btContent(businessTripDTO.getBtContent());
+        businessTrip.btTitle(businessTripDTO.getBtTitle());
+
         BusinessTrip result2 = businessTripRepository.save(businessTrip);
-        return "";
+        return "등록 성공";
+    }
+
+    public String insertEducation(EducationDTO educationDTO, UserDTO principal) {
+        // 기안 -> 기안번호 조회
+
+        System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
+        System.out.println("educationDTO@@@@@@@@@@@@@@@@@@@@@@@@@@@@ = " + educationDTO);
+
+
+        User user = modelMapper.map(principal, User.class);
+
+        LocalDate now = LocalDate.now();
+        educationDTO.setEduDate(now);
+        // 기안 -> 기안번호 조회
+        Document document = new Document();
+        document.documentTitle(educationDTO.getEduTitle())
+                .userDTO(user)
+                .draftDay(educationDTO.getEduDate())
+                .form("교육신청서").build();
+
+        System.out.println("document = " + document);
+
+        Document result = documentRepository.save(document);
+
+        System.out.println("result = " + result);
+
+        // 기안코드를 휴가신청
+
+        // 휴가신청서
+        Education education = new Education();
+
+
+        education.document(result);
+        education.user(user);
+//        education.btDate(businessTripDTO.getBtDate());
+//        businessTrip.btPhone(businessTripDTO.getBtPhone());
+//        businessTrip.btStart(businessTripDTO.getBtStart());
+//        businessTrip.btFinish(businessTripDTO.getBtFinish());
+//        businessTrip.btPlace(businessTripDTO.getBtPlace());
+//        businessTrip.btContent(businessTripDTO.getBtContent());
+//        businessTrip.btTitle(businessTripDTO.getBtTitle());
+//
+//        BusinessTrip result2 = businessTripRepository.save(businessTrip);
+        return "등록 성공";
     }
 }

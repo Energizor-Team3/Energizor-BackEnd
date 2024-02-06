@@ -92,7 +92,6 @@ Authorization: Bearer eyJkYXRlIjoxNzA3MTI0NjM5NzAxLCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 
 {
   "offApplyTitle": "휴가신청서1111",
-
   "offStart": "2024-02-21",
   "offEnd": "2024-02-24",
   "offDay": "4",
@@ -105,19 +104,15 @@ Authorization: Bearer eyJkYXRlIjoxNzA3MTI0NjM5NzAxLCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 POST http://localhost:8031/approval/businessTrip
 Accept: */*
 Content-Type: application/json
-Authorization: Bearer eyJkYXRlIjoxNzA3MDk4MDgwNjE3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcwOTk4ODAsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.kGNh0Llmi-Np56Hwr_a923BsXFr_P_uZqyCTqMOQEpY
-
+Authorization: Bearer eyJkYXRlIjoxNzA3MTkxNTMwMDcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcxOTMzMzAsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.gEC4SzxQk47Cal-ea2jk4MDyRkppNNYRT7s5Apc4jsc
 
 
 {
-
-  "btDate": "2024-02-02",
   "btPhone": "01022222222",
   "btStart": "2024-02-15",
   "btFinish": "2024-02-18",
   "btPlace": "강원도 삼척시 삼척동",
   "btContent": "수리",
   "btTitle": "출장신청서"
-
 }
 
