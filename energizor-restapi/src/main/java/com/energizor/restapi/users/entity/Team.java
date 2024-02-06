@@ -1,12 +1,8 @@
 package com.energizor.restapi.users.entity;
 
-
-
-import com.energizor.restapi.users.dto.DeptDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "team")
