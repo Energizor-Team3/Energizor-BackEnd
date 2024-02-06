@@ -1,6 +1,6 @@
 package com.energizor.restapi.note.dto;
 
-import com.energizor.restapi.group.dto.UsersDTO;
+import com.energizor.restapi.group.dto.UserGroupDTO;
 import lombok.*;
 
 import java.util.Date;
@@ -18,7 +18,7 @@ public class SendNoteDTO {
     private String noteContent;
     private Date noteSendDate;
 
-    private UsersDTO sendUserCode;
-    private List<UsersDTO> renUserCode;
+    private UserGroupDTO sendUserCode;
+    private List<UserGroupDTO> renUserCode;
 
 }

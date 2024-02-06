@@ -11,24 +11,24 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class GroupService {
 
+    private final DeptAndTeamRepository deptAndTeamRepository;
+    private final TeamAndUsersRepository teamAndUsersRepository;
+    private final UserGroupRepository userGroupRepository;
     private final DeptGroupRepository deptGroupRepository;
     private final TeamGroupRepository teamGroupRepository;
-    private final UserGroupRepository userGroupRepository;
-    private final DeptRepository deptRepository;
-    private final TeamRepository teamRepository;
 
     private final ModelMapper modelMapper;
 
     public GroupService(ModelMapper modelMapper
-            ,DeptGroupRepository deptGroupRepository
-            ,DeptRepository deptRepository
-            ,TeamRepository teamRepository
+            , DeptAndTeamRepository deptAndTeamRepository
+            , DeptGroupRepository deptGroupRepository
             , TeamGroupRepository teamGroupRepository
+            , TeamAndUsersRepository teamAndUsersRepository
             , UserGroupRepository userGroupRepository) {
+        this.deptAndTeamRepository = deptAndTeamRepository;
         this.deptGroupRepository = deptGroupRepository;
-        this.deptRepository = deptRepository;
-        this.teamRepository = teamRepository;
         this.teamGroupRepository = teamGroupRepository;
+        this.teamAndUsersRepository = teamAndUsersRepository;
         this.userGroupRepository = userGroupRepository;
         this.modelMapper = modelMapper;
 
@@ -39,7 +39,7 @@ public class GroupService {
 
         log.info("selectdepts start=============");
 
-        DeptAndTeam dept = deptGroupRepository.findById(deptCode).get();
+        DeptAndTeam dept = deptAndTeamRepository.findById(deptCode).get();
         DeptAndTeamDTO deptAndTeamDTO = modelMapper.map(dept, DeptAndTeamDTO.class);
 
 
@@ -55,7 +55,7 @@ public class GroupService {
 
         log.info("selectTeam start=============");
 
-        TeamAndUsers team = teamGroupRepository.findById(teamCode).get();
+        TeamAndUsers team = teamAndUsersRepository.findById(teamCode).get();
         TeamAndUsersDTO teamAndUsersDTO = modelMapper.map(team, TeamAndUsersDTO.class);
 
 
@@ -67,31 +67,33 @@ public class GroupService {
 
     }
 
-    public UsersDTO selectUsers(int userCode) {
+    public UserAndTeamDTO selectUsers(int userCode) {
         log.info("selectTeam start=============");
 
-        Users user = userGroupRepository.findById(userCode).get();
-        UsersDTO usersDTO = modelMapper.map(user, UsersDTO.class);
+        UsersGroup user = userGroupRepository.findById(userCode).get();
+        UserAndTeamDTO userAndTeamDTO = modelMapper.map(user, UserAndTeamDTO.class);
 
         System.out.println("group ================ " + user);
 
         log.info("selectTeam End===============");
 
-        return usersDTO;
+        return userAndTeamDTO;
     }
 
+    /* 부서생성 */
+
     @Transactional
-    public String insertDept(DeptDTO deptDTO) {
+    public String insertDept(DeptGroupDTO deptGroupDTO) {
         log.info("insertDept start ===============");
-        log.info("insertDept start ==============="+deptDTO);
+        log.info("insertDept start ==============="+ deptGroupDTO);
 
         int result = 0;
 
         try {
-            Dept insertDept = modelMapper.map(deptDTO, Dept.class);
+            DeptGroup insertDept = modelMapper.map(deptGroupDTO, DeptGroup.class);
 
 
-            deptRepository.save(insertDept);
+            deptGroupRepository.save(insertDept);
 
             result = 1;
         } catch (Exception e) {
@@ -104,19 +106,21 @@ public class GroupService {
 
     }
 
+    /* 팀생성 */
 
-    public String insertTeam(TeamDTO teamDTO) {
+    @Transactional
+    public String insertTeam(TeamGroupDTO teamGroupDTO) {
 
         log.info("insertTeam start ===============");
-        log.info("insertTeam start ==============="+teamDTO);
+        log.info("insertTeam start ==============="+ teamGroupDTO);
 
         int result = 0;
 
         try {
-            Team insertTeam = modelMapper.map(teamDTO, Team.class);
+            TeamGroup insertTeam = modelMapper.map(teamGroupDTO, TeamGroup.class);
 
 
-            teamRepository.save(insertTeam);
+            teamGroupRepository.save(insertTeam);
 
             result = 1;
         } catch (Exception e) {
@@ -129,19 +133,23 @@ public class GroupService {
 
     }
 
-    public String updateDept(DeptDTO deptDTO) {
+
+
+    /* 부서 수정 */
+    @Transactional
+    public String updateDept(DeptGroupDTO deptGroupDTO) {
 
         log.info("updateDept start ===============");
-        log.info("updateDept start ==============="+deptDTO);
+        log.info("updateDept start ==============="+ deptGroupDTO);
 
         int result = 0;
 
         try {
 
-            Dept dept = deptRepository.findById(deptDTO.getDeptCode()).get();
+            DeptGroup dept = deptGroupRepository.findById(deptGroupDTO.getDeptCode()).get();
 
-            dept = dept.deptCode(deptDTO.getDeptCode())
-                    .deptName(deptDTO.getDeptName()).build();
+            dept = dept.deptCode((long) deptGroupDTO.getDeptCode())
+                    .deptName(deptGroupDTO.getDeptName()).build();
 
             result = 1;
 
@@ -152,5 +160,73 @@ public class GroupService {
         }
         log.info("[DeptService] updateDept End ===================================");
         return (result > 0) ? "부서 수정 성공": "부서 수정 실패";
+    }
+
+    @Transactional
+    public String updateTeam(TeamGroupDTO teamGroupDTO) {
+
+        log.info("updateTeam start ===============");
+        log.info("updateTeam start ==============="+ teamGroupDTO);
+
+        int result = 0;
+
+        try {
+
+            TeamGroup team = teamGroupRepository.findById(teamGroupDTO.getTeamCode()).get();
+
+            team = team.teamCode((long) teamGroupDTO.getTeamCode())
+                    .teamName(teamGroupDTO.getTeamName()).build();
+
+            result = 1;
+        } catch (Exception e) {
+            log.info("[updateTeam] Exception!!");
+            throw new RuntimeException(e);
+        }
+        log.info("[TeamService] updateTeam End ===================================");
+        return (result > 0) ? "팀 수정 성공": "팀 수정 실패";
+    }
+
+    @Transactional
+    public String deleteDept(DeptGroupDTO deptGroupDTO) {
+
+        log.info("deleteDept start ==============="+ deptGroupDTO);
+
+        int result = 0;
+
+        try {
+            DeptGroup dept = deptGroupRepository.findById(deptGroupDTO.getDeptCode()).get();
+
+            deptGroupRepository.delete(dept);
+
+            result = 1;
+
+        }catch (Exception e) {
+            log.info("[deleteDept] Exception!!");
+            throw new RuntimeException(e);
+        }
+        log.info("[DeptService] deleteDept End ===================================");
+        return (result > 0) ? "부서 삭제 성공": "부서 삭제 실패";
+
+    }
+
+    @Transactional
+    public String deleteTeam(TeamGroupDTO teamGroupDTO) {
+
+        log.info("deleteTeam start ==============="+ teamGroupDTO);
+
+        int result = 0;
+
+        try {
+            TeamGroup team = teamGroupRepository.findById(teamGroupDTO.getTeamCode()).get();
+
+            teamGroupRepository.delete(team);
+
+            result = 1;
+        } catch (Exception e) {
+            log.info("[deleteTeam] Exception!!");
+            throw new RuntimeException(e);
+        }
+        log.info("[TeamService] deleteTeam End ===================================");
+        return (result > 0) ? "팀 삭제 성공": "팀 삭제 실패";
     }
 }

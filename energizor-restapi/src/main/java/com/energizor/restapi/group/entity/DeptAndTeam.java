@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.entity;
-import com.energizor.restapi.users.entity.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,18 +17,18 @@ public class DeptAndTeam {
         @Id
         @Column(name = "dept_code", nullable = false)
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int deptCode;
+        private Long deptCode;
 
         @Column(name = "dept_name", length = 20, nullable = false)
         private String deptName;
 
         @OneToMany
         @JoinColumn(name="dept_code")
-        private List<Team> teamList;
+        private List<TeamGroup> teamList;
 
         public DeptAndTeam() {}
 
-        public DeptAndTeam deptCode(int deptCode) {
+        public DeptAndTeam deptCode(Long deptCode) {
                 this.deptCode = deptCode;
                 return this;
         }
@@ -39,7 +38,7 @@ public class DeptAndTeam {
                 return this;
         }
 
-        public DeptAndTeam teamList(List<Team> teamList) {
+        public DeptAndTeam teamList(List<TeamGroup> teamList) {
                 this.teamList = teamList;
                 return this;
         }

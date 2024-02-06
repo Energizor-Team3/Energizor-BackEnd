@@ -1,6 +1,4 @@
 package com.energizor.restapi.group.entity;
-
-import com.energizor.restapi.users.entity.Team;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class Users {
+public class UsersGroup {
 
     @Id
     @Column(name = "user_code", nullable = false)
@@ -23,27 +21,27 @@ public class Users {
 
     @JoinColumn(name = "team_code")
     @ManyToOne
-    private Team team;
+    private TeamGroup teamGroup;
 
-    public Users() {}
+    public UsersGroup() {}
 
-    public Users userCode(Long userCode) {
+    public UsersGroup userCode(Long userCode) {
         this.userCode =userCode;
         return this;
     }
 
-    public Users userName(String userName) {
+    public UsersGroup userName(String userName) {
         this.userName = userName;
         return this;
     }
 
-    public Users team(Team team) {
-        this.team = team;
+    public UsersGroup teamGroup(TeamGroup teamGroup) {
+        this.teamGroup = teamGroup;
         return this;
     }
 
-    public Users build() {
-        return new Users(userCode, userName, team);
+    public UsersGroup build() {
+        return new UsersGroup(userCode, userName, teamGroup);
     }
 
 }

@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class Team {
+public class TeamGroup {
 
 
     @Id
@@ -21,21 +21,29 @@ public class Team {
     @Column(name = "team_name", length = 20, nullable = false)
     private String teamName;
 
-    public Team() {}
+    @Column(name = "dept_code", length = 20, nullable = false)
+    private Long deptCode;
 
-    public Team teamCode(Long teamCode) {
+    public TeamGroup() {}
+
+    public TeamGroup teamCode(Long teamCode) {
         this.teamCode = teamCode;
         return this;
     }
 
-    public Team teamName(String teamName) {
+    public TeamGroup teamName(String teamName) {
         this.teamName = teamName;
         return this;
     }
 
+    public TeamGroup deptCode(Long deptCode) {
+        this.deptCode = deptCode;
+        return this;
+    }
 
-    public Team build() {
-        return new Team(teamCode, teamName);
+
+    public TeamGroup build() {
+        return new TeamGroup(teamCode, teamName, deptCode);
     }
 
 }

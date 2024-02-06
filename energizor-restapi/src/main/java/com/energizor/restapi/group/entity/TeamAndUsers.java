@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.entity;
-import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +23,7 @@ public class TeamAndUsers {
 
     @OneToMany
     @JoinColumn(name = "team_code")
-    private List<Users> userlist;
+    private List<UsersGroup> userlist;
 
     public TeamAndUsers() {}
 
@@ -38,7 +37,7 @@ public class TeamAndUsers {
         return this;
     }
 
-    public TeamAndUsers userlist(List<Users> userlist) {
+    public TeamAndUsers userlist(List<UsersGroup> userlist) {
         this.userlist = userlist;
         return this;
     }

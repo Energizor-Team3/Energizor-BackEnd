@@ -14,6 +14,6 @@ public class TeamAndUsersDTO {
     private String teamName;
     private int deptCode;
 
-    private List<User> userList;
+    private List<UserGroupDTO> userList;
 
 }

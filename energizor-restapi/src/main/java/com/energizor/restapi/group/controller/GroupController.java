@@ -1,7 +1,7 @@
 package com.energizor.restapi.group.controller;
 import com.energizor.restapi.common.ResponseDTO;
-import com.energizor.restapi.group.dto.DeptDTO;
-import com.energizor.restapi.group.dto.TeamDTO;
+import com.energizor.restapi.group.dto.DeptGroupDTO;
+import com.energizor.restapi.group.dto.TeamGroupDTO;
 import com.energizor.restapi.group.service.GroupService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +18,8 @@ public class GroupController {
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
+
+    /* 조회 */
 
     @GetMapping("/dept/{deptCode}")
     public ResponseEntity<ResponseDTO> selectDept(@PathVariable int deptCode) {
@@ -37,28 +39,51 @@ public class GroupController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조직도 유저 조회 성공" , groupService.selectUsers(userCode)));
     }
 
-    /* insert */
+    /* 추가 */
     @PostMapping("/dept-insert")
-    public ResponseEntity<ResponseDTO> insertDept(@RequestBody DeptDTO deptDTO) {
+    public ResponseEntity<ResponseDTO> insertDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
         return ResponseEntity.ok()
-                .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertDept(deptDTO)));
+                .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertDept(deptGroupDTO)));
     }
 
     @PostMapping("/team-insert")
-    public ResponseEntity<ResponseDTO> insertTeam(@RequestBody TeamDTO teamDTO) {
+    public ResponseEntity<ResponseDTO> insertTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
 
         return ResponseEntity.ok()
-                .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertTeam(teamDTO)));
+                .body(new ResponseDTO(HttpStatus.OK, "팀 생성 성공" , groupService.insertTeam(teamGroupDTO)));
     }
 
-    /* update */
+    /* 수정 */
 
     @PostMapping("/dept-update")
-    public ResponseEntity<ResponseDTO> updateDept(@RequestBody DeptDTO deptDTO) {
+    public ResponseEntity<ResponseDTO> updateDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
         return ResponseEntity.ok()
-                .body(new ResponseDTO(HttpStatus.OK, "부서 수정 성공" , groupService.updateDept(deptDTO)));
+                .body(new ResponseDTO(HttpStatus.OK, "부서 수정 성공" , groupService.updateDept(deptGroupDTO)));
+    }
+
+    @PostMapping("/team-update")
+    public ResponseEntity<ResponseDTO> updateTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "팀 수정 성공" , groupService.updateTeam(teamGroupDTO)));
+    }
+
+    /* 삭제 */
+
+    @PostMapping("/dept-delete")
+    public ResponseEntity<ResponseDTO> deleteDept(@RequestBody DeptGroupDTO deptGroupDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "부서 삭제 성공" , groupService.deleteDept(deptGroupDTO)));
+    }
+
+    @PostMapping("/team-delete")
+    public ResponseEntity<ResponseDTO> deleteTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
+
+        return ResponseEntity.ok()
+                .body(new ResponseDTO(HttpStatus.OK, "팀 삭제 성공" , groupService.deleteTeam(teamGroupDTO)));
     }
 
 }

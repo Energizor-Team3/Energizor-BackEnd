@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class TeamDTO {
+public class TeamGroupDTO {
 
     private int teamCode;
     private String teamName;
