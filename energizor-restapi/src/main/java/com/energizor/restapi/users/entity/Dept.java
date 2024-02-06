@@ -10,7 +10,6 @@ import lombok.ToString;
 @Table(name = "department")
 @AllArgsConstructor
 @Getter
-@ToString
 public class Dept {
 
     @Id
@@ -37,4 +36,11 @@ public class Dept {
         return new Dept(deptCode, deptName);
     }
 
+    @Override
+    public String toString() {
+        return "Dept{" +
+                "deptCode=" + deptCode +
+                ", deptName='" + deptName + '\'' +
+                '}';
+    }
 }
