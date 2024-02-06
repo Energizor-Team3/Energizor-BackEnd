@@ -1,10 +1,7 @@
 package com.energizor.restapi.users.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
-
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +9,6 @@ import java.util.List;
 @Table(name = "users")
 @AllArgsConstructor
 @Getter
-
 public class User {
 
     @Id

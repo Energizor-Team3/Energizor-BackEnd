@@ -1,8 +1,6 @@
 package com.energizor.restapi.group.dto;
 import lombok.*;
-
 import java.util.List;
-
 
 @NoArgsConstructor
 @AllArgsConstructor

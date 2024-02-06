@@ -1,5 +1,5 @@
 package com.energizor.restapi.group.dto;
-import com.energizor.restapi.group.entity.Team;
+import com.energizor.restapi.users.entity.Team;
 import lombok.*;
 
 @NoArgsConstructor
@@ -13,6 +13,6 @@ public class UsersDTO {
     private String userName;
 
 
-    private Team team;
+    private TeamDTO team;
 
 }
