@@ -31,4 +31,10 @@ public class GroupController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조직도 팀,유저 조회 성공" , groupService.selectTeamAndUsers(teamCode)));
     }
 
+    @GetMapping("/user/{userCode}")
+    public ResponseEntity<ResponseDTO> selectUser(@PathVariable int userCode) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조직도 유저 조회 성공" , groupService.selectUsers(userCode)));
+    }
+
 }

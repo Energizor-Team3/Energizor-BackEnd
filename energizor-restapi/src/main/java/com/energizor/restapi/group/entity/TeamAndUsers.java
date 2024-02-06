@@ -50,6 +50,8 @@ public class TeamAndUsers {
         this.userlist = userlist;
         return this;
     }
-
+    public TeamAndUsers build() {
+        return new TeamAndUsers(teamCode, teamName, deptCode, userlist);
+    }
 
 }

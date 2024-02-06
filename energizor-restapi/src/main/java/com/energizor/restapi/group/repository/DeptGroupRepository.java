@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 
-public interface GroupRepository extends JpaRepository<DeptAndTeam, Integer> {
+public interface DeptGroupRepository extends JpaRepository<DeptAndTeam, Integer> {
 
 
 

@@ -1,5 +1,6 @@
 package com.energizor.restapi.note.entity;
 
+import com.energizor.restapi.group.entity.Users;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -65,5 +66,9 @@ public class NoteFile {
     public NoteFile sendNoteCode(SendNote sendNoteCode) {
         this.sendNoteCode = sendNoteCode;
         return this;
+    }
+
+    public NoteFile build() {
+        return new NoteFile(noteFileCode, noteOriginalFileName, noteSaveFileName, noteOriginalPath, noteSavePath ,sendNoteCode);
     }
 }

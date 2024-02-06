@@ -1,8 +1,5 @@
 package com.energizor.restapi.note.entity;
-
-
 import com.energizor.restapi.group.entity.Users;
-import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,24 +9,24 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "send_note")
+@Table(name = "copy_of_note")
 @AllArgsConstructor
 @Getter
 @ToString
-public class SendNote {
+public class SendNoteNotYet {
 
     @Id
-    @Column(name = "send_note_code", nullable = false)
+    @Column(name = "copy_of_note_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sendNoteCode;
+    private int copyOfNoteCode;
 
-    @Column(name = "note_title")
+    @Column(name = "ren_title")
     private String noteTitle;
 
-    @Column(name = "note_content")
+    @Column(name = "ren_content")
     private String noteContent;
 
-    @Column(name = "note_send_date")
+    @Column(name = "ren_save_date")
     private Date noteSendDate;
 
     @JoinColumn(name = "user_code")
@@ -40,39 +37,40 @@ public class SendNote {
     @OneToMany
     private List<Users> renUserCode;
 
-    public SendNote() {
-    }
+    public SendNoteNotYet(){}
 
-    public SendNote sendNoteCode(int sendNoteCode) {
-        this.sendNoteCode = sendNoteCode;
+    public SendNoteNotYet copyOfNoteCode(int copyOfNoteCode) {
+        this.copyOfNoteCode = copyOfNoteCode;
         return this;
     }
 
-    public SendNote noteTitle(String noteTitle) {
+    public SendNoteNotYet noteTitle(String noteTitle) {
         this.noteTitle = noteTitle;
         return this;
     }
 
-    public SendNote noteContent(String noteContent) {
+    public SendNoteNotYet noteContent(String noteContent) {
         this.noteContent = noteContent;
         return this;
     }
 
-    public SendNote noteSendDate(Date noteSendDate) {
+    public SendNoteNotYet noteSendDate(Date noteSendDate) {
         this.noteSendDate = noteSendDate;
         return this;
     }
 
-    public SendNote sendUserCode(Users sendUserCode) {
+    public SendNoteNotYet sendUserCode(Users sendUserCode) {
         this.sendUserCode = sendUserCode;
         return this;
     }
 
-    public SendNote renUserCode(List<Users> renUserCode) {
+    public SendNoteNotYet renUserCode(List<Users> renUserCode) {
         this.renUserCode = renUserCode;
         return this;
     }
-    public SendNote build() {
-        return new SendNote(sendNoteCode, noteTitle, noteContent, noteSendDate, sendUserCode, renUserCode);
+
+    public SendNoteNotYet build() {
+        return new SendNoteNotYet(copyOfNoteCode, noteTitle, noteContent, noteSendDate, sendUserCode, renUserCode);
     }
+
 }

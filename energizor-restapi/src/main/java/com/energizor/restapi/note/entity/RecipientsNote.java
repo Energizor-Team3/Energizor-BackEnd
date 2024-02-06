@@ -1,5 +1,6 @@
 package com.energizor.restapi.note.entity;
 
+import com.energizor.restapi.group.entity.TeamAndUsers;
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "recipients_note")
@@ -60,4 +62,8 @@ public class RecipientsNote {
         this.renSaveState = renSaveState;
         return this;
     }
+    public RecipientsNote build() {
+        return new RecipientsNote(renUserCode, senNoteCode, renReadingState, renReadingDate, renSaveState);
+    }
+
 }

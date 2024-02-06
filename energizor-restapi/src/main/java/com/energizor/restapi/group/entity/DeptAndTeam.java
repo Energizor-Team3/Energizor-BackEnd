@@ -1,4 +1,5 @@
 package com.energizor.restapi.group.entity;
+import com.energizor.restapi.group.dto.TeamDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +25,7 @@ public class DeptAndTeam {
 
         @OneToMany
         @JoinColumn(name="dept_code")
-        private List<TeamAndUsers> teamList;
+        private List<Team> teamList;
 
         public DeptAndTeam() {}
 
@@ -38,12 +39,14 @@ public class DeptAndTeam {
                 return this;
         }
 
-        public DeptAndTeam teamList(List<TeamAndUsers> teamList) {
+        public DeptAndTeam teamList(List<Team> teamList) {
                 this.teamList = teamList;
                 return this;
         }
 
-
+        public DeptAndTeam build() {
+                return new DeptAndTeam(deptCode, deptName, teamList);
+        }
 
 
 }
