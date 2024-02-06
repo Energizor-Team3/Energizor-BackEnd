@@ -1,17 +1,32 @@
+### 로그인
+POST http://localhost:8031/auth/login
+Content-Type: application/json
+Accept: */*
+Access-Control-Allow-Origin: *
 
+{
+  "userId": "200302001",
+  "userPw": "1234"
+}
 
+### 직원 조회
+GET http://localhost:8031/users/user/200302001
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA2ODM2ODM5NTMzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyTmFtZSI6IjIwMDMwMjAwMSIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX0seyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjIsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MiwiYXV0aE5hbWUiOiJST0xFX0FETUlOIn19XSwiZXhwIjoxNzA2ODM4NjM5LCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.BDae2vuxuz2kOqVLZi23ti_Y2oEDszhu-UU_GkP21wM
 
-### 조직도 부서기준 조회
-GET http://localhost:8031/group/dept/1
+### 직원 등록
+POST http://localhost:8031/auth/signup
 Content-Type: application/json
 Accept: */*
 
-### 조직도 팀기준 조회
-GET http://localhost:8031/group/team/3
-Content-Type: application/json
-Accept: */*
 
-### 조직도 유저기준 조회
-GET http://localhost:8031/group/user/2
-Content-Type: application/json
-Accept: */*
+{
+  "userName": "김부장",
+  "userPw": "pass01",
+  "userRank": "부장",
+  "email": "kimboojang@gmail.com",
+  "phone": "010-1111-0000",
+  "entDate": "2024-02-01",
+  "teamCode": "6"
+}
