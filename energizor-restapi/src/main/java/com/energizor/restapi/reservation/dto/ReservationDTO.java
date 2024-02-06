@@ -18,6 +18,7 @@ public class ReservationDTO {
     private String reservationContent;
     private UserDTO user;
     private MeetDTO meet;
+    //ㅁㄴㅇ
 
 
 
