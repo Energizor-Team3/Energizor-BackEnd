@@ -1,1 +1,17 @@
-### 로그인
+
+
+
+### 조직도 부서기준 조회
+GET http://localhost:8031/group/dept/1
+Content-Type: application/json
+Accept: */*
+
+### 조직도 팀기준 조회
+GET http://localhost:8031/group/team/3
+Content-Type: application/json
+Accept: */*
+
+### 조직도 유저기준 조회
+GET http://localhost:8031/group/user/2
+Content-Type: application/json
+Accept: */*
