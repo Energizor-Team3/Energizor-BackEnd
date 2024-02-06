@@ -41,3 +41,6 @@ image:
 
   image-dir: src/main/resources/static/imgs
   image-url: http://localhost:8031/imgs/
+jwt:
+  key: wERjtIdxQ8lNjF0w/AAiN6HqTASaCAUzSq6nbKefMwf5CbPE8GvwLsClz94uVt9Q1esxYwwXVU+BYn7/mR01Qg==
+  time: 18000000

@@ -22,12 +22,9 @@ public class TeamAndUsers {
     @Column(name = "team_name", length = 20, nullable = false)
     private String teamName;
 
-    @Column(name = "dept_code")
-    private Long deptCode;
-
     @OneToMany
     @JoinColumn(name = "team_code")
-    private List<User> userlist;
+    private List<Users> userlist;
 
     public TeamAndUsers() {}
 
@@ -41,17 +38,12 @@ public class TeamAndUsers {
         return this;
     }
 
-    public TeamAndUsers deptCode(Long deptCode) {
-        this.deptCode = deptCode;
-        return this;
-    }
-
-    public TeamAndUsers userlist(List<User> userlist) {
+    public TeamAndUsers userlist(List<Users> userlist) {
         this.userlist = userlist;
         return this;
     }
     public TeamAndUsers build() {
-        return new TeamAndUsers(teamCode, teamName, deptCode, userlist);
+        return new TeamAndUsers(teamCode, teamName, userlist);
     }
 
 }

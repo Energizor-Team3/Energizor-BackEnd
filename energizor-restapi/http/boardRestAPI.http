@@ -1,0 +1,111 @@
+### 게시글 조회
+GET http://localhost:8031/board/list?boardTypeCode=2&offset=1
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAxMTIzMzY3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTkxMjMsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.wgqFrnQfFxtiE6nNkA4alsqfQCGxquc8Y71mIPgA9kI
+
+
+### 게시글 상세 조회
+GET http://localhost:8031/board/list/detail/2
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAxMTIzMzY3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTkxMjMsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.wgqFrnQfFxtiE6nNkA4alsqfQCGxquc8Y71mIPgA9kI
+
+
+### 게시글 등록
+POST http://localhost:8031/board/register
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAxMjM1ODU4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTkyMzUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.AR_cC9Xv_iwMRnRbdSBRqQs2UZSgdPsYfOM8jKDrW8E
+
+{
+  "title": "신규등록2223",
+  "content": "신규글내용2223",
+  "viewCount": 5,
+  "userName": "최사원",
+  "userRank": "팀장",
+  "teamName": "개발2팀",
+  "userCode": 2,
+  "boardTypeCode": 1
+
+
+}
+
+### 게시글 수정
+PATCH http://localhost:8031/board/update
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAxMjM1ODU4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTkyMzUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.AR_cC9Xv_iwMRnRbdSBRqQs2UZSgdPsYfOM8jKDrW8E
+
+{
+  "boardCode": 3,
+  "title": "한 번 더 수정한 제목",
+  "content": "한 번 더 수정한 내용"
+}
+
+### 게시글 삭제
+PATCH http://localhost:8031/board/delete/9
+Content-Type: application/json
+Accept: */*
+
+### 댓글 조회
+GET http://localhost:8031/board/comment/4
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3MjAxMjM1ODU4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcyMTkyMzUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.AR_cC9Xv_iwMRnRbdSBRqQs2UZSgdPsYfOM8jKDrW8E
+
+### 댓글 등록
+POST http://localhost:8031/board/comment/register
+Content-Type: application/json
+Accept: */*
+
+{
+  "commentContent": "신규 댓글 내용",
+  "boardCode": 2
+}
+
+### 댓글 수정
+PATCH http://localhost:8031/board/comment/update
+Content-Type: application/json
+Accept: */*
+
+{
+  "commentCode": 3,
+  "commentContent": "댓글 수정 테스트222"
+}
+
+### 댓글 삭제
+PATCH http://localhost:8031/board/comment/delete/5
+Content-Type: application/json
+Accept: */*
+
+### 관심게시글 조회
+GET http://localhost:8031/board/interest/list
+Content-Type: application/json
+Accept: */*
+
+### 관심게시글 상세 조회
+GET http://localhost:8031/board/interest/detail/3
+Content-Type: application/json
+Accept: */*
+
+### 관심게시글 등록
+POST http://localhost:8031/board/interest/register
+Content-Type: application/json
+Accept: */*
+
+{
+  "boardCode": 10,
+  "userCode": 21
+}
+
+### 관심게시글 삭제
+PATCH http://localhost:8031/board/interest/delete
+Content-Type: application/json
+Accept: */*
+
+{
+  "interestCode": 7
+}
+
+

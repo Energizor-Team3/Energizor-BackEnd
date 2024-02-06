@@ -1,6 +1,4 @@
 package com.energizor.restapi.group.dto;
-
-
 import lombok.*;
 
 @NoArgsConstructor
@@ -12,4 +10,5 @@ public class TeamDTO {
 
     private int teamCode;
     private String teamName;
+    private int deptCode;
 }

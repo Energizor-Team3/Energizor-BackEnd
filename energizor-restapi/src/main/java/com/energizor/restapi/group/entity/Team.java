@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@Entity
+@Entity(name = "GroupTeam")
 @Table(name = "team")
 @AllArgsConstructor
 @Getter
@@ -16,6 +16,7 @@ public class Team {
     @Column(name = "team_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teamCode;
+
 
     @Column(name = "team_name", length = 20, nullable = false)
     private String teamName;
