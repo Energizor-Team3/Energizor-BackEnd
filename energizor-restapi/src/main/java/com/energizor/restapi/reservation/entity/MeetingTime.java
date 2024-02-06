@@ -22,7 +22,16 @@ public class MeetingTime {
     @Column(name = "time")
     private Time time;
 
-    public MeetingTime() {
+    public MeetingTime() {}
 
+    public MeetingTime meetTIme(int meetTime){
+        this.meetTime = meetTime;
+        return this;
     }
+
+    public MeetingTime time(Time time){
+        this.time = time;
+        return this;
+    }
+
 }

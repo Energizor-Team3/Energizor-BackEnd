@@ -23,10 +23,29 @@ public class Attendee {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_code", referencedColumnName = "user_code") // 수정된 부분
-    private User user;
+    private User userCode;
 
 
     public Attendee() {}
+
+    public Attendee attCode(int attCode){
+        this.attCode= attCode;
+        return this;
+    }
+
+    public Attendee reservation(Reservation reservation){
+        this.reservation= reservation;
+        return this;
+    }
+
+    public Attendee userCode(User userCode){
+        this.userCode = userCode;
+        return this;
+    }
+
+    public Attendee build() {
+        return new Attendee(attCode, reservation, userCode);
+    }
 
 
 }

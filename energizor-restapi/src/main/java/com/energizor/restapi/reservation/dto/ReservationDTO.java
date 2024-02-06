@@ -5,21 +5,28 @@ import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class ReservationDTO {
 
     private int reservationCode;
-    private Date reservationDate;
+    private LocalDate reservationDate;
     private String reservationContent;
-    private UserDTO user;
-    private MeetDTO meet;
-    //ㅁㄴㅇ
+    private UserDTO userCode;
+    private MeetDTO meetCode;
 
-
-
+    @Override
+    public String toString() {
+        return "ReservationDTO{" +
+                "reservationCode=" + reservationCode +
+                ", reservationDate=" + reservationDate +
+                ", reservationContent='" + reservationContent + '\'' +
+                '}';
+    }
 }

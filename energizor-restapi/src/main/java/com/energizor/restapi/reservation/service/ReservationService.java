@@ -50,7 +50,8 @@ public class ReservationService {
     //예약내역 추가
     @Transactional
     public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO) {
-        reservationDTO.getUser().setUserCode(userDTO.getUserCode());
+        System.out.println("userDTO service11111111111111111111111111111111 = " + userDTO);
+        reservationDTO.setUserCode(userDTO);
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
         reservationRepository.save(reservation);
         return "등록성공";

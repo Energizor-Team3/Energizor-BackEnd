@@ -6,12 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 @Entity
 @Table(name = "reservation")
 @AllArgsConstructor
 @Getter
-@ToString
+
 public class Reservation {
 
     @Id
@@ -19,30 +21,37 @@ public class Reservation {
     private int reservationCode;
 
     @Column(name = "reservation_date")
-    private Date reservationDate;
+    private LocalDate reservationDate;
 
     @Column(name = "reservation_content")
     private String reservationContent;
 
     @ManyToOne
     @JoinColumn(name = "user_code")
-    private User user;
+    private User userCode;
 
     @ManyToOne
     @JoinColumn(name = "meet_code")
-    private Meet meet;
+    private Meet meetCode;
 
     public Reservation() {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "reservationCode=" + reservationCode +
+                ", reservationDate=" + reservationDate +
+                ", reservationContent='" + reservationContent + '\'' +
+                '}';
+    }
 
     public Reservation reservationCode(int reservationCode){
         this.reservationCode = reservationCode;
         return this;
     }
-    public Reservation reservationDate(Date reservationDate){
+    public Reservation reservationDate(LocalDate reservationDate){
         this.reservationDate = reservationDate;
         return this;
     }
@@ -50,17 +59,17 @@ public class Reservation {
         this.reservationContent = reservationContent;
         return this;
     }
-    public Reservation user(User user){
-        this.user = user;
+    public Reservation userCode(User userCode){
+        this.userCode = userCode;
         return this;
     }
-    public Reservation meet(Meet meet){
-        this.meet = meet;
+    public Reservation meetCode(Meet meetCode){
+        this.meetCode = meetCode;
         return this;
     }
 
     public Reservation build() {
-        return new Reservation(reservationCode,reservationDate,reservationContent,user,meet );
+        return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
     }
 
 

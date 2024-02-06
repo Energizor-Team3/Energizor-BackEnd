@@ -6,12 +6,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
 @Table(name = "meet")
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class Meet {
     @Id
@@ -20,7 +22,17 @@ public class Meet {
     @Column(name = "meet_name")
     private String meetName;
 
-    public Meet() {
+    public Meet() {}
 
+    public Meet meetCode(int meetCode){
+        this.meetCode = meetCode;
+        return this;
     }
+
+    public Meet meetName(String meetName){
+        this.meetName = meetName;
+        return this;
+    }
+
+
 }

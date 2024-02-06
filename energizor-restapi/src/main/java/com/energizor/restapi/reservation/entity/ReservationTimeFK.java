@@ -23,7 +23,17 @@ public class ReservationTimeFK {
     @Column(name = "meet_time", insertable=false, updatable=false)
     private Time meetTime;
 
-    public ReservationTimeFK() {
+    public ReservationTimeFK() {}
+
+    public ReservationTimeFK id(ReservationTimePK id){
+        this.id = id;
+        return this;
+    }
+
+
+    public ReservationTimeFK meetTime(Time meetTime){
+        this.meetTime = meetTime;
+        return this;
     }
 }
 
