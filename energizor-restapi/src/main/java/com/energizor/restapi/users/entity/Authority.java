@@ -21,7 +21,7 @@ public class Authority {
     @Column(name = "auth_name", nullable = false)
     private String authName;
 
-    public Authority() {
+    protected Authority() {
     }
 
     public Authority authCode(int authCode) {

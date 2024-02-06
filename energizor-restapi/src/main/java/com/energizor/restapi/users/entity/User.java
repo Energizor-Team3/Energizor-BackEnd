@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "users")
 @AllArgsConstructor
 @Getter
-@ToString
+//@ToString
 public class User {
 
     @Id
@@ -130,6 +130,11 @@ public class User {
 
     public User team(Team team) {
         this.team = team;
+        return this;
+    }
+
+    public User team(int teamCode) {
+        this.team = team.teamCode(teamCode);
         return this;
     }
 

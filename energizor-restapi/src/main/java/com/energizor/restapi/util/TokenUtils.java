@@ -92,7 +92,7 @@ public class TokenUtils {
         JwtBuilder builder = Jwts.builder()
                 .setHeader(createHeader())
                 .setClaims(createClaims(user))
-                .setSubject(String.valueOf(user.getUserId()))    // int로 바꾸기???
+                .setSubject(String.valueOf(user.getUserId()))
                 .signWith(SignatureAlgorithm.HS256, createSignature())
                 .setExpiration(expireTime);
 
@@ -123,9 +123,13 @@ public class TokenUtils {
     private static Map<String, Object> createClaims(UserDTO user){
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("userName", user.getUsername());
+        claims.put("userCode", user.getUserCode());
+        claims.put("userId", user.getUserId());
+        claims.put("userName", user.getUserName());
+        claims.put("userRank", user.getUserRank());
         claims.put("userRole", user.getUserRole());
         claims.put("email", user.getEmail());
+//        claims.put("dayoff", user.getDayoff());
 
         return claims;
     }

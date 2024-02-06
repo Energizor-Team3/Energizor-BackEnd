@@ -27,6 +27,5 @@ public class AuthController {
         return ResponseEntity
                 .ok()
                 .body(new ResponseDTO(HttpStatus.CREATED, "회원가입 성공", authService.signup(userDTO)));
-
     }
 }
