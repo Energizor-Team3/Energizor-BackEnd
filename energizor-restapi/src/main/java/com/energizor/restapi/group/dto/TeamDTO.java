@@ -1,4 +1,4 @@
-package com.energizor.restapi.users.dto;
+package com.energizor.restapi.group.dto;
 
 
 import lombok.*;
@@ -12,6 +12,4 @@ public class TeamDTO {
 
     private int teamCode;
     private String teamName;
-    private DeptDTO deptDTO;
-
 }

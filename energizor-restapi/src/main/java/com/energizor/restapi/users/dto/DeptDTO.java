@@ -5,10 +5,16 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class DeptDTO {
 
     private int deptCode;
     private String deptName;
 
+    @Override
+    public String toString() {
+        return "DeptDTO{" +
+                "deptCode=" + deptCode +
+                ", deptName='" + deptName + '\'' +
+                '}';
+    }
 }

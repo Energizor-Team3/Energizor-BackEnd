@@ -3,7 +3,7 @@ package com.energizor.restapi.note.dto;
 import com.energizor.restapi.group.dto.UsersDTO;
 import lombok.*;
 
-import java.util.Date;
+import javax.xml.crypto.Data;
 import java.util.List;
 
 @NoArgsConstructor
@@ -11,12 +11,12 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class SendNoteDTO {
+public class SendNoteNotYetDTO {
 
-    private int sendNoteCode;
-    private String noteTitle;
-    private String noteContent;
-    private Date noteSendDate;
+    private int notYetNoteCode;
+    private String notYetTitle;
+    private String notYetContent;
+    private Data notYetSaveDate;
 
     private UsersDTO sendUserCode;
     private List<UsersDTO> renUserCode;
