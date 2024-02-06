@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name="boardUser")
 @Table(name="users")
 @AllArgsConstructor
 @NoArgsConstructor

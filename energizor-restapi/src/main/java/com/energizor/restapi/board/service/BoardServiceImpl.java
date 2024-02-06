@@ -9,9 +9,7 @@ import com.energizor.restapi.board.repository.BoardCommentRepository;
 import com.energizor.restapi.board.repository.BoardRepository;
 import com.energizor.restapi.board.repository.InterestBoardRepository;
 import com.energizor.restapi.common.Criteria;
-import com.energizor.restapi.board.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import com.energizor.restapi.board.repository.BoardUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -23,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -36,7 +32,7 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardRepository boardRepository;
     private final BoardCommentRepository boardCommentRepository;
-    private final UserRepository userRepository;
+    private final BoardUserRepository userRepository;
     private final InterestBoardRepository interestBoardRepository;
     private final ModelMapper modelMapper;
 

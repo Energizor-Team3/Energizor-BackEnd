@@ -8,7 +8,7 @@ import lombok.ToString;
 
 import java.time.Year;
 
-@Entity
+@Entity(name="boardDayOff")
 @Table(name="dayoff")
 @AllArgsConstructor
 @NoArgsConstructor

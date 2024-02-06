@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
-@Table(name="boardTeam")
+@Entity(name="boardTeam")
+@Table(name="Team")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
