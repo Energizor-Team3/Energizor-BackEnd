@@ -66,6 +66,7 @@ public class CalendarController {
 @PostMapping("/addCalendar")
 public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
                                                   @AuthenticationPrincipal UserDTO principal) {
+
     System.out.println("principal=============================================================== = " + principal);
     // 캘린더 및 참석자 정보를 함께 저장
     String result = calendarService.addNewCalendar(calendarAndParticipantDTO, principal);
@@ -81,31 +82,32 @@ public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarAndPartic
 
 
     // 캘린더 수정
-    @PatchMapping("/updateCalendar/{calNo}")
-    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo,
-                                                      @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
-                                                      @AuthenticationPrincipal UserDTO principal) {
-        System.out.println("principal=============================================================== = " + principal);
+//    @PatchMapping("/updateCalendar/{calNo}")
+//    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo,
+//                                                      @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
+//                                                      @AuthenticationPrincipal UserDTO principal) {
+//        System.out.println("principal=============================================================== = " + principal);
+//
+//        // 로그인한 사용자의 캘린더 목록 조회
+//        List<CalendarDTO> userCalendars = calendarService.findCalendarsForLoggedInUser(principal);
+//
+//        // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
+//        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
+//
+//        // 사용자의 캘린더 목록에 해당 캘린더가 없으면 수정 실패 응답 반환
+//        if (!calendarExists) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseDTO(HttpStatus.FORBIDDEN, "해당 캘린더를 수정할수 없습니다", null));
+//        }
+//        // 캘린더가 존재하고 사용자의 캘린더 목록에 있으면 수정 작업 수행
+//        try {
+//            calendarService.updateCalendar(calNo, calendarAndParticipantDTO, principal);
+//            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "캘린더 수정 중 오류가 발생했습니다", null));
+//        }
+//    }
 
-        // 로그인한 사용자의 캘린더 목록 조회
-        List<CalendarDTO> userCalendars = calendarService.findCalendarsForLoggedInUser(principal);
-
-        // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
-        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
-
-        // 사용자의 캘린더 목록에 해당 캘린더가 없으면 수정 실패 응답 반환
-        if (!calendarExists) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseDTO(HttpStatus.FORBIDDEN, "해당 캘린더를 수정할수 없습니다", null));
-        }
-        // 캘린더가 존재하고 사용자의 캘린더 목록에 있으면 수정 작업 수행
-        try {
-            calendarService.updateCalendar(calNo, calendarAndParticipantDTO, principal);
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "캘린더 수정 중 오류가 발생했습니다", null));
-        }
-    }
 
 
 // 캘린더 삭제

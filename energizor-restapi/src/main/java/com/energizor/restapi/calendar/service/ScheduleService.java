@@ -20,6 +20,8 @@ public class ScheduleService {
         this.modelMapper = modelMapper;
     }
 
+    // 캘린더 코드로 해당 캘린더 일정 조회
+
     public List<ScheduleDTO> findSchedulesByCalNo(int calNo) {
         List<Schedule> schedules = scheduleRepository.findByCalendar_CalNo(calNo);
         return schedules.stream()
