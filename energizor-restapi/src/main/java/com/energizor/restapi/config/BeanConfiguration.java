@@ -13,7 +13,7 @@ public class BeanConfiguration {
 
         ModelMapper modelMapper = new ModelMapper();
 
-        // ModelMapper의 매핑 전략 적용 - private 필드 매핑
+        // ModelMapper의 매핑 전략 적용 - private 필드 매핑.
         modelMapper.getConfiguration()
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setFieldMatchingEnabled(true);
