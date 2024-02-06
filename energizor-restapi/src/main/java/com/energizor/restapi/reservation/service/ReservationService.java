@@ -7,11 +7,15 @@ import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.repository.AttendeeRepository;
 import com.energizor.restapi.reservation.repository.ReservationRepository;
 import com.energizor.restapi.users.dto.UserDTO;
+import com.energizor.restapi.users.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,6 +55,10 @@ public class ReservationService {
     @Transactional
     public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO) {
         System.out.println("userDTO service11111111111111111111111111111111 = " + userDTO);
+        // 현재 날짜 가져오기
+        LocalDate currentDate = LocalDate.now();
+        // 예약 객체의 날짜 설정
+        reservationDTO.setReservationDate(currentDate);
         reservationDTO.setUserCode(userDTO);
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
         reservationRepository.save(reservation);

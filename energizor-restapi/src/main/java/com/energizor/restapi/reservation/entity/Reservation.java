@@ -9,6 +9,8 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "reservation")
 @AllArgsConstructor
@@ -71,6 +73,9 @@ public class Reservation {
     public Reservation build() {
         return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
     }
+
+
+
 
 
 }
