@@ -50,6 +50,6 @@ public class Attendee {
     }
 
 
-
-
+    public void setUser(User user) {
+    }
 }

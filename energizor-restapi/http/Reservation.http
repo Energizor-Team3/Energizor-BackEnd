@@ -31,10 +31,10 @@ Accept: */*
 Authorization: Bearer eyJkYXRlIjoxNzA3Mjg5ODEyNTE3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDczMDc4MTIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.lAYinYMOxggy0IZHGk93rEOZ4rSqzdbBqBZP2qDmCM4
 
 {
-  "reservationCode": 41,
-  "reservationDate": "1996-04-24",
+  "reservationCode": 40,
   "reservationContent": "수정3333",
-  "meetCode": 1
+  "meetCode": 1,
+  "member": [2]
 }
 
 

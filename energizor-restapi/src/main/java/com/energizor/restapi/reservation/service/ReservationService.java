@@ -87,11 +87,32 @@ public class ReservationService {
     //예약내역 수정
     @Transactional
     public String updateReservation(ReservationDTO reservationDTO) {
+        // 현재 날짜 가져오기
+        LocalDate currentDate = LocalDate.now();
+        // 예약 객체의 날짜 설정
+        reservationDTO.setReservationDate(currentDate);
 
         log.info("[ReservationService] updateReservation Start ===================================");
         log.info("[ReservationService] ReservationDTO : " + reservationDTO);
 
         Reservation reservation = reservationRepository.findById(reservationDTO.getReservationCode()).get();
+
+            attendeeRepository.deleteAllByReservationReservationCode(reservationDTO.getReservationCode());
+
+        int[] attendeeUser = reservationDTO.getMember();
+        for (int i = 0; i < attendeeUser.length; i++){
+
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa" + attendeeUser[i]);
+
+            User user123 = userRepository.findByUserCode(attendeeUser[i]);
+
+            System.out.println("user123 = " + user123);
+            Attendee attendee = new Attendee();
+            attendee.reservation(reservation);
+            attendee.userCode(user123);
+
+            attendeeRepository.save(attendee);
+        }
         /* update를 위한 엔티티 값 수정 */
         reservation = reservation.reservationCode(reservationDTO.getReservationCode())
                 .reservationDate(reservationDTO.getReservationDate())
@@ -99,6 +120,7 @@ public class ReservationService {
                 .build();
 
         return "Reservation updated successfully";
+
     }
     //예약내역 삭제
     @Transactional
