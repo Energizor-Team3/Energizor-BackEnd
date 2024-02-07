@@ -20,6 +20,7 @@ public class Reservation {
 
     @Id
     @Column(name = "reservation_code")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reservationCode;
 
     @Column(name = "reservation_date")

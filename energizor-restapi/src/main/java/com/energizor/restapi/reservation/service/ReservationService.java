@@ -8,14 +8,13 @@ import com.energizor.restapi.reservation.repository.AttendeeRepository;
 import com.energizor.restapi.reservation.repository.ReservationRepository;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
+import com.energizor.restapi.users.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,13 +26,16 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final AttendeeRepository attendeeRepository;
 
+    private final UserRepository userRepository;
+
     private final ModelMapper modelMapper;
 
 
 
-    public ReservationService(ReservationRepository reservationRepository, AttendeeRepository attendeeRepository, ModelMapper modelMapper) {
+    public ReservationService(ReservationRepository reservationRepository, AttendeeRepository attendeeRepository, UserRepository userRepository, ModelMapper modelMapper) {
         this.reservationRepository = reservationRepository;
         this.attendeeRepository = attendeeRepository;
+        this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -61,7 +63,30 @@ public class ReservationService {
         reservationDTO.setReservationDate(currentDate);
         reservationDTO.setUserCode(userDTO);
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
-        reservationRepository.save(reservation);
+        Reservation result = reservationRepository.save(reservation);
+
+
+        System.out.println("result22222222222222222222222 = " + result);
+
+        int[] attendeeUser = reservationDTO.getMember();
+        for (int i = 0; i < attendeeUser.length; i++){
+
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa" + attendeeUser[i]);
+
+
+
+            User user123 = userRepository.findByUserCode(attendeeUser[i]);
+
+            System.out.println("user123 = " + user123);
+            Attendee attendee = new Attendee();
+            attendee.reservation(result);
+            attendee.userCode(user123);
+
+            attendeeRepository.save(attendee);
+        }
+
+
+
         return "등록성공";
     }
 
@@ -105,12 +130,25 @@ public class ReservationService {
     }
 
     //참석자 추가
-    @Transactional
-    public Object createAttendee(AttendeeDTO attendeeDTO) {
-        Attendee attendee = modelMapper.map(attendeeDTO, Attendee.class);
-        attendeeRepository.save(attendee);
-        return "참석자 추가 성공";
-    }
+//    @Transactional
+//    public Object createAttendee(AttendeeDTO attendeeDTO) {
+//        // AttendeeDTO에서 UserDTO 배열을 가져옵니다.
+//        UserDTO[] userDTOs = attendeeDTO.getUserCode();
+//
+//        // UserDTO 배열을 Attendee 객체로 매핑하여 저장합니다.
+//        for (UserDTO userDTO : userDTOs) {
+//            // Attendee 객체 생성 및 매핑
+//            Attendee attendee = new Attendee();
+//            attendee.setAttCode(attendeeDTO.getAttCode());
+//            attendee.setReservationCode(attendeeDTO.getReservationCode());
+//            attendee.setUserCode(userDTO);
+//
+//            // Attendee 저장
+//            attendeeRepository.save(attendee);
+//        }
+//
+//        return "참석자 추가 성공";
+//    }
 
     //참석자 수정
 

@@ -85,11 +85,14 @@ public class ReservationController {
         }
     }
 
-    //참석자 추가
-    @PostMapping("/attendee/create")
-    public ResponseEntity<ResponseDTO> createAttendee(@RequestBody AttendeeDTO attendeeDTO){
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "참석자 추가 성공", reservationService.createAttendee(attendeeDTO)));
-    }
+//    @PostMapping("/attendee/create")
+//    public ResponseEntity<ResponseDTO> createAttendee(@RequestBody AttendeeDTO attendeeDTO) {
+//        Object result = reservationService.createAttendee(attendeeDTO);
+//        HttpStatus status = HttpStatus.CREATED;
+//        String message = "참석자 추가 성공";
+//
+//        return ResponseEntity.status(status).body(new ResponseDTO(status, message, result));
+//    }
 
     //참석자 수정
     //
