@@ -65,15 +65,12 @@ public class ReservationService {
         Reservation reservation = modelMapper.map(reservationDTO, Reservation.class);
         Reservation result = reservationRepository.save(reservation);
 
-
         System.out.println("result22222222222222222222222 = " + result);
 
         int[] attendeeUser = reservationDTO.getMember();
         for (int i = 0; i < attendeeUser.length; i++){
 
             System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa" + attendeeUser[i]);
-
-
 
             User user123 = userRepository.findByUserCode(attendeeUser[i]);
 
@@ -84,9 +81,6 @@ public class ReservationService {
 
             attendeeRepository.save(attendee);
         }
-
-
-
         return "등록성공";
     }
 
