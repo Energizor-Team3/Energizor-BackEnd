@@ -3,7 +3,8 @@ package com.energizor.restapi.calendar.controller;
 
 import com.energizor.restapi.calendar.dto.CalendarAndParticipantDTO;
 import com.energizor.restapi.calendar.dto.CalendarDTO;
-import com.energizor.restapi.calendar.entity.Calendar;
+import com.energizor.restapi.calendar.dto.ScheduleAndCalendarDTO;
+import com.energizor.restapi.calendar.dto.ScheduleDTO;
 import com.energizor.restapi.calendar.service.CalendarService;
 import com.energizor.restapi.calendar.service.ScheduleService;
 import com.energizor.restapi.common.ResponseDTO;
@@ -14,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -82,31 +82,31 @@ public ResponseEntity<ResponseDTO> addNewCalendar(@RequestBody CalendarAndPartic
 
 
     // 캘린더 수정
-//    @PatchMapping("/updateCalendar/{calNo}")
-//    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo,
-//                                                      @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
-//                                                      @AuthenticationPrincipal UserDTO principal) {
-//        System.out.println("principal=============================================================== = " + principal);
+    @PatchMapping("/updateCalendar/{calNo}")
+    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo,
+                                                      @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
+                                                      @AuthenticationPrincipal UserDTO principal) {
+        System.out.println("principal=============================================================== = " + principal);
 //
-//        // 로그인한 사용자의 캘린더 목록 조회
-//        List<CalendarDTO> userCalendars = calendarService.findCalendarsForLoggedInUser(principal);
-//
-//        // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
-//        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
-//
-//        // 사용자의 캘린더 목록에 해당 캘린더가 없으면 수정 실패 응답 반환
-//        if (!calendarExists) {
-//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseDTO(HttpStatus.FORBIDDEN, "해당 캘린더를 수정할수 없습니다", null));
-//        }
-//        // 캘린더가 존재하고 사용자의 캘린더 목록에 있으면 수정 작업 수행
-//        try {
-//            calendarService.updateCalendar(calNo, calendarAndParticipantDTO, principal);
-//            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "캘린더 수정 중 오류가 발생했습니다", null));
-//        }
-//    }
+        // 로그인한 사용자의 캘린더 목록 조회
+        List<CalendarDTO> userCalendars = calendarService.findCalendarsForLoggedInUser(principal);
+
+//         해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
+        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
+
+//         사용자의 캘린더 목록에 해당 캘린더가 없으면 수정 실패 응답 반환
+        if (!calendarExists) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseDTO(HttpStatus.FORBIDDEN, "해당 캘린더를 수정할수 없습니다", null));
+        }
+        // 캘린더가 존재하고 사용자의 캘린더 목록에 있으면 수정 작업 수행
+        try {
+            calendarService.updateCalendar(calNo, calendarAndParticipantDTO, principal);
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "캘린더 수정 중 오류가 발생했습니다", null));
+        }
+    }
 
 
 
@@ -138,6 +138,31 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  calNo + "번 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByCalNo(calNo)));
     }
 
+    @PostMapping("/schedule/insert")
+    public ResponseEntity<ResponseDTO> insertSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"스케줄 등록 성공",scheduleService.insertSchedule(scheduleDTO)));
+
+    }
+    @DeleteMapping("/schedule/delete/{schNo}")
+    public ResponseEntity<ResponseDTO> deleteSchedule(@PathVariable int schNo) {
+        String result = scheduleService.deleteSchedule(schNo);
+        if (result.equals("Schedule delete successfully")) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "스케줄 삭제 성공", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "존재하지 않는 스케줄 입니다", null));
+        }
+    }
+
+    @PatchMapping("/schedule/update/{schNo}")
+    public ResponseEntity<ResponseDTO> updateSchedule(@PathVariable int schNo, @RequestBody ScheduleDTO updatedScheduleDTO) {
+        try {
+            ScheduleDTO updatedSchedule = scheduleService.updateSchedule(schNo, updatedScheduleDTO);
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "스케줄 업데이트 성공", updatedSchedule));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "존재하지 않는 스케줄입니다", null));
+        }
+    }
 
 //    @GetMapping("/schedule/{calNo}")
 //    public ResponseEntity<ResponseDTO> getScheduleByCalendarCode(@PathVariable int calNo) {
