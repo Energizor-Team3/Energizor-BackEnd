@@ -39,6 +39,7 @@ public class TokenUtils {
      * @return token: Authrization의 token 부분을 반환한다.
      * */
     public static String splitHeader(String header){
+        System.out.println("header = " + header);
         if(!header.equals("")){
             return header.split(" ")[1];
         }else{

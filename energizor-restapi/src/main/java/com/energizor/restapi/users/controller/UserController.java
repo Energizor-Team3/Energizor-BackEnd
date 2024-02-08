@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,8 +27,11 @@ public class UserController {
     }
 
     @GetMapping("/users-management")
-    public ResponseEntity<ResponseDTO> selectUserListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @Secured("ROLE_ADMIN")
+    public ResponseEntity<ResponseDTO> selectUserListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset, @AuthenticationPrincipal UserDTO principal) {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
+        System.out.println("principal ==-=-=-=-=-=-=- " + principal);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 10);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();

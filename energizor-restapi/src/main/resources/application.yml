@@ -18,6 +18,19 @@ spring:
   web:
     resources:
       static-locations: classpath:/imgs/
+  security:
+    basic:
+      enabled: false
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: YOUR_GOOGLE_CLIENT_ID
+            clientSecret: YOUR_GOOGLE_CLIENT_SECRET
+      resource:
+        jwt:
+          key-value: YOUR_PUBLIC_KEY
+
 
   # jpa config
   jpa:
@@ -44,3 +57,4 @@ image:
 jwt:
   key: wERjtIdxQ8lNjF0w/AAiN6HqTASaCAUzSq6nbKefMwf5CbPE8GvwLsClz94uVt9Q1esxYwwXVU+BYn7/mR01Qg==
   time: 18000000
+

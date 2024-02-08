@@ -5,6 +5,8 @@ import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 public class AuthController {
 
     private final AuthService authService;
@@ -21,7 +24,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO userDTO){
+    public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDTO principal){
+        System.out.println("principal =================================== " + principal);
         // 멤버의 기본 상태값 설정
         userDTO.setUserStatus("Y");
         return ResponseEntity

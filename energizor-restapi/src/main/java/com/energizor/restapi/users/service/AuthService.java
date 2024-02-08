@@ -46,7 +46,7 @@ public class AuthService {
         this.dayoffRepository = dayoffRepository;
     }
 
-    @Transactional   // DML작업은 Transactional 어노테이션 추가
+    @Transactional
     public Object signup(UserDTO userDTO) {
 
         log.info("[AuthService] signup Start ==================================");
