@@ -24,4 +24,12 @@ public class ProjectController {
     public ResponseEntity<ResponseDTO> getAllCalendars() {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "모든 프로젝트 목록 조회 성공", projectService.findAllProjects()));
     }
+
+    @GetMapping("/{proNo}")
+    public ResponseEntity<ResponseDTO> findProject(@PathVariable int proNo) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  proNo+" 번 프로젝트 조회 성공",projectService.findProject(proNo)));
+    }
+
+
 }
