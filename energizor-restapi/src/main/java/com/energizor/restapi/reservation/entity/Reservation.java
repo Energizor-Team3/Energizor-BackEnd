@@ -37,6 +37,8 @@ public class Reservation {
     @JoinColumn(name = "meet_code")
     private Meet meetCode;
 
+
+
     public Reservation() {
 
     }

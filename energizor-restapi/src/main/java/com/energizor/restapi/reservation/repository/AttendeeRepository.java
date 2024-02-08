@@ -14,4 +14,5 @@ public interface AttendeeRepository extends JpaRepository<Attendee, Integer> {
 
 
     void deleteAllByReservationReservationCode(int reservationCode);
+
 }

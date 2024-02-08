@@ -64,14 +64,15 @@ public class ReservationController {
         }
     }
     // 예약내역 삭제
-    @DeleteMapping("/delete/{reservation_code}")
-    public ResponseEntity<ResponseDTO> deleteReservation(@PathVariable int reservation_code) {
-        String result = reservationService.deleteReservation(reservation_code);
-        if (result.equals("Reservation delete successfully")) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 삭제 성공", null));
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "예약이 존재하지 않습니다", null));
-        }
+    @DeleteMapping("/delete/{reservationCode}")
+    public ResponseEntity<ResponseDTO> deleteReservation(@PathVariable int reservationCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 삭제 성공", reservationService.deleteReservation(reservationCode)));
+    }
+
+    //참석자만 삭제
+    @DeleteMapping("/delete/attendee/{reservationCode}")
+    public ResponseEntity<ResponseDTO> deleteAttendee(@PathVariable int reservationCode) {
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "참석자 삭제 성공", reservationService.deleteAttendee(reservationCode)));
     }
 
     //참석자 예약코드로 조회
@@ -85,17 +86,6 @@ public class ReservationController {
         }
     }
 
-//    @PostMapping("/attendee/create")
-//    public ResponseEntity<ResponseDTO> createAttendee(@RequestBody AttendeeDTO attendeeDTO) {
-//        Object result = reservationService.createAttendee(attendeeDTO);
-//        HttpStatus status = HttpStatus.CREATED;
-//        String message = "참석자 추가 성공";
-//
-//        return ResponseEntity.status(status).body(new ResponseDTO(status, message, result));
-//    }
-
-    //참석자 수정
-    //
 
 }
 

@@ -122,19 +122,39 @@ public class ReservationService {
         return "Reservation updated successfully";
 
     }
+    //참석자만 삭제
+    @Transactional
+    public String deleteAttendee(int reservationCode) {
+        log.info("[ReservationService] deleteAttendee Start ===================================");
+        log.info("[ReservationService] Reservation Code : " + reservationCode);
+        // 예약 코드에 해당하는 모든 참석자 정보를 가져옴
+        List<Attendee> attendees = attendeeRepository.findByReservationReservationCode(reservationCode);
+
+        // 참석자 정보 삭제
+        if (!attendees.isEmpty()) {
+            attendeeRepository.deleteAllByReservationReservationCode(reservationCode);
+            return "Attendees deleted successfully";
+        } else {
+            return "No attendees found for reservation code: " + reservationCode;
+        }
+    }
+
     //예약내역 삭제
     @Transactional
     public String deleteReservation(int reservationCode) {
         log.info("[ReservationService] deleteReservation Start ===================================");
         log.info("[ReservationService] Reservation Code : " + reservationCode);
 
-        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationCode);
-        if (optionalReservation.isPresent()) {
-            reservationRepository.delete(optionalReservation.get());
-            return "Reservation delete successfully";
-        } else {
-            return "Reservation not found";
+        // 예약 코드에 해당하는 모든 참석자 정보를 가져옴
+        List<Attendee> attendees = attendeeRepository.findByReservationReservationCode(reservationCode);
+
+        // 참석자 정보 삭제
+        if (!attendees.isEmpty()) {
+            attendeeRepository.deleteAll(attendees);
         }
+        reservationRepository.deleteById(reservationCode);
+
+        return "성공";
     }
 
     //참석자 예약코드로 조회
@@ -145,28 +165,7 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    //참석자 추가
-//    @Transactional
-//    public Object createAttendee(AttendeeDTO attendeeDTO) {
-//        // AttendeeDTO에서 UserDTO 배열을 가져옵니다.
-//        UserDTO[] userDTOs = attendeeDTO.getUserCode();
-//
-//        // UserDTO 배열을 Attendee 객체로 매핑하여 저장합니다.
-//        for (UserDTO userDTO : userDTOs) {
-//            // Attendee 객체 생성 및 매핑
-//            Attendee attendee = new Attendee();
-//            attendee.setAttCode(attendeeDTO.getAttCode());
-//            attendee.setReservationCode(attendeeDTO.getReservationCode());
-//            attendee.setUserCode(userDTO);
-//
-//            // Attendee 저장
-//            attendeeRepository.save(attendee);
-//        }
-//
-//        return "참석자 추가 성공";
-//    }
 
-    //참석자 수정
 
 
 

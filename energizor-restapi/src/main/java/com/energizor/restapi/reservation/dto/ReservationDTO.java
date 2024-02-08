@@ -21,6 +21,7 @@ public class ReservationDTO {
     private UserDTO userCode;
     private MeetDTO meetCode;
     private int[] member;
+    private  ReservationTimeDTO reservationTime;
 
     @Override
     public String toString() {
