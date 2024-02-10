@@ -355,7 +355,7 @@ Content-Disposition: form-data; name="gdContent"
 합계 : 8000원
 --WebAppBoundary
 
-### 기안한 문서 조회
+### 임시 기안한 문서 조회
 GET http://localhost:8031/approval/tempSaveDocument
 Content-Type: application/json
 Accept: */*
