@@ -20,6 +20,6 @@ public class DocumentDTO {
     private UserDTO userDTO;
     private LocalDate draftDay;
     private String form;
-
+    private String tempSaveStatus;
 
 }

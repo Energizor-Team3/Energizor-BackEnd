@@ -23,4 +23,7 @@ public class BusinessTripDTO {
     private DocumentDTO documentDTO;
     private UserDTO userDTO;
     private String btTitle;
+    private String lineUser;
+    private String rfUser;
+
 }

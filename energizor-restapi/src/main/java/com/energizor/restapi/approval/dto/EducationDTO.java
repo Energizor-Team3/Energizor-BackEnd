@@ -24,4 +24,6 @@ public class EducationDTO {
     private String eduContent;
     private List<DocumentDTO> documentDTO;
     private UserDTO userDTO;
+    private String lineUser;
+    private String rfUser;
 }

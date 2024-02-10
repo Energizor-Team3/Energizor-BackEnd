@@ -24,6 +24,12 @@ public class DayOffApplyDTO {
     private UserDTO userDTO;
     private String offApplyTitle;
 
+    private String lineUser;
+    private String rfUser;
+
+
+
+
     @Override
     public String toString() {
         return "DayOffApplyDTO{" +

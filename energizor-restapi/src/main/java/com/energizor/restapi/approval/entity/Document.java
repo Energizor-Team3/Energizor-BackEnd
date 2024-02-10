@@ -29,6 +29,9 @@ public class  Document {
     private LocalDate draftDay;
     @Column(name = "form")
     private String form;
+    @Column(name = "tempsavestatus")
+    private String tempSaveStatus;
+
 
     public Document() {
     }
@@ -55,8 +58,12 @@ public class  Document {
         this.form = form;
         return this;
     }
+    public Document tempSaveStatus(String tempSaveStatus) {
+        this.tempSaveStatus = tempSaveStatus;
+        return this;
+    }
 
     public Document build() {
-        return new Document(documentCode, documentTitle, userDTO, draftDay, form);
+        return new Document(documentCode, documentTitle, userDTO, draftDay, form, tempSaveStatus);
     }
 }
