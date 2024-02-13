@@ -9,6 +9,17 @@ Access-Control-Allow-Origin: *
   "userPw": "1234"
 }
 
+### 비밀번호 찾기
+POST http://localhost:8031/auth/searchpwd
+Content-Type: application/json
+Accept: */*
+Access-Control-Allow-Origin: *
+
+{
+  "userId": "240201001",
+  "email": "sueyeon777@gmail.com"
+}
+
 ### 내 정보 조회
 GET http://localhost:8031/users/user/200302001
 Content-Type: application/json

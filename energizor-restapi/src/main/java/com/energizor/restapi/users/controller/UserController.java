@@ -28,7 +28,6 @@ public class UserController {
 
     @GetMapping("/users-management")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-//    @Secured("ROLE_ADMIN")
     public ResponseEntity<ResponseDTO> selectUserListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset, @AuthenticationPrincipal UserDTO principal) {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
         System.out.println("principal ==-=-=-=-=-=-=- " + principal);
@@ -45,12 +44,15 @@ public class UserController {
 
     // 바로 수정으로 넘어갈거면 삭제 !!!!!!!!!!!!!!!!!!!!
     @GetMapping("/users-management/{userCode}")
-    public ResponseEntity<ResponseDTO> selectUserDetailForAdmin(@PathVariable int userCode) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<ResponseDTO> selectUserDetailForAdmin(@PathVariable int userCode, @AuthenticationPrincipal UserDTO principal) {
 
+        System.out.println("principal =============>>>>>>>>>> " + principal);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "직원 상세정보 조회 성공",  userService.selectUserDetailForAdmin(userCode)));
     }
 
     @PutMapping(value = "/user-update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO> updateUserForAdmin(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("principal =============>>>>>>>>>> " + principal);

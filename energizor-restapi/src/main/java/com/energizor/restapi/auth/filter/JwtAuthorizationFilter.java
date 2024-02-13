@@ -40,7 +40,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
          * */
 
         List<String> roleLeessList = Arrays.asList(
-                "/auth/login"
+                "/auth/login", "/auth/searchpwd"
         );
 
         if(roleLeessList.stream().anyMatch(uri -> roleLeessList.stream().anyMatch(pattern -> Pattern.matches(pattern, request.getRequestURI())))){

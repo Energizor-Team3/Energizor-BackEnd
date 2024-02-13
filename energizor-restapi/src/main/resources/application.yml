@@ -18,18 +18,18 @@ spring:
   web:
     resources:
       static-locations: classpath:/imgs/
-  security:
-    basic:
-      enabled: false
-    oauth2:
-      client:
-        registration:
-          google:
-            clientId: YOUR_GOOGLE_CLIENT_ID
-            clientSecret: YOUR_GOOGLE_CLIENT_SECRET
-      resource:
-        jwt:
-          key-value: YOUR_PUBLIC_KEY
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hrmanager690@gmail.com
+    password: "ejyw ykzv yqxy mmms"
+    properties:
+      debug: true
+      smtp:
+        auth: true
+        timeout:
+          starttls:
+            enable: true
 
 
   # jpa config

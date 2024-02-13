@@ -1,6 +1,7 @@
 package com.energizor.restapi.users.service;
 
 import com.energizor.restapi.exception.DuplicatedMemberEmailException;
+import com.energizor.restapi.users.dto.MailDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.Dayoff;
 import com.energizor.restapi.users.entity.User;
@@ -9,12 +10,20 @@ import com.energizor.restapi.users.repository.DayoffRepository;
 import com.energizor.restapi.users.repository.UserRepository;
 import com.energizor.restapi.users.repository.UserRoleRepository;
 
+import com.energizor.restapi.util.TokenUtils;
+import jakarta.mail.internet.InternetAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Year;
@@ -23,27 +32,34 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAccessor;
 import java.util.Date;
+import java.util.Optional;
 
 @Service
 @Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
+
+    @Autowired
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
     private final UserRoleRepository userRoleRepository;
     private final DayoffRepository dayoffRepository;
 
+    private final JavaMailSender javaMailSender;
+
     public AuthService(UserRepository userRepository
                         , PasswordEncoder passwordEncoder
                         , ModelMapper modelMapper
                         , UserRoleRepository userRoleRepository
-                        , DayoffRepository dayoffRepository){
+                        , DayoffRepository dayoffRepository
+                        , JavaMailSender javaMailSender){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
         this.userRoleRepository = userRoleRepository;
         this.dayoffRepository = dayoffRepository;
+        this.javaMailSender = javaMailSender;
     }
 
     @Transactional
@@ -129,4 +145,111 @@ public class AuthService {
         user.userId(generatedUserId);
     }
 
+    //보낼 사용자 이메일의 정보 내가 보내는거면 내 이메일
+    private void sendPasswordSearchEmail(String email, String temporaryPassword) throws UnsupportedEncodingException {
+        System.out.println("비번 변경 서비스 시작=====================================");
+        System.out.println("사용자의 이메일 정보 =====================================");
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        InternetAddress fromAddress = new InternetAddress("hrmanager690@gmail.com", "EveryWare 인사담당자");
+        message.setFrom(String.valueOf(fromAddress));
+        message.setTo(email);
+        message.setSubject("EveryWare 임시비밀번호 안내");
+        message.setText("안녕하세요. EveryWare 임시비밀번호 안내 관련 이메일 입니다." +
+                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다." +
+                "로그인 후에 비밀번호를 변경해주세요!");
+
+        javaMailSender.send(message);
+    }
+
+
+    @Transactional
+    public UserDTO sendSearchPwd(String userId, String email) throws UserPrincipalNotFoundException, UnsupportedEncodingException {
+        Optional<User> user = userRepository.findByUserIdAndEmail(userId, email);
+        System.out.println("비번 변경 서비스 시작=====================================");
+        System.out.println("user 들어있는지 확인용 = " + user);
+        if (user.isPresent()) {
+            //여기서 임시 비밀번호를 생성함
+//            String temporaryPassword = TokenUtils.randomString(); //토큰유틸에 만들어놓음
+            String temporaryPassword = getTempPassword();
+            System.out.println("temporaryPassword 임시비밀번호 출력확인용 = " + temporaryPassword);
+            //이메일로 임시 비밀번호 전송
+            sendPasswordSearchEmail(email, temporaryPassword);
+            //사용자 비밀번호 업데이트
+            System.out.println(" 비번 업데이트 시작=====================================");
+//            LoginEmployee loginEmployee = employee.get();//get은 optional클래스에서 사용되는 메서드 중 하나
+            System.out.println("passwordEncoder.encode(temporaryPassword)"+passwordEncoder.encode(temporaryPassword));
+            //이게 출력이 안되었던 이유는 bean에 passencoder를 등록해줬어야 되었는데 안해줘서 값을 아예 못가져왔는데
+            //위에서 autowired를 passencoder에 넣어주니까 값을 잘 들고왔다 메일은 보내졌는데 메일이 보내지고 나서 값을 잃었던 것
+
+            System.out.println(" 비번 업데이트 시작에서 정보 가져오기=====================================");
+
+//            loginEmployee.setEmployeePassword(passwordEncoder.encode(temporaryPassword)); //passwordEncoder 사용
+            user.get().userPw(passwordEncoder.encode(temporaryPassword));  //엔티티로 해야됨
+            System.out.println(" 비번 변경 서비스 거의 다옴 =====================================");
+
+            userRepository.save(user.get());
+
+            System.out.println(" 비번 변경 서비스 끝=====================================");
+
+            return modelMapper.map(user.get(), UserDTO.class); //일단 오류는 안뜨게함
+        } else {
+            throw new UserPrincipalNotFoundException("사용자 정보를 찾을 수 없습니다.");
+        }
+    }
+
+    // 임시 비밀번호 생성
+    public static String getTempPassword(){
+        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+        String str = "";
+
+        // 문자 배열 길이의 값을 랜덤으로 10개를 뽑아 구문을 작성함
+        int idx = 0;
+        for (int i = 0; i < 10; i++) {
+            idx = (int) (charSet.length * Math.random());
+            str += charSet[idx];
+        }
+        return str;
+    }
+
+//    public MailDTO createMailAndChangePassword(String email) {
+//
+//        String str = getTempPassword();
+//        MailDTO mailDTO = new MailDTO();
+//        mailDTO.setAddress(email);
+//        mailDTO.setTitle("EveryWare 임시비밀번호 안내 이메일입니다.");
+//        mailDTO.setMessage("안녕하세요. EveryWare 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 " + str + " 입니다." + "로그인 후에 비밀번호를 변경해주세요!");
+//        updatePassword(str, email);
+//
+//        return mailDTO;
+//    }
+//
+//    // MailDto를 바탕으로 실제 이메일 전송
+////    public void mailSend(MailDTO mailDTO) {
+////        System.out.println("전송 완료!");
+////        SimpleMailMessage message = new SimpleMailMessage();
+////        message.setTo(mailDTO.getAddress());
+////        message.setSubject(mailDTO.getTitle());
+////        message.setText(mailDTO.getMessage());
+////        message.setFrom("wisejohn950330@gmail.com");
+////        message.setReplyTo("wisejohn950330@gmail.com");
+////        System.out.println("message"+message);
+////        javaMailSender.send(message);
+////    }
+//
+//    //임시 비밀번호로 업데이트
+//    public boolean updatePassword(String str, String email){
+//        try {
+//            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//            String encodePw = encoder.encode(str); // 패스워드 암호화
+//            User user = userRepository.findByEmail(email);
+////            user.updatePassword(encodePw);
+//            userRepository.save(user);
+//            return true;
+//        } catch (Exception e) {
+//            return false;
+//        }
+//    }
 }
