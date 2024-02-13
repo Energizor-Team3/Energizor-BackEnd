@@ -24,4 +24,6 @@ public interface DayOffRepository extends JpaRepository<DayOff, Integer> {
 
     @Query("SELECT d FROM DayOff d WHERE d.user = :user AND d.offYear = :offYear")
     DayOff findByUserAndOffYear(@Param("user") User user, @Param("offYear") Year offYear);
+
+    DayOff findByUser(User userDTO);
 }

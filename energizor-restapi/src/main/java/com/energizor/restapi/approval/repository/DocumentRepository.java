@@ -38,4 +38,9 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
 
     List<Document> findByUserDTOUserCode(int userCode);
+
+    Document findByDocumentCodeAndForm(int documentCode, String 휴가신청서);
+
+
+    Document findDocumentByDocumentCodeAndUserDTOAndTempSaveStatus(int documentCode, User user, String y);
 }

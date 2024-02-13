@@ -15,10 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -72,10 +68,11 @@ public class ApprovalService {
     }
 
 
-
     @Transactional
-    public String insertDayOffApply(DayOffApplyDTO dayOffApplyDTO, MultipartFile file, UserDTO principal) throws IOException {
+    public String insertDayOffApply(DayOffApplyDTO dayOffApplyDTO, MultipartFile file, UserDTO principal, Document document) throws IOException {
         System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
+        System.out.println("document==================================== " + document);
+        System.out.println("dayOffApplyDTO============================================= " + dayOffApplyDTO);
 
         User user1 = userRepository.findByUserCode(principal.getUserCode());
         User user = modelMapper.map(user1, User.class);
@@ -83,7 +80,7 @@ public class ApprovalService {
         LocalDate now = LocalDate.now();
         dayOffApplyDTO.setOffApplyDate(now);
         // 기안 -> 기안번호 조회
-        Document document = new Document();
+
         document.documentTitle(dayOffApplyDTO.getOffApplyTitle())
                 .userDTO(user)
                 .draftDay(dayOffApplyDTO.getOffApplyDate())
@@ -95,31 +92,28 @@ public class ApprovalService {
         Document result = documentRepository.save(document);
 
 
+        // 파일의 원본 이름을 가져옵니다.
+        String originalFileName = file.getOriginalFilename();
 
-                // 파일의 원본 이름을 가져옵니다.
-                String originalFileName = file.getOriginalFilename();
-
-                // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
-                String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
+        // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
+        String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
 
 
-                // 데이터베이스에 파일 정보를 저장합니다.
-                ApprovalFile approvalFile = new ApprovalFile();
-                approvalFile.apFileNameOrigin(originalFileName);
-                approvalFile.apFileNameChange(storedFileName);
-                approvalFile.apFileDate(new Date());
-                approvalFile.apFileStatus("N");
-                approvalFile.apFilePathOrigin(IMAGE_DIR);
-                approvalFile.apFilePathChange(IMAGE_DIR + "/" + storedFileName);
-                approvalFile.document(result);
+        // 데이터베이스에 파일 정보를 저장합니다.
+        ApprovalFile approvalFile = new ApprovalFile();
+        approvalFile.apFileNameOrigin(originalFileName);
+        approvalFile.apFileNameChange(storedFileName);
+        approvalFile.apFileDate(new Date());
+        approvalFile.apFileStatus("N");
+        approvalFile.document(result);
 
-                // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
-                approvalFileRepository.save(approvalFile);
+        // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
+        approvalFileRepository.save(approvalFile);
 
         // 참조, 결재선 지정
         int[] rfUser = changeUser(dayOffApplyDTO.getRfUser());
-        for(int i=0; i < rfUser.length; i++){
-            if(rfUser[i]  > 0){
+        for (int i = 0; i < rfUser.length; i++) {
+            if (rfUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(rfUser[i]);
@@ -142,11 +136,10 @@ public class ApprovalService {
         }
 
         int[] lineUser = changeUser(dayOffApplyDTO.getLineUser());
-        for(int i=0; i < lineUser.length; i++){
+        for (int i = 0; i < lineUser.length; i++) {
 
 
-
-            if(lineUser[i]  > 0){
+            if (lineUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(lineUser[i]);
@@ -159,7 +152,7 @@ public class ApprovalService {
                 ApprovalLine approvalLine = new ApprovalLine();
                 approvalLine.document(result);
                 approvalLine.user(userCode);
-                approvalLine.sequence(i+1);
+                approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
                 approvalLine.reason(null);
@@ -189,8 +182,9 @@ public class ApprovalService {
         DayOffApply result2 = dayOffApplyRepository.save(dayOffApply);
         return "휴가신청서 기안 성공";
     }
+
     @Transactional
-    public String insertBusinessTrip(BusinessTripDTO businessTripDTO, MultipartFile file, UserDTO principal) throws IOException {
+    public String insertBusinessTrip(BusinessTripDTO businessTripDTO, MultipartFile file, UserDTO principal, Document document) throws IOException {
         // 기안 -> 기안번호 조회
 
         System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
@@ -202,7 +196,6 @@ public class ApprovalService {
         LocalDate now = LocalDate.now();
         businessTripDTO.setBtDate(now);
         // 기안 -> 기안번호 조회
-        Document document = new Document();
         document.documentTitle(businessTripDTO.getBtTitle())
                 .userDTO(user)
                 .draftDay(businessTripDTO.getBtDate())
@@ -228,8 +221,6 @@ public class ApprovalService {
         approvalFile.apFileNameChange(storedFileName);
         approvalFile.apFileDate(new Date());
         approvalFile.apFileStatus("N");
-        approvalFile.apFilePathOrigin(IMAGE_DIR);
-        approvalFile.apFilePathChange(IMAGE_DIR + "/" + storedFileName);
         approvalFile.document(result);
 
         // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
@@ -240,9 +231,8 @@ public class ApprovalService {
         int[] rfUser = changeUser(businessTripDTO.getRfUser());
 
 
-
-        for(int i=0; i < rfUser.length; i++){
-            if(rfUser[i]  > 0){
+        for (int i = 0; i < rfUser.length; i++) {
+            if (rfUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(rfUser[i]);
@@ -267,9 +257,9 @@ public class ApprovalService {
         int[] lineUser = changeUser(businessTripDTO.getLineUser());
 
 
-        for(int i=0; i < lineUser.length; i++){
+        for (int i = 0; i < lineUser.length; i++) {
 
-            if(lineUser[i]  > 0){
+            if (lineUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(lineUser[i]);
@@ -282,7 +272,7 @@ public class ApprovalService {
                 ApprovalLine approvalLine = new ApprovalLine();
                 approvalLine.document(result);
                 approvalLine.user(userCode);
-                approvalLine.sequence(i+1);
+                approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
                 approvalLine.reason(null);
@@ -311,7 +301,7 @@ public class ApprovalService {
         return "등록 성공";
     }
 
-    public String insertEducation(EducationDTO educationDTO, MultipartFile file, UserDTO principal) throws IOException {
+    public String insertEducation(EducationDTO educationDTO, MultipartFile file, UserDTO principal, Document document) throws IOException {
         // 기안 -> 기안번호 조회
 
         System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
@@ -323,7 +313,6 @@ public class ApprovalService {
         LocalDate now = LocalDate.now();
         educationDTO.setEduDate(now);
         // 기안 -> 기안번호 조회
-        Document document = new Document();
         document.documentTitle(educationDTO.getEduTitle())
                 .userDTO(user)
                 .draftDay(educationDTO.getEduDate())
@@ -349,19 +338,16 @@ public class ApprovalService {
         approvalFile.apFileNameChange(storedFileName);
         approvalFile.apFileDate(new Date());
         approvalFile.apFileStatus("N");
-        approvalFile.apFilePathOrigin(IMAGE_DIR);
-        approvalFile.apFilePathChange(IMAGE_DIR + "/" + storedFileName);
         approvalFile.document(result);
 
         // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
         approvalFileRepository.save(approvalFile);
 
 
-
         // 참조, 결재선 지정
         int[] rfUser = changeUser(educationDTO.getRfUser());
-        for(int i=0; i < rfUser.length; i++){
-            if(rfUser[i]  > 0){
+        for (int i = 0; i < rfUser.length; i++) {
+            if (rfUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(rfUser[i]);
@@ -383,11 +369,10 @@ public class ApprovalService {
         }
 
         int[] lUser = changeUser(educationDTO.getLineUser());
-        for(int i=0; i < lUser.length; i++){
+        for (int i = 0; i < lUser.length; i++) {
 
 
-
-            if(lUser[i]  > 0){
+            if (lUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(lUser[i]);
@@ -400,7 +385,7 @@ public class ApprovalService {
                 ApprovalLine approvalLine = new ApprovalLine();
                 approvalLine.document(result);
                 approvalLine.user(userCode);
-                approvalLine.sequence(i+1);
+                approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
                 approvalLine.reason(null);
@@ -430,7 +415,7 @@ public class ApprovalService {
         return "등록 성공";
     }
 
-    public String insertgeneralDraft(GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO principal) throws IOException {
+    public String insertgeneralDraft(GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO principal, Document document) throws IOException {
 
         System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
         System.out.println("generalDraftDTO@@@@@@@@@@@@@@@@@@@@@@@@@@@@ = " + generalDraftDTO);
@@ -441,11 +426,10 @@ public class ApprovalService {
         LocalDate now = LocalDate.now();
         generalDraftDTO.setGdDate(now);
         // 기안 -> 기안번호 조회
-        Document document = new Document();
         document.documentTitle(generalDraftDTO.getGdTitle())
                 .userDTO(user)
                 .draftDay(generalDraftDTO.getGdDate())
-                .form("교육신청서")
+                .form("기안신청서")
                 .tempSaveStatus("N").build();
 
         System.out.println("document = " + document);
@@ -467,8 +451,6 @@ public class ApprovalService {
         approvalFile.apFileNameChange(storedFileName);
         approvalFile.apFileDate(new Date());
         approvalFile.apFileStatus("N");
-        approvalFile.apFilePathOrigin(IMAGE_DIR);
-        approvalFile.apFilePathChange(IMAGE_DIR + "/" + storedFileName);
         approvalFile.document(result);
 
         // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
@@ -476,8 +458,8 @@ public class ApprovalService {
 
         // 참조, 결재선 지정
         int[] rfUser = changeUser(generalDraftDTO.getRfUser());
-        for(int i=0; i < rfUser.length; i++){
-            if(rfUser[i]  > 0){
+        for (int i = 0; i < rfUser.length; i++) {
+            if (rfUser[i] > 0) {
 
 
                 User userCode1 = userRepository.findByUserCode(rfUser[i]);
@@ -500,10 +482,10 @@ public class ApprovalService {
         }
 
         int[] lUser = changeUser(generalDraftDTO.getLineUser());
-        for(int i=0; i < lUser.length; i++){
+        for (int i = 0; i < lUser.length; i++) {
 
 
-            if(lUser[i]  > 0){
+            if (lUser[i] > 0) {
                 User userCode1 = userRepository.findByUserCode(lUser[i]);
                 User userCode = modelMapper.map(userCode1, User.class);
 
@@ -512,7 +494,7 @@ public class ApprovalService {
                 ApprovalLine approvalLine = new ApprovalLine();
                 approvalLine.document(result);
                 approvalLine.user(userCode);
-                approvalLine.sequence(i+1);
+                approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
                 approvalLine.reason(null);
@@ -531,11 +513,12 @@ public class ApprovalService {
         generalDraft.document(result);
         generalDraft.user(user);
 
+        generalDraftRepository.save(generalDraft);
         return "등록 성공";
     }
 
     // 들고온 유저코드 분할작업
-    public int[] changeUser(String user){
+    public int[] changeUser(String user) {
         String[] rfUserArr = user.split(",");
         int[] rfUserIntArr = Arrays.stream(rfUserArr)
                 .mapToInt(Integer::parseInt)
@@ -562,36 +545,121 @@ public class ApprovalService {
     // 결재 대기 문서 조회
     public List<DocumentDTO> inBoxDocumentByUserCode(UserDTO userDTO) {
 
+        User changeUser = modelMapper.map(userDTO, User.class);
+
+        // 대리결재자 조회
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+
+        if (proxyApproval.getProxyStatus().equals("Y")) {
+            // 문서 코드 목록 가져오기
+            List<Integer> inboxDocumentList = documentRepository.inboxDocumentByUserDTO(proxyApproval.getOriginUser().getUserCode());
+
+            System.out.println("inboxDocumentList ============================= " + inboxDocumentList);
+            // 문서 코드 목록으로 Document 정보 가져오기
+            List<Document> proxyDocumentList = new ArrayList<>();
+            for (int documentCode : inboxDocumentList) {
+                System.out.println("documentCode =========================== " + documentCode);
+                Document document = documentRepository.findByDocumentCodeAndTempSaveStatus(documentCode, "N");
+                System.out.println("document ============================== " + document);
+                if (document != null) {
+                    proxyDocumentList.add(document);
+                }
+            }
+
+            return proxyDocumentList.stream()
+                    .map(document -> modelMapper.map(document, DocumentDTO.class))
+                    .collect(Collectors.toList());
+        }
+
 
         // 문서 코드 목록 가져오기
         List<Integer> inboxDocumentList = documentRepository.inboxDocumentByUserDTO(userDTO.getUserCode());
 
         System.out.println("inboxDocumentList ============================ " + inboxDocumentList);
-        // 문서 코드 목록으로 ApprovalDoc 정보 가져오기
+        // 문서 코드 목록으로 Document 정보 가져오기
         List<Document> documentList = new ArrayList<>();
         for (int documentCode : inboxDocumentList) {
             System.out.println("documentCode =========================== " + documentCode);
-            Document document = documentRepository.findByDocumentCodeAndTempSaveStatus(documentCode,"N");
+            Document document = documentRepository.findByDocumentCodeAndTempSaveStatus(documentCode, "N");
             System.out.println("document ============================== " + document);
-            if(document != null) {
+            if (document != null) {
                 documentList.add(document);
             }
         }
+
 
         return documentList.stream()
                 .map(document -> modelMapper.map(document, DocumentDTO.class))
                 .collect(Collectors.toList());
 
     }
+
+    // 결재하기
     @Transactional
-    public String approvement(int documentCode, UserDTO userDTO) {
+    public String approvement(ApprovalCommentDTO approvalCommentDTO, int documentCode, UserDTO userDTO) {
 
         //결재 대상 조회
         int approvalLineUser = approvalLineRepository.approvalSubjectUserCode(documentCode);
+        User changeUser = modelMapper.map(userDTO, User.class);
 
+
+        // 대리위임자 결재
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+
+
+        if (proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
+            ApprovalLine porxyApprovalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCode(documentCode, proxyApproval.getOriginUser().getUserCode());
+
+
+            // 결재 상태 업데이트
+            porxyApprovalLine.processingDate(LocalDateTime.now());
+            porxyApprovalLine.approvalLineStatus("결재");
+            porxyApprovalLine.getUser().userCode(proxyApproval.getOriginUser().getUserCode());
+            approvalLineRepository.save(porxyApprovalLine);
+
+            // 코멘트 달기
+
+            ApprovalComment approvalComment = new ApprovalComment();
+            approvalComment.acContent(approvalCommentDTO.getAcContent());
+            approvalComment.acDate(LocalDate.now());
+            approvalComment.getDocument().documentCode(documentCode);
+            approvalComment.user(proxyApproval.getChangeUser());
+
+            approvalCommentRepository.save(approvalComment);
+
+
+            // 휴가일수 차감
+            Document document = documentRepository.findByDocumentCodeAndForm(documentCode, "휴가신청서");
+
+            if (document != null) {
+                List<ApprovalLine> checkStatus = approvalLineRepository.findByDocument(document);
+                int check = 0;
+                for (ApprovalLine lineCheckStatus : checkStatus) {
+
+                    if (lineCheckStatus.getApprovalLineStatus().equals("결재")) {
+                        check++;
+                    }
+
+                }
+                if (check == checkStatus.size()) {
+
+                    DayOff dayOff = dayOffRepository.findByUser(document.getUserDTO());
+                    DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(document);
+
+
+                    dayOff.offUsed(dayOff.getOffUsed() + dayOffApply.getOffDay());
+
+                    dayOffRepository.save(dayOff);
+                }
+            }
+
+
+            return "결재 성공";
+
+        }
 
         // 결재대상 확인
-        if (approvalLineUser != userDTO.getUserCode()){
+        if (approvalLineUser != userDTO.getUserCode()) {
             return "결재 대상이 아닙니다.";
         }
 
@@ -606,23 +674,93 @@ public class ApprovalService {
         approvalLine.approvalLineStatus("결재");
         approvalLineRepository.save(approvalLine);
 
+        // 코멘트 달기
+
+        ApprovalComment approvalComment = new ApprovalComment();
+        approvalComment.acContent(approvalCommentDTO.getAcContent());
+        approvalComment.acDate(LocalDate.now());
+        approvalComment.getDocument().documentCode(documentCode);
+        approvalComment.user(proxyApproval.getChangeUser());
+
+        // 휴가일수 차감
+        Document document = documentRepository.findByDocumentCodeAndForm(documentCode, "휴가신청서");
+
+        if (document != null) {
+            List<ApprovalLine> checkStatus = approvalLineRepository.findByDocument(document);
+            int check = 0;
+            for (ApprovalLine lineCheckStatus : checkStatus) {
+
+                if (lineCheckStatus.getApprovalLineStatus().equals("결재")) {
+                    check++;
+                }
+
+            }
+            if (check == checkStatus.size()) {
+
+                DayOff dayOff = dayOffRepository.findByUser(document.getUserDTO());
+                DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(document);
+
+
+                dayOff.offUsed(dayOff.getOffUsed() + dayOffApply.getOffDay());
+
+                dayOffRepository.save(dayOff);
+
+            }
+        }
+
+
         return "결재 성공";
     }
 
+    // 반려하기
     @Transactional
-    public String rejection(int documentCode, UserDTO userDTO) {
+    public String rejection(ApprovalCommentDTO approvalCommentDTO, int documentCode, UserDTO userDTO) {
 
         //결재 대상 조회
         int approvalLineUser = approvalLineRepository.approvalSubjectUserCode(documentCode);
 
+        User changeUser = modelMapper.map(userDTO, User.class);
+        // 대리위임자 결재
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        if (proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
+
+            // 미결 상태인 모든 approvalLine 조회
+            List<Integer> approvalLineList = approvalLineRepository.findLineUser(documentCode);
+            System.out.println("approvalLineList =============== " + approvalLineList);
+
+            // 각 approvalLine의 상태를 반려로 변경
+            for (int approvalLineCode : approvalLineList) {
+                Optional<ApprovalLine> optionalApprovalLine = approvalLineRepository.findById(approvalLineCode);
+                optionalApprovalLine.ifPresent(approvalLine -> {
+                    approvalLine.processingDate(LocalDateTime.now());
+                    approvalLine.approvalLineStatus("반려");
+                    approvalLine.getUser().userCode(proxyApproval.getChangeUser().getUserCode());
+                    approvalLineRepository.save(approvalLine);
+                });
+            }
+
+
+
+            // 코멘트 달기
+
+            ApprovalComment approvalComment = new ApprovalComment();
+            approvalComment.acContent(approvalCommentDTO.getAcContent());
+            approvalComment.acDate(LocalDate.now());
+            approvalComment.getDocument().documentCode(documentCode);
+            approvalComment.user(proxyApproval.getChangeUser());
+
+
+            return "반려 성공";
+
+        }
 
         // 결재대상 확인
-        if (approvalLineUser != userDTO.getUserCode()){
+        if (approvalLineUser != userDTO.getUserCode()) {
             return "결재 대상이 아닙니다.";
         }
 
 
-        // 대기 상태인 모든 approvalLine 조회
+        // 미결 상태인 모든 approvalLine 조회
         List<Integer> approvalLineList = approvalLineRepository.findLineUser(documentCode);
         System.out.println("approvalLineList =============== " + approvalLineList);
 
@@ -635,9 +773,18 @@ public class ApprovalService {
                 approvalLineRepository.save(approvalLine);
             });
         }
+
+        // 코멘트 달기
+
+        ApprovalComment approvalComment = new ApprovalComment();
+        approvalComment.acContent(approvalCommentDTO.getAcContent());
+        approvalComment.acDate(LocalDate.now());
+        approvalComment.getDocument().documentCode(documentCode);
+        approvalComment.user(proxyApproval.getChangeUser());
+
         return "반려 성공";
     }
-
+    // 상신 기안 회수하기
     @Transactional
     public String withdraw(int documentCode, UserDTO userDTO) {
 
@@ -673,17 +820,51 @@ public class ApprovalService {
         return "회수 성공";
     }
 
+
+    // 결재 진행중인 문서
     public List<DocumentDTO> approvalProgress(UserDTO userDTO) {
 
+        User changeUser = modelMapper.map(userDTO, User.class);
+
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        if (proxyApproval.getProxyStatus().equals("Y")) {
+            // 해당 위임받은 결재문서 의 결재 상신 문서 리스트 조회
+            List<Document> documents = documentRepository.findByUserDTOUserCode(proxyApproval.getOriginUser().getUserCode());
+            // 해당 사용자의 결재 상신 문서 리스트 조회
+            List<Document> mydocuments = documentRepository.findByUserDTOUserCode(changeUser.getUserCode());
+
+            
+            // 결재 상태 중에 미결이 존재하는 문서 리스트 조회
+            // 위임받은 문서
+            List<Document> documentList = new ArrayList<>();
+            for (Document document1 : documents) {
+                List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                if (!approvalLines.isEmpty()) {
+                    documentList.add(document1);
+                }
+            }
+            // 자기 문서
+            for (Document document1 : mydocuments) {
+                List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                if (!approvalLines.isEmpty()) {
+                    documentList.add(document1);
+                }
+            }
+
+            return documentList.stream()
+                    .map(document -> modelMapper.map(document, DocumentDTO.class))
+                    .collect(Collectors.toList());
+
+        }
 
         // 해당 사용자의 결재 상신 문서 리스트 조회
         List<Document> documents = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
 
         // 결재 상태 중에 미결이 존재하는 문서 리스트 조회
         List<Document> documentList = new ArrayList<>();
-        for(Document document1 : documents) {
+        for (Document document1 : documents) {
             List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
-            if(!approvalLines.isEmpty()) {
+            if (!approvalLines.isEmpty()) {
                 documentList.add(document1);
             }
         }
@@ -694,6 +875,7 @@ public class ApprovalService {
 
     // 결재 완료 문서 조회
     public List<DocumentDTO> approvalComplete(UserDTO userDTO) {
+
 
         // 해당 사용자의 결재 상신 문서 리스트 조회
         List<Document> documentList = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
@@ -709,7 +891,6 @@ public class ApprovalService {
                 approvalComplete.add(document);
             }
         }
-
 
 
         return approvalComplete.stream()
@@ -759,7 +940,7 @@ public class ApprovalService {
     }
 
     @Transactional
-    public String temporarySaveApprovalDayOff(DayOffApplyDTO dayOffApplyDTO, UserDTO userDTO)  {
+    public String temporarySaveApprovalDayOff(DayOffApplyDTO dayOffApplyDTO, UserDTO userDTO) {
 
         User user1 = userRepository.findByUserCode(userDTO.getUserCode());
         User user = modelMapper.map(user1, User.class);
@@ -821,7 +1002,7 @@ public class ApprovalService {
         Document result = documentRepository.save(document);
 
         System.out.println("result = " + result);
-        
+
 
         // 교육신청서
         Education education = new Education();
@@ -897,7 +1078,7 @@ public class ApprovalService {
         document.documentTitle(generalDraftDTO.getGdTitle())
                 .userDTO(user)
                 .draftDay(generalDraftDTO.getGdDate())
-                .form("교육신청서")
+                .form("기안신청서")
                 .tempSaveStatus("Y").build();
 
         System.out.println("document = " + document);
@@ -919,7 +1100,7 @@ public class ApprovalService {
 
     }
 
-
+    // 임시 기안 조회
     public List<DocumentDTO> findTempSaveDocument(UserDTO userDTO) {
         // 로그인한 사용자의 정보 가져오기
         System.out.println("userDTO1111111111111111111111111 = " + userDTO);
@@ -932,5 +1113,59 @@ public class ApprovalService {
         return documentList.stream()
                 .map(document -> modelMapper.map(document, DocumentDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public String insertBySelectTempDocument(int documentCode, DayOffApplyDTO dayOffApplyDTO, BusinessTripDTO businessTripDTO, EducationDTO educationDTO, GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO userDTO) throws IOException {
+
+
+        // 로그인한 사용자의 정보 가져오기
+        User user = modelMapper.map(userDTO, User.class);
+
+        // 해당 사용자의 결재 상신 문서 리스트 조회
+        Document document = documentRepository.findDocumentByDocumentCodeAndUserDTOAndTempSaveStatus(documentCode, user, "Y");
+
+        System.out.println("document=================================== " + document);
+
+        switch (document.getForm()) {
+            case "휴가신청서":
+                insertDayOffApply(dayOffApplyDTO, file, userDTO, document);
+                break;
+            case "출장신청서":
+                insertBusinessTrip(businessTripDTO, file, userDTO, document);
+                break;
+            case "교육신청서":
+                insertEducation(educationDTO, file, userDTO, document);
+                break;
+            case "기안신청서":
+                insertgeneralDraft(generalDraftDTO, file, userDTO, document);
+                break;
+            default:
+                break;
+        }
+
+        return "등록 성공";
+    }
+
+    // 대리결재 위임
+    @Transactional
+    public String insertProxy(ProxyApprovalDTO proxyApprovalDTO, UserDTO userDTO) {
+
+        System.out.println("proxyApprovalDTO =============== " + proxyApprovalDTO);
+        System.out.println("userDTO ============= " + userDTO);
+
+        User originUser = modelMapper.map(userDTO, User.class);
+        ProxyApproval proxyApproval1 = modelMapper.map(proxyApprovalDTO, ProxyApproval.class);
+
+
+        ProxyApproval proxyApproval = new ProxyApproval();
+        proxyApproval.originUser(originUser);
+        proxyApproval.changeUser(proxyApproval1.getChangeUser());
+        proxyApproval.startDate(proxyApprovalDTO.getStartDate());
+        proxyApproval.finishDate(proxyApprovalDTO.getFinishDate());
+        proxyApproval.proxyStatus("N");
+
+        proxyApprovalRepository.save(proxyApproval);
+
+        return "등록 성공";
     }
 }

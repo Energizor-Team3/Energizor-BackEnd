@@ -2,6 +2,7 @@ package com.energizor.restapi.approval.repository;
 
 import com.energizor.restapi.approval.entity.ApprovalLine;
 import com.energizor.restapi.approval.entity.Document;
+import com.energizor.restapi.users.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -81,4 +82,8 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Inte
                     "AND approvalline_status = '회수'",
             nativeQuery = true)
     List<Integer> findWithdrawDocument(int documentCode);
+
+    List<ApprovalLine> findByDocument(Document document);
+
+    ApprovalLine findByUser(User originUser);
 }

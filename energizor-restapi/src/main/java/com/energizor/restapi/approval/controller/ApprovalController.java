@@ -5,6 +5,7 @@ import com.energizor.restapi.approval.entity.Document;
 import com.energizor.restapi.approval.service.ApprovalService;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.users.dto.UserDTO;
+import com.energizor.restapi.users.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,22 +42,22 @@ public class ApprovalController {
     }
     // 결재하기
     @PutMapping("/approvement/{documentCode}")
-    public ResponseEntity<String> approvement(@PathVariable int documentCode, @AuthenticationPrincipal UserDTO userDTO){
+    public ResponseEntity<String> approvement(@ModelAttribute ApprovalCommentDTO approvalCommentDTO, @PathVariable int documentCode, @AuthenticationPrincipal UserDTO userDTO){
         System.out.println("documentCode = " + documentCode);
         System.out.println("userDTO = " + userDTO);
 
-        String result = approvalService.approvement(documentCode, userDTO);
+        String result = approvalService.approvement(approvalCommentDTO, documentCode, userDTO);
         System.out.println("result ========== " + result);
         return ResponseEntity.ok(result);
     }
 
     // 반려하기
     @PutMapping("/rejection/{documentCode}")
-    public ResponseEntity<String> rejection(@PathVariable int documentCode, @AuthenticationPrincipal UserDTO userDTO){
+    public ResponseEntity<String> rejection(@ModelAttribute ApprovalCommentDTO approvalCommentDTO, @PathVariable int documentCode, @AuthenticationPrincipal UserDTO userDTO){
         System.out.println("documentCode = " + documentCode);
         System.out.println("userDTO = " + userDTO);
 
-        String result = approvalService.rejection(documentCode, userDTO);
+        String result = approvalService.rejection(approvalCommentDTO, documentCode, userDTO);
         System.out.println("result ========== " + result);
         return ResponseEntity.ok(result);
     }
@@ -127,30 +128,45 @@ public class ApprovalController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.findTempSaveDocument(userDTO)));
     }
 
+    // 임시 기안 문서 조회 후 기안 추가
+    @PutMapping("/insertBySelectTempDocument/{documentCode}")
+    public ResponseEntity<ResponseDTO> insertDayOffApplyBySelectTempDocument(@PathVariable int documentCode, @ModelAttribute DayOffApplyDTO dayOffApplyDTO ,BusinessTripDTO businessTripDTO ,EducationDTO educationDTO ,GeneralDraftDTO generalDraftDTO , MultipartFile file, @AuthenticationPrincipal UserDTO userDTO) throws IOException {
+        System.out.println("dayOffApplyDTO======================================= " + dayOffApplyDTO);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.insertBySelectTempDocument(documentCode, dayOffApplyDTO ,businessTripDTO ,educationDTO ,generalDraftDTO ,file ,userDTO)));
+    }
+
+    // 대리 결재 위임
+    @PostMapping("/insertProxy")
+    public ResponseEntity<ResponseDTO> insertProxy(@RequestBody ProxyApprovalDTO proxyApprovalDTO, @AuthenticationPrincipal UserDTO userDTO){
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 위임 성공", approvalService.insertProxy(proxyApprovalDTO, userDTO)));
+    }
+
+
+
 
 
 
     //기안추가
     @PostMapping("/dayOffApply")
-    public ResponseEntity<ResponseDTO> insertDayOffApply(@ModelAttribute DayOffApplyDTO dayOffApplyDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal) throws IOException {
+    public ResponseEntity<ResponseDTO> insertDayOffApply(@ModelAttribute DayOffApplyDTO dayOffApplyDTO, MultipartFile file,@AuthenticationPrincipal UserDTO principal, Document document ) throws IOException {
         System.out.println("principal=============================================================== = " + principal);
         System.out.println("file==============="+file);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 임시 저장 성공", approvalService.insertDayOffApply(dayOffApplyDTO, file, principal)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 임시 저장 성공", approvalService.insertDayOffApply(dayOffApplyDTO, file, principal, document)));
     }
 
     @PostMapping("/businessTrip")
-    public ResponseEntity<ResponseDTO> insertBusinessTrip(@ModelAttribute BusinessTripDTO businessTripDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertBusinessTrip(businessTripDTO, file, principal)));
+    public ResponseEntity<ResponseDTO> insertBusinessTrip(@ModelAttribute BusinessTripDTO businessTripDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal, Document document) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertBusinessTrip(businessTripDTO, file, principal, document)));
     }
 
     @PostMapping("/education")
-    public ResponseEntity<ResponseDTO> insertEducation(@ModelAttribute EducationDTO educationDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertEducation(educationDTO, file, principal)));
+    public ResponseEntity<ResponseDTO> insertEducation(@ModelAttribute EducationDTO educationDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal, Document document) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertEducation(educationDTO, file, principal, document)));
     }
 
     @PostMapping("/generalDraft")
-    public ResponseEntity<ResponseDTO> insertgeneralDraft(@ModelAttribute GeneralDraftDTO generalDraftDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertgeneralDraft(generalDraftDTO, file, principal)));
+    public ResponseEntity<ResponseDTO> insertgeneralDraft(@ModelAttribute GeneralDraftDTO generalDraftDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal, Document document) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertgeneralDraft(generalDraftDTO, file, principal, document)));
     }
 
 

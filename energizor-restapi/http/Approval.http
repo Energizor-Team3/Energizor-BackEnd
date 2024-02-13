@@ -2,7 +2,7 @@
 POST http://localhost:8031/approval/dayOffApply
 Accept: */*
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJkYXRlIjoxNzA3Mjk3MDYzMzI0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDczMTUwNjMsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.0qa0KmFjGpN-GCkZWS2KT3DW5Rwkmgcx79sSXDF1ges
+Authorization: Bearer eyJkYXRlIjoxNzA3NzM5NDAzMzIyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc3NTc0MDMsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.quHtrjfmAMrCEN6RQ5UYL2xqEWeI5Szupuefm2oCKCs
 
 
 --WebAppBoundary
@@ -32,11 +32,11 @@ Content-Disposition: form-data; name="offState"
 --WebAppBoundary
 Content-Disposition: form-data; name="rfUser"
 
-2,3
+3
 --WebAppBoundary
 Content-Disposition: form-data; name="lineUser"
 
-21,22,19
+2
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="3333.png"
 
@@ -147,7 +147,7 @@ Content-Disposition: form-data; name="file"; filename="3333.png"
 POST http://localhost:8031/approval/generalDraft
 Accept: */*
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJkYXRlIjoxNzA3NTc2MTA0MzcxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc1OTQxMDQsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.L6oAYlwXsXoM2BxAmWSgSzeCM1-aYOXqXQOS_q8Ti70
+Authorization: Bearer eyJkYXRlIjoxNzA3NzU5MDUxMzkwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzc3NzA1MSwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.T3cyJqfaeaGrtL3IsbaZK15Hm1zq9dLQD-7a__usask
 
 --WebAppBoundary
 Content-Disposition: form-data; name="gdTitle"
@@ -164,7 +164,7 @@ Content-Disposition: form-data; name="rfUser"
 --WebAppBoundary
 Content-Disposition: form-data; name="lineUser"
 
-2,3
+1
 --WebAppBoundary
 Content-Disposition: form-data; name="file"; filename="3333.png"
 
@@ -181,13 +181,13 @@ Authorization: Bearer eyJkYXRlIjoxNzA3NTkxOTc0ODc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 GET http://localhost:8031/approval/inboxApproval
 Accept: */*
 Content-Type: application/json
-Authorization: Bearer eyJkYXRlIjoxNzA3NTY5NTI5MjMwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzU4NzUyOSwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.IREwcQBYNQQWaUh7oh2ms029zauUZqCMFIE8o2i5A6E
+Authorization: Bearer eyJkYXRlIjoxNzA3NzU5MTExNzg0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzc3NzExMSwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.EyFj2p5_EyWc6p-XuODIVO0kEDNNnXZyk8-9zoZm7nw
 
 ### 결재하기
-PUT http://localhost:8031/approval/approvement/54
+PUT http://localhost:8031/approval/approvement/79
 Accept: */*
 Content-Type: application/json
-Authorization: Bearer eyJkYXRlIjoxNzA3NTY5NTI5MjMwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzU4NzUyOSwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.IREwcQBYNQQWaUh7oh2ms029zauUZqCMFIE8o2i5A6E
+Authorization: Bearer eyJkYXRlIjoxNzA3NzU5MTExNzg0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzc3NzExMSwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.EyFj2p5_EyWc6p-XuODIVO0kEDNNnXZyk8-9zoZm7nw
 
 ### 반려하기
 PUT http://localhost:8031/approval/rejection/71
@@ -362,4 +362,148 @@ Accept: */*
 Authorization: Bearer eyJkYXRlIjoxNzA3NTkxOTc0ODc1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc2MDk5NzQsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.Ru6BqLUwVr3X4lX80cDy2EqC3WNNeB53mGOfDeEziFc
 
 
+### 임시 기안한 문서 조회 후 기안작성
+PUT http://localhost:8031/approval/insertBySelectTempDocument/76
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3NzQ2NDA3NzE2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc3NjQ0MDcsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.Zzz0EkomXH5vf0IgPP9YAytQzkniYkrfGWr_F466aZ0
+
+--WebAppBoundary
+Content-Disposition: form-data; name="btPhone"
+
+01022222222
+--WebAppBoundary
+Content-Disposition: form-data; name="btStart"
+
+2024-02-15
+--WebAppBoundary
+Content-Disposition: form-data; name="btFinish"
+
+2024-02-18
+--WebAppBoundary
+Content-Disposition: form-data; name="btPlace"
+
+강원도 삼척시 삼척동
+--WebAppBoundary
+Content-Disposition: form-data; name="btContent"
+
+수리
+--WebAppBoundary
+Content-Disposition: form-data; name="btTitle"
+
+출장신청서
+--WebAppBoundary
+Content-Disposition: form-data; name="rfUser"
+
+2,3
+--WebAppBoundary
+Content-Disposition: form-data; name="lineUser"
+
+21,22,19
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="3333.png"
+
+< ./3333.png
+--WebAppBoundary--
+Content-Disposition: form-data; name="btPhone"
+
+01022222222
+--WebAppBoundary
+Content-Disposition: form-data; name="btStart"
+
+2024-02-15
+--WebAppBoundary
+Content-Disposition: form-data; name="btFinish"
+
+2024-02-18
+--WebAppBoundary
+Content-Disposition: form-data; name="btPlace"
+
+강원도 삼척시 삼척동
+--WebAppBoundary
+Content-Disposition: form-data; name="btContent"
+
+수리
+--WebAppBoundary
+Content-Disposition: form-data; name="btTitle"
+
+출장신청서
+--WebAppBoundary
+Content-Disposition: form-data; name="eduTitle"
+
+교육기안 신청서
+--WebAppBoundary
+Content-Disposition: form-data; name="eduName"
+
+장재영
+--WebAppBoundary
+Content-Disposition: form-data; name="eduStart"
+
+2024-06-01
+--WebAppBoundary
+Content-Disposition: form-data; name="eduFinish"
+
+2024-12-01
+--WebAppBoundary
+Content-Disposition: form-data; name="eduInstitution"
+
+장재영 사람 만들기 교육기관
+--WebAppBoundary
+Content-Disposition: form-data; name="eduPrice"
+
+75000000
+--WebAppBoundary
+Content-Disposition: form-data; name="eduContent"
+
+사람이 되기 위해 교육을 받고 싶습니다.
+--WebAppBoundary
+Content-Disposition: form-data; name="gdTitle"
+
+구매 품의서
+--WebAppBoundary
+Content-Disposition: form-data; name="gdContent"
+
+볼펜 구매
+개당 가격 : 2000
+수량 : 4
+합계 : 8000원
+--WebAppBoundary
+Content-Disposition: form-data; name="offApplyTitle"
+
+휴가신청서
+--WebAppBoundary
+Content-Disposition: form-data; name="offStart"
+
+2024-03-01
+--WebAppBoundary
+Content-Disposition: form-data; name="offEnd"
+
+2024-03-04
+--WebAppBoundary
+Content-Disposition: form-data; name="offDay"
+
+4
+--WebAppBoundary
+Content-Disposition: form-data; name="offReason"
+
+연차
+--WebAppBoundary
+Content-Disposition: form-data; name="offState"
+
+대기
+--WebAppBoundary
+
+### 대리결재 위임
+POST http://localhost:8031/approval/insertProxy
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer eyJkYXRlIjoxNzA3NzU0Nzk3ODgwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc3NzI3OTcsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.DRxsWVBXPxZ3PpPZDejkIiJoDkrVn_JopegptuAqrNY
+
+{
+  "changeUser": {
+    "userCode": 2
+  },
+  "startDate": "2024-02-13",
+  "finishDate": "2024-02-17"
+}
 
