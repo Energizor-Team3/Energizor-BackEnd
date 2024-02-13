@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "프로젝트 관리 스웨거 연동")
 @RestController
 @RequestMapping("/project")
 @Slf4j

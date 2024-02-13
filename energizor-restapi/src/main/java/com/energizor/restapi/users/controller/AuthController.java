@@ -6,6 +6,7 @@ import com.energizor.restapi.users.dto.PasswordResetRequest;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.service.AuthService;
 import com.energizor.restapi.users.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Operation(summary = "직원 등록", description = "관리자 권한을 가진 인사담당자가 새로운 직원 등록을 할 수 있습니다.")
     @PostMapping("/signup")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDTO principal) {
@@ -51,6 +53,7 @@ public class AuthController {
 //        return "auth/findPwForm";
 //    }
 
+    @Operation(summary = "비밀번호 찾기", description = "비밀번호를 잊었을 때 찾을 수 있습니다.")
     @PostMapping("/searchpwd")
     public ResponseEntity<ResponseDTO> resetPassword(@RequestBody PasswordResetRequest request, @AuthenticationPrincipal UserDTO principal) {
 
