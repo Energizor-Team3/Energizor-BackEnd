@@ -3,11 +3,13 @@ import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.group.dto.DeptDTO;
 import com.energizor.restapi.group.dto.TeamDTO;
 import com.energizor.restapi.group.service.GroupService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "조직도 스웨거 연동")
 @RestController
 @RequestMapping("/group")
 @Slf4j

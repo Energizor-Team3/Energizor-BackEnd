@@ -7,6 +7,7 @@ import com.energizor.restapi.reservation.entity.Attendee;
 import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.service.ReservationService;
 import com.energizor.restapi.users.dto.UserDTO;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "자원 예약 스웨거 연동")
 @RestController
 @RequestMapping("/reservation")
 @Slf4j

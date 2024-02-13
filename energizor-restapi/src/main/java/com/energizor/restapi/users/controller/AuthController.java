@@ -6,6 +6,7 @@ import com.energizor.restapi.users.dto.PasswordResetRequest;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.service.AuthService;
 import com.energizor.restapi.users.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
+@Tag(name = "Auth Controller 스웨거 연동")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {

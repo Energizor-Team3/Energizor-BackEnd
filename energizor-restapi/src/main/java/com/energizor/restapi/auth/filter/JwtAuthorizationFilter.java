@@ -40,7 +40,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
          * */
 
         List<String> roleLeessList = Arrays.asList(
-                "/auth/login", "/auth/searchpwd"
+                "/auth/login", "/auth/searchpwd",
+                "/swagger-ui/(.*)",        //swagger 설정
+                "/swagger-ui/index.html",  //swagger 설정
+                "/v3/api-docs",              //swagger 설정
+                "/v3/api-docs/(.*)",         //swagger 설정
+                "/swagger-resources",        //swagger 설정
+                "/swagger-resources/(.*)"    //swagger 설정
         );
 
         if(roleLeessList.stream().anyMatch(uri -> roleLeessList.stream().anyMatch(pattern -> Pattern.matches(pattern, request.getRequestURI())))){
