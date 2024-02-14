@@ -13,6 +13,7 @@ import java.util.List;
 @ToString
 public class DeptAndTeam {
 
+        /* 부서기준으로 하나의 부서안에 속해있는 팀 전부 조회 ( 부서 + 팀s ) */
 
         @Id
         @Column(name = "dept_code", nullable = false)

@@ -11,6 +11,9 @@ import lombok.ToString;
 @ToString
 public class UsersGroup {
 
+
+    /* 사원기준으로 사원개인의 정보와 속해있는 팀 조회 ( 사원 + 팀 ) */
+
     @Id
     @Column(name = "user_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

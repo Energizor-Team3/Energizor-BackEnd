@@ -13,6 +13,8 @@ import java.util.List;
 public class TeamAndUsers {
 
 
+    /* 하나의 팀 안에 속해있는 사원들 전부 조회 ( 팀 + 사원s ) */
+
     @Id
     @Column(name = "team_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

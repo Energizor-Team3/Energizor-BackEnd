@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +10,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class DeptGroup {
+
+    /*  */
 
     @Id
     @Column(name = "dept_code", nullable = false)

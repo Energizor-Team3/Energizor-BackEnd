@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.dto;
-import com.energizor.restapi.users.entity.User;
 import lombok.*;
 import java.util.List;
 
