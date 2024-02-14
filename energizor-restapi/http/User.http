@@ -5,7 +5,7 @@ Accept: */*
 Access-Control-Allow-Origin: *
 
 {
-  "userId": "200302002",
+  "userId": "200302001",
   "userPw": "1234"
 }
 
