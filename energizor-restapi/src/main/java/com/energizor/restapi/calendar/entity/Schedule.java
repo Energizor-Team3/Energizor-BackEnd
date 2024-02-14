@@ -31,7 +31,7 @@ public class Schedule {
 
         @Column(name = "sch_edate")
         private LocalDateTime schEndDate;
-        @Column(name = "sch_allday", length = 5, nullable = false)
+        @Column(name = "sch_allday", length = 5, nullable = false,columnDefinition = "VARCHAR(5) default 'N'")
         private String schAllDay;
 
         @Column(name = "sch_local", length = 255)

@@ -52,6 +52,9 @@ public class ScheduleService {
 
     public ScheduleDTO insertSchedule(ScheduleDTO scheduleDTO) {
         log.info("[Schedule Service] Insert start===============");
+        if(scheduleDTO.getSchAllDay() == null) {
+            scheduleDTO.setSchAllDay("N");
+        }
 
         Schedule insertSchedule=modelMapper.map(scheduleDTO, Schedule.class);
         Schedule savedSchedule=scheduleRepository.save(insertSchedule);
