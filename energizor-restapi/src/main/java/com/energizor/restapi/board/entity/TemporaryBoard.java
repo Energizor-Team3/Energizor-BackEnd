@@ -14,13 +14,14 @@ import com.energizor.restapi.users.entity.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude="user")
-public class Board extends BaseEntity{
+public class TemporaryBoard extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="board_code")
-    private int boardCode;
+    @Column(name="temporary_code")
+    private int temporaryCode;
 
     @Column(name="title")
     private String title;
@@ -42,39 +43,35 @@ public class Board extends BaseEntity{
     @JoinColumn(name="board_type_code")
     private BoardType boardType;
 
-    @OneToMany(mappedBy = "board")
-    private List<InterestBoard> interestBoards=new ArrayList<>();
-
-    @Column(name="temporary_opt")
-    private Boolean temporaryOpt;
-
-    public Board boardCode(int boardCode) {
-        this.boardCode=boardCode;
+    public TemporaryBoard setTemporaryCode(int temporaryCode) {
+        this.temporaryCode=temporaryCode;
         return this;
     }
 
-    public Board title(String title) {
+    public TemporaryBoard setTitle(String title) {
         this.title=title;
         return this;
     }
 
-    public Board content(String content) {
+    public TemporaryBoard setContent(String content) {
         this.content=content;
         return this;
     }
 
-    public Board viewCount(int viewCount) {
+    public TemporaryBoard setViewCount(int viewCount) {
         this.viewCount=viewCount;
         return this;
     }
 
-    public Board user(User user) {
+    public TemporaryBoard setUser(User user) {
         this.user=user;
         return this;
     }
 
-    public Board build() {
-        return new Board(boardCode,title,content,viewCount,deleteDate,user,boardType,interestBoards,temporaryOpt);
+
+
+    public TemporaryBoard build() {
+        return new TemporaryBoard(temporaryCode,title,content,viewCount,deleteDate,user,boardType);
     }
 
     public void changeBoardDeletedAt(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import com.energizor.restapi.users.entity.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,9 +23,6 @@ public class InterestBoard extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int interestCode;
 
-    @Column(name="delete_date")
-    private LocalDateTime deleteDate;
-
     @ManyToOne
     @JoinColumn(name="board_code")
     private Board board;
@@ -34,7 +32,7 @@ public class InterestBoard extends BaseEntity{
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="user_code", insertable=false, updatable=false)
+    @JoinColumn(name="owner_code", insertable=false, updatable=false)
     private User owner;
 
     public InterestBoard board(Board board) {
@@ -52,12 +50,6 @@ public class InterestBoard extends BaseEntity{
         return this;
     }
 
-    public InterestBoard deleteDate(LocalDateTime deleteDate) {
-        this.deleteDate=deleteDate;
-        return this;
-    }
-
-    public void changeReplyDeleteDate(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}
 
     @Override
     public String toString() {

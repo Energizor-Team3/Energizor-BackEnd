@@ -14,7 +14,7 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment,Integ
             "from BoardComment bc "+
             "left join bc.board b "+
             "where b.boardCode= :boardCode")
-    BoardComment findByCodeWithComment(@Param("boardCode") int boardCode);
+    List<BoardComment> findByCodeWithComment(@Param("boardCode") int boardCode);
 
     @Query("select bc "+
             "from BoardComment bc "+
