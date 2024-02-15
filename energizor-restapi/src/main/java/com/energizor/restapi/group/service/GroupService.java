@@ -7,6 +7,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Slf4j
 public class GroupService {
@@ -17,20 +20,39 @@ public class GroupService {
     private final DeptGroupRepository deptGroupRepository;
     private final TeamGroupRepository teamGroupRepository;
 
+    private final AllGroupRepository allGroupRepository;
+
     private final ModelMapper modelMapper;
 
     public GroupService(ModelMapper modelMapper
+            , AllGroupRepository allGroupRepository
             , DeptAndTeamRepository deptAndTeamRepository
             , DeptGroupRepository deptGroupRepository
             , TeamGroupRepository teamGroupRepository
             , TeamAndUsersRepository teamAndUsersRepository
             , UserGroupRepository userGroupRepository) {
+        this.allGroupRepository = allGroupRepository;
         this.deptAndTeamRepository = deptAndTeamRepository;
         this.deptGroupRepository = deptGroupRepository;
         this.teamGroupRepository = teamGroupRepository;
         this.teamAndUsersRepository = teamAndUsersRepository;
         this.userGroupRepository = userGroupRepository;
         this.modelMapper = modelMapper;
+
+    }
+
+
+    public List<AllGroupDTO> selectAllGroupList() {
+
+        log.info("selectAllGroup start=============");
+
+        List<AllGroupList> groupList = allGroupRepository.findAll();
+
+        log.info("selectAllGroup End===============");
+
+        return groupList.stream()
+                        .map(group -> modelMapper.map(group, AllGroupDTO.class))
+                        .collect(Collectors.toList());
 
     }
 
@@ -229,4 +251,5 @@ public class GroupService {
         log.info("[TeamService] deleteTeam End ===================================");
         return (result > 0) ? "팀 삭제 성공": "팀 삭제 실패";
     }
+
 }

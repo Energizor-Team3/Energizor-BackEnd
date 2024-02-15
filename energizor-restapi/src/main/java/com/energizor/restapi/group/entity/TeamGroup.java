@@ -1,8 +1,12 @@
 package com.energizor.restapi.group.entity;
+import com.energizor.restapi.group.dto.UserGroupDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.CustomLog;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity(name = "GroupTeam")
 @Table(name = "team")
@@ -24,6 +28,10 @@ public class TeamGroup {
     @Column(name = "dept_code", length = 20, nullable = false)
     private Long deptCode;
 
+    @JoinColumn(name = "team_code")
+    @OneToMany
+    private List<UsersGroup> userList;
+
     public TeamGroup() {}
 
     public TeamGroup teamCode(Long teamCode) {
@@ -41,9 +49,14 @@ public class TeamGroup {
         return this;
     }
 
+    public TeamGroup userList(List<UsersGroup> userList) {
+        this.userList = userList;
+        return this;
+    }
+
 
     public TeamGroup build() {
-        return new TeamGroup(teamCode, teamName, deptCode);
+        return new TeamGroup(teamCode, teamName, deptCode, userList);
     }
 
 }

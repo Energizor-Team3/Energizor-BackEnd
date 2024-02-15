@@ -38,7 +38,7 @@ public class UsersGroup {
         return this;
     }
 
-    public UsersGroup teamGroup(TeamGroup teamGroup) {
+        public UsersGroup teamGroup(TeamGroup teamGroup) {
         this.teamGroup = teamGroup;
         return this;
     }

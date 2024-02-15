@@ -3,11 +3,16 @@ import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.group.dto.DeptGroupDTO;
 import com.energizor.restapi.group.dto.TeamGroupDTO;
 import com.energizor.restapi.group.service.GroupService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+
+@Tag(name = "Group Controller 조직도 전체조회 및 부서,팀 추가/수정/삭제(유저CUD제외)")
 @RestController
 @RequestMapping("/group")
 @Slf4j
@@ -18,6 +23,15 @@ public class GroupController {
     public GroupController(GroupService groupService) {
         this.groupService = groupService;
     }
+
+
+    /* 전체조회 */
+
+    @GetMapping("/groupList")
+    public ResponseEntity<ResponseDTO> selectAllGroup() {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "모든 그룹 조회 성공", groupService.selectAllGroupList()));
+    }
+
 
     /* 조회 */
 
@@ -40,6 +54,8 @@ public class GroupController {
     }
 
     /* 추가 */
+    @Operation(summary = "부서 추가", description = "괸리자 권한을 가진 인사담당자가 부서추가를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/dept-insert")
     public ResponseEntity<ResponseDTO> insertDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
@@ -47,6 +63,8 @@ public class GroupController {
                 .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertDept(deptGroupDTO)));
     }
 
+    @Operation(summary = "팀 추가", description = "괸리자 권한을 가진 인사담당자가 팀추가를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/team-insert")
     public ResponseEntity<ResponseDTO> insertTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
 
@@ -56,6 +74,8 @@ public class GroupController {
 
     /* 수정 */
 
+    @Operation(summary = "부서 수정", description = "괸리자 권한을 가진 인사담당자가 부서수정를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/dept-update")
     public ResponseEntity<ResponseDTO> updateDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
@@ -63,6 +83,8 @@ public class GroupController {
                 .body(new ResponseDTO(HttpStatus.OK, "부서 수정 성공" , groupService.updateDept(deptGroupDTO)));
     }
 
+    @Operation(summary = "팀 수정", description = "괸리자 권한을 가진 인사담당자가 팀수정를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/team-update")
     public ResponseEntity<ResponseDTO> updateTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
 
@@ -72,6 +94,8 @@ public class GroupController {
 
     /* 삭제 */
 
+    @Operation(summary = "부서 삭제", description = "괸리자 권한을 가진 인사담당자가 부서삭제를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/dept-delete")
     public ResponseEntity<ResponseDTO> deleteDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
@@ -79,6 +103,8 @@ public class GroupController {
                 .body(new ResponseDTO(HttpStatus.OK, "부서 삭제 성공" , groupService.deleteDept(deptGroupDTO)));
     }
 
+    @Operation(summary = "팀 삭제", description = "괸리자 권한을 가진 인사담당자가 팀삭제를 할 수 있습니다")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/team-delete")
     public ResponseEntity<ResponseDTO> deleteTeam(@RequestBody TeamGroupDTO teamGroupDTO) {
 
