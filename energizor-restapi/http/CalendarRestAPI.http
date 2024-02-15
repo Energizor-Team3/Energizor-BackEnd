@@ -79,14 +79,16 @@ Authorization: Bearer eyJkYXRlIjoxNzA3Mjc5MTMwMzE5LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 POST http://localhost:8031/calendar/schedule/insert
 Accept: */*
 Content-Type: application/json
-Authorization: Bearer eyJkYXRlIjoxNzA3ODk4Nzg1MTM5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc5MTY3ODUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.L0PjIROIPZBFNF8O2UamHdaPl13CG8YTy_5_sfpSh8c
+Authorization: Bearer eyJkYXRlIjoxNzA4MDIyNzY5MzMxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDgwNDA3NjksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.gdBn82T4lc2fHZmZ68IACxCYTKh876-Wfx3Z27CDwWg
 
 {
 
-  "schTitle": "캘린더 넘버 안들어가",
+  "schTitle": "인서트 해보자",
   "schStartDate": "2024-03-22T03:03:03",
+  "schDetail": "여기는 내용 여기는 내용여기는 내용 여기는 내용여기는 내용 여기는 내용여기는 내용 여기는 내용여기는 내용 여기는 내용",
   "schEndDate": "2024-05-02T05:03:03",
-  "calNo": 3
+  "calNo": 1,
+  "schLocal": "서울시 강남구 어쩌구 저쩌구"
 
 }
 
@@ -119,6 +121,6 @@ Authorization: Bearer eyJkYXRlIjoxNzA3Mjg5MDc3MjAwLCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 
 
 ###캘린더 타입(공유/개인)으로 조회
-GET http://localhost:8031/calendar/calendarByType/공유캘린더
+GET http://localhost:8031/calendar/calendarByType/공유 캘린더
 Accept: */*
 Content-Type: application/json
