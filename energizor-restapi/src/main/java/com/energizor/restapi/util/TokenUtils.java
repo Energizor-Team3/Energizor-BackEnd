@@ -130,11 +130,14 @@ public class TokenUtils {
 
         claims.put("userCode", user.getUserCode());
         claims.put("userId", user.getUserId());
-        claims.put("userName", user.getUsername());
+        claims.put("userName", user.getUserName());
+        claims.put("userPw", user.getUserPw());
+        System.out.println("user.getUserPw() = " + user.getUserPw());
         claims.put("userRank", user.getUserRank());
         claims.put("userRole", user.getUserRole());
         claims.put("email", user.getEmail());
 //        claims.put("dayoff", user.getDayoff());
+
 
         return claims;
     }
@@ -161,7 +164,6 @@ public class TokenUtils {
             e.printStackTrace(); // 예외 처리 - 원하는 방식으로 처리하도록 수정 가능
         }
         System.out.println("randomBytes 출력 = " + randomBytes);
-//        log.info("ramdom번호 출력 나오냐", randomBytes);
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 

@@ -38,6 +38,8 @@ public class UserDTO implements UserDetails {
     private int teamCode;
     private DayOffDTO dayoff;
 
+    private String profilePath;
+
     public String getUserId() {
         return userId;
     }
