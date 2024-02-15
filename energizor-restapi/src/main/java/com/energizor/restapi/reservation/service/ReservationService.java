@@ -40,8 +40,10 @@ public class ReservationService {
     }
 
     //예약내역 전체조회
-    public List<ReservationDTO> selectAllReservations() {
-        List<Reservation> allReservations = reservationRepository.findAll();
+    public List<ReservationDTO> selectAllReservations(UserDTO userDTO) {
+
+        User user = modelMapper.map(userDTO, User.class);
+        List<Reservation> allReservations = reservationRepository.findByUserCode(user);
         return allReservations.stream()
                 .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
                 .collect(Collectors.toList());
@@ -49,7 +51,8 @@ public class ReservationService {
 
     //예약내역 상세조회
     public ReservationDTO selectReservationByCode(int reservationCode) {
-        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationCode);
+
+        Optional<Reservation> optionalReservation = reservationRepository.findByReservationCode(reservationCode);
         return optionalReservation.map(reservation -> modelMapper.map(reservation, ReservationDTO.class)).orElse(null);
     }
 
