@@ -3,6 +3,8 @@ package com.energizor.restapi.board.controller;
 import com.energizor.restapi.board.dto.*;
 import com.energizor.restapi.board.service.BoardService;
 import com.energizor.restapi.common.Criteria;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
