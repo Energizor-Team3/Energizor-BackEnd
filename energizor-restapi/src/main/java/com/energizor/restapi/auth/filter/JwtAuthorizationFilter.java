@@ -1,6 +1,7 @@
 package com.energizor.restapi.auth.filter;
 
 import com.energizor.restapi.common.AuthConstants;
+import com.energizor.restapi.users.dto.AuthorityDTO;
 import com.energizor.restapi.users.dto.DayOffDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.dto.UserRoleDTO;
@@ -39,7 +40,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
          * */
 
         List<String> roleLeessList = Arrays.asList(
-                "/auth/login"
+                "/auth/login", "/auth/searchpwd",
+                "/swagger-ui/(.*)",        //swagger 설정
+                "/swagger-ui/index.html",  //swagger 설정
+                "/v3/api-docs",              //swagger 설정
+                "/v3/api-docs/(.*)",         //swagger 설정
+                "/swagger-resources",        //swagger 설정
+                "/swagger-resources/(.*)"    //swagger 설정
         );
 
         if(roleLeessList.stream().anyMatch(uri -> roleLeessList.stream().anyMatch(pattern -> Pattern.matches(pattern, request.getRequestURI())))){
@@ -63,14 +70,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     authentication.setUserName(claims.get("userName").toString());
                     authentication.setUserRank(claims.get("userRank").toString());
                     authentication.setEmail(claims.get("email").toString());
-                    System.out.println("claims userRole ==================== " + claims.get("userRole"));
+                    System.out.println("claims userRole ==================== " + claims.get("userRole")); // [{userCode=2, authCode=1, authority={authCode=1, authName=ROLE_USER}}]
                     System.out.println("claims offCode ==================== " + claims.get("dayoff"));
 
                     // List<UserRoleDTO> 설정
                     List<UserRoleDTO> userRoles = mapToUserRoleList(claims.get("userRole"));
-                    System.out.println("userRoles = " + userRoles);
+                    System.out.println("userRoles =-======================>>>> " + userRoles);
                     authentication.setUserRole(userRoles);
-
 
                     AbstractAuthenticationToken authenticationToken = UsernamePasswordAuthenticationToken.authenticated(authentication, token, authentication.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetails(request));
@@ -102,7 +108,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 UserRoleDTO userRole = new UserRoleDTO();
                 userRole.setUserCode((Integer) roleMap.get("userCode"));
                 userRole.setAuthCode((Integer) roleMap.get("authCode"));
-                // 다른 필드들도 필요에 따라 추가
+
+                Object authorityObject = roleMap.get("authority");
+                userRole.setAuthority(AuthorityDTO.fromLinkedHashMap((LinkedHashMap<String, Object>) authorityObject));
 
                 userRoles.add(userRole);
             }
@@ -110,6 +118,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         }
         return userRoles;
     }
+
 
     /**
      * 토큰 관련된 Exception 발생 시 예외 응답

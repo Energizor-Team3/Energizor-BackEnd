@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +24,8 @@ public class TokenUtils {
 
     private static String jwtSecretKey;
     private static Long tokenValidateTime;
+
+    private static SecureRandom secureRandom;
 
     @Value("${jwt.key}")
     public void setJwtSecretKey(String jwtSecretKey) {
@@ -39,6 +43,7 @@ public class TokenUtils {
      * @return token: Authrization의 token 부분을 반환한다.
      * */
     public static String splitHeader(String header){
+        System.out.println("header = " + header);
         if(!header.equals("")){
             return header.split(" ")[1];
         }else{
@@ -142,6 +147,22 @@ public class TokenUtils {
     private static Key createSignature(){
         byte[] secretBytes = DatatypeConverter.parseBase64Binary(jwtSecretKey);
         return new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
+    }
+
+    /***
+     * 토큰이나 임시 비밀번호를 위한 랜덤 문자열 생성 매서드이다.
+     * @return 랜덤 문자열
+     */
+    public static String randomString() {
+        byte[] randomBytes = new byte[8];
+        try {
+            secureRandom.nextBytes(randomBytes);
+        } catch (Exception e) {
+            e.printStackTrace(); // 예외 처리 - 원하는 방식으로 처리하도록 수정 가능
+        }
+        System.out.println("randomBytes 출력 = " + randomBytes);
+//        log.info("ramdom번호 출력 나오냐", randomBytes);
+        return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
 
 }
