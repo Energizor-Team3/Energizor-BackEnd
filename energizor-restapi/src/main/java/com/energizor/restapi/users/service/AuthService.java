@@ -158,10 +158,10 @@ public class AuthService {
     //보낼 사용자 이메일의 정보 내가 보내는거면 내 이메일
     private void sendPasswordSearchEmail(String email, String temporaryPassword) throws UnsupportedEncodingException {
         System.out.println("비번 변경 서비스 시작=====================================");
-        System.out.println("사용자의 이메일 정보 =====================================");
+        System.out.println("사용자의 이메일 정보 =====================================" + email);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        InternetAddress fromAddress = new InternetAddress("hrmanager690@gmail.com", "EveryWare 인사담당자");
+        InternetAddress fromAddress = new InternetAddress("sueyeon777@gmail.com", "EveryWare 인사담당자");
         message.setFrom(String.valueOf(fromAddress));
         message.setTo(email);
         message.setSubject("EveryWare 임시비밀번호 안내");
