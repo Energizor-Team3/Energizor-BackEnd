@@ -38,7 +38,7 @@ Content-Disposition: form-data; name="lineUser"
 
 1
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="3333.png"
+Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -86,7 +86,7 @@ Content-Disposition: form-data; name="lineUser"
 
 21,22,19
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="3333.png"
+Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -138,7 +138,7 @@ Content-Disposition: form-data; name="lineUser"
 
 21,22,19
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="3333.png"
+Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -166,7 +166,7 @@ Content-Disposition: form-data; name="lineUser"
 
 1
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="3333.png"
+Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
