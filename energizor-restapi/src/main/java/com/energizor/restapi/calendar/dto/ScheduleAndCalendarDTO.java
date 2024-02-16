@@ -3,12 +3,14 @@ package com.energizor.restapi.calendar.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class ScheduleDTO {
+
+public class ScheduleAndCalendarDTO {
     private int schNo;
     private String schTitle;
     private String schDetail;
@@ -16,5 +18,6 @@ public class ScheduleDTO {
     private LocalDateTime schEndDate;
     private String schAllDay;
     private String schLocal;
-    private int calNo;
+    private CalendarDTO calendarDTO;
+
 }
