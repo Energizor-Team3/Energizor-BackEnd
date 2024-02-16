@@ -1,5 +1,6 @@
 package com.energizor.restapi.group.dto;
 import lombok.*;
+
 import java.util.List;
 
 @NoArgsConstructor
@@ -7,11 +8,11 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class DeptAndTeamDTO {
+public class TeamGroupDTO {
 
-        private int deptCode;
-        private String deptName;
+    private int teamCode;
+    private String teamName;
+    private int deptCode;
 
-        private List<TeamGroupDTO> teamList;
-
+    private List<UserGroupDTO> userList;
 }
