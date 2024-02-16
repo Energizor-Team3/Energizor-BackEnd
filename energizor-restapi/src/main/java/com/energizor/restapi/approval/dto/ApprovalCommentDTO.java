@@ -3,6 +3,7 @@ package com.energizor.restapi.approval.dto;
 import com.energizor.restapi.users.dto.UserDTO;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ApprovalCommentDTO {
     private int acCode;
     private String acContent;
-    private Date acDate;
+    private LocalDate acDate;
     private List<DocumentDTO> documentDTO;
     private List<UserDTO> userDTO;
 

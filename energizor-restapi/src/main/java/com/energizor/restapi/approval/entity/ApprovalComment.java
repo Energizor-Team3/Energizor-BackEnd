@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -22,7 +24,7 @@ public class ApprovalComment {
     @Column(name = "ac_content")
     private String acContent;
     @Column(name = "ac_date")
-    private Date acDate;
+    private LocalDate acDate;
     @ManyToOne
     @JoinColumn(name = "document_code")
     private Document document;
@@ -41,7 +43,7 @@ public class ApprovalComment {
         return this;
     }
 
-    public ApprovalComment acDate(Date acDate) {
+    public ApprovalComment acDate(LocalDate acDate) {
         this.acDate = acDate;
         return this;
     }
