@@ -84,9 +84,9 @@ public class ReservationController {
     }
 
     //참석자 예약코드로 조회
-    @GetMapping("/attendee/{reservation_code}")
-    public ResponseEntity<ResponseDTO> attendeeByReservationCode(@PathVariable("reservation_code") int reservation_code) {
-        List<AttendeeDTO> attendeeDTOs = reservationService.attendeesByReservationCode(reservation_code);
+    @GetMapping("/attendee/{reservationCode}")
+    public ResponseEntity<ResponseDTO> attendeeByReservationCode(@PathVariable int reservationCode) {
+        List<AttendeeDTO> attendeeDTOs = reservationService.attendeesByReservationCode(reservationCode);
         if (!attendeeDTOs.isEmpty()) {
             return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "예약 코드를 활용한 참석자 조회 성공", attendeeDTOs));
         } else {
