@@ -1,19 +1,20 @@
 package com.energizor.restapi.calendar.service;
 
-import com.energizor.restapi.board.dto.BoardDTO;
-import com.energizor.restapi.board.entity.Board;
+import com.energizor.restapi.calendar.dto.CalendarDTO;
 import com.energizor.restapi.calendar.dto.ScheduleAndCalendarDTO;
 import com.energizor.restapi.calendar.dto.ScheduleDTO;
 import com.energizor.restapi.calendar.entity.Schedule;
 import com.energizor.restapi.calendar.entity.ScheduleAndCalendar;
+import com.energizor.restapi.calendar.repository.CalendarParticipantRepository;
+import com.energizor.restapi.calendar.repository.CalendarRepository;
 import com.energizor.restapi.calendar.repository.ScheduleAndCategoryRepository;
 import com.energizor.restapi.calendar.repository.ScheduleRepository;
-import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.users.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,16 +28,27 @@ import lombok.extern.log4j.Log4j2;
 public class ScheduleService {
 
     private final ScheduleAndCategoryRepository scheduleAndCategoryRepository;
+
+    private final CalendarRepository calendarRepository;
+
+    private final CalendarParticipantRepository calendarParticipantRepository;
+
     private final ScheduleRepository scheduleRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
+    private final CalendarService calendarService;
 
-    public ScheduleService(ScheduleAndCategoryRepository scheduleAndCategoryRepository, ScheduleRepository scheduleRepository, ModelMapper modelMapper, UserRepository userRepository) {
+
+    public ScheduleService(ScheduleAndCategoryRepository scheduleAndCategoryRepository, CalendarRepository calendarRepository, CalendarParticipantRepository calendarParticipantRepository, ScheduleRepository scheduleRepository, ModelMapper modelMapper, UserRepository userRepository, CalendarService calendarService) {
         this.scheduleAndCategoryRepository = scheduleAndCategoryRepository;
+        this.calendarRepository = calendarRepository;
+
+        this.calendarParticipantRepository = calendarParticipantRepository;
         this.scheduleRepository = scheduleRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.calendarService = calendarService;
     }
 
     // 캘린더 코드로 해당 캘린더 일정 조회
@@ -47,6 +59,19 @@ public class ScheduleService {
                 .map(schedule -> modelMapper.map(schedule, ScheduleAndCalendarDTO.class))
                 .collect(Collectors.toList());
     }
+
+
+    // 유저 코드로 해당 유저가 참여하는 모든 캘린더의 일정 조회
+
+    public List<ScheduleDTO> findScheduleByUserCode(int userCode){
+        List<Schedule> scheduleList = scheduleRepository.findScheduleByUserCode(userCode);
+        return scheduleList.stream()
+                .map(schedule -> modelMapper.map(schedule,ScheduleDTO.class))
+                .collect(Collectors.toList());
+
+    }
+
+
 
     @Transactional
 
@@ -78,6 +103,8 @@ public class ScheduleService {
             return "Schedule not found";
         }
     }
+
+
 
     @Transactional
     public ScheduleDTO updateSchedule(int schNo, ScheduleDTO updatedScheduleDTO) {

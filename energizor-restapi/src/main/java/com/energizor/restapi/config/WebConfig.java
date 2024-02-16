@@ -58,21 +58,5 @@ public class WebConfig implements WebMvcConfigurer {
         return new JwtTokenInterceptor();
     }
 
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        // Jackson ObjectMapper 설정
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"));
 
-        // LocalDateTimeSerializer 등록
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_DATE_TIME));
-        objectMapper.registerModule(javaTimeModule);
-
-        // MappingJackson2HttpMessageConverter 설정
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(objectMapper);
-        converters.add(converter);
-    }
 }
