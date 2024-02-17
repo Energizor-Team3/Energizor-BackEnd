@@ -4,30 +4,44 @@ import com.energizor.restapi.board.dto.*;
 import com.energizor.restapi.board.entity.*;
 import com.energizor.restapi.board.repository.*;
 import com.energizor.restapi.users.entity.User;
-import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.users.dto.UserDTO;
 //import com.querydsl.core.BooleanBuilder;
 //import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.AccessDeniedException;
+import java.io.File;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,7 +55,11 @@ public class BoardServiceImpl implements BoardService{
     private final BoardUserRepository userRepository;
     private final InterestBoardRepository interestBoardRepository;
     private final TemporaryBoardRepository temporaryBoardRepository;
+    private final FileRepository fileRepository;
     private final ModelMapper modelMapper;
+
+    @Value("${board.upload.path}")
+    private String uploadPath;
 
 
     @Override
@@ -524,6 +542,125 @@ public class BoardServiceImpl implements BoardService{
 
         return true;
     }
+
+    @Override
+    public List<UploadResultDTO> uploadFile(MultipartFile[] uploadFiles, int boardCode) {
+        List<UploadResultDTO> resultDTOList = new ArrayList<>();
+        Board board=boardRepository.findByCode(boardCode);
+
+        log.info("isEmpty : " + uploadFiles.length);
+
+        for (MultipartFile uploadFile : uploadFiles) {
+            BoardFile boardFile=new BoardFile();
+
+            // 실제 파일 이름 IE나 Edge는 전체 경로가 들어오므로
+            String originalName = uploadFile.getOriginalFilename();
+            log.info("originalName : " + originalName);
+            String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
+
+            log.info("fileName : " + fileName);
+
+            // 날짜 폴더 생성
+            String folderPath = makeFolder();
+            log.info("folderPath : " + folderPath);
+
+            // UUID
+            String uuid = UUID.randomUUID().toString();
+            log.info("uuid : " + uuid);
+
+            // 저장할 파일 이름 중간에 "_"를 이용해서 구분
+            String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + fileName;
+            // File.separator > unix / or window \\ 구분자 추가됨
+            log.info("saveName : " + saveName);
+
+            Path savePath = Paths.get(saveName);
+            log.info("savePath : " + savePath);
+
+            try {
+                uploadFile.transferTo(savePath); // 실제 이미지 저장
+
+                if(uploadFile.getContentType()!=null&&uploadFile.getContentType().startsWith("image")) {
+                    // 섬네일 생성
+                    String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + fileName;
+                    // 섬네일 파일 이름은 중간에 s_로 시작하도록
+                    File thumbnailFile = new File(thumbnailSaveName);
+                    // 섬네일 생성
+                    Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+
+                }
+
+                resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            boardFile.setFileName(fileName);
+            boardFile.setUuid(uuid);
+            boardFile.setFolderPath(folderPath);
+            boardFile.setFileType(uploadFile.getContentType());
+            boardFile.setFileSize((int) uploadFile.getSize());
+            boardFile.setBoard(board);
+
+            fileRepository.save(boardFile);
+
+
+        }
+
+        return resultDTOList;
+    }
+
+    private String makeFolder() {
+
+        String str = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+
+        String folderPath = str.replace("/", File.separator);
+
+        // make folder
+        File uploadFolder = new File(uploadPath, folderPath);
+
+        if (uploadFolder.exists() == false) {
+            uploadFolder.mkdirs();
+        }
+
+        return folderPath;
+    }
+
+    @Operation(summary="파일 조회",description="로그인한 사용자는 파일을 조회 할 수 있습니다.")
+    @GetMapping("/display")
+    public ResponseEntity<byte[]> getFile(@RequestParam("fileName") String fileName) {
+        log.info("fileName : " + fileName);
+
+        ResponseEntity<byte[]> result = null;
+        log.info("up result : " + result);
+
+        try {
+            String srcFileName = URLDecoder.decode(fileName, "UTF-8");
+            log.info("fileName : " + srcFileName);
+
+            File file = new File(uploadPath + File.separator + srcFileName);
+            log.info("file : " + file);
+
+
+            HttpHeaders header = new HttpHeaders();
+
+            // MIME 타입 처리
+            header.add("Content-Type", Files.probeContentType(file.toPath()));
+            log.info("header : " + header);
+
+            // 파일 데이터 처리
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+            log.info("result : " + result);
+        } catch (Exception e) {
+            log.info("check");
+            log.error(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        log.info("result : " + result);
+        return result;
+    }
+
+
 
 
 }

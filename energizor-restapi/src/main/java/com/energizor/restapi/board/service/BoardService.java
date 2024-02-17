@@ -4,11 +4,9 @@ import com.energizor.restapi.board.dto.*;
 import com.energizor.restapi.board.entity.Board;
 import com.energizor.restapi.board.entity.InterestBoard;
 import com.energizor.restapi.board.entity.TemporaryBoard;
-import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
-import com.querydsl.core.types.Predicate;
-import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -108,4 +106,5 @@ public interface BoardService {
     }
 
 
+    List<UploadResultDTO> uploadFile(MultipartFile[] uploadFiles, int boardCode);
 }

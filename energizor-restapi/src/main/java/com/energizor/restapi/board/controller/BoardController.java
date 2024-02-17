@@ -1,10 +1,12 @@
 package com.energizor.restapi.board.controller;
 
 import com.energizor.restapi.board.dto.*;
+import com.energizor.restapi.board.entity.BoardFile;
 import com.energizor.restapi.board.service.BoardService;
 import com.energizor.restapi.common.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.AllArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,140 +53,92 @@ public class BoardController {
 
     private final BoardService boardService;
 
+    @Operation(summary="파일 업로드",description="로그인한 사용자는 글 작성 시에 파일을 업로드 할 수 있습니다.")
     @PostMapping("/upload")
-    public ResponseEntity<List<UploadResultDTO>> uploadFile(@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
-        log.info("upload start : "+uploadFiles);
+    public ResponseEntity<ResponseDTO> uploadFile(@RequestParam("boardCode") int boardCode,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
+        log.info("start");
 
-        List<UploadResultDTO> resultDTOList=new ArrayList<>();
+        List<UploadResultDTO> resultDTOList = boardService.uploadFile(uploadFiles,boardCode);
 
-        for(MultipartFile uploadFile:uploadFiles) {
-
-            // 이미지 파일만 업로드 가능
-            if(uploadFile.getContentType().startsWith("image")==false) {
-                log.warn("this file is not image type");
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            }
-
-            // 실제 파일 이름 IEsk Edge는 전체 경로가 들어오므로
-            String originalName=uploadFile.getOriginalFilename();
-            String fileName=originalName.substring(originalName.lastIndexOf("\\")+1);
-
-            // 날짜 폴더 생성
-            String folderPath=makeFolder();
-            log.info("folderPath : "+folderPath);
-
-            // UUID
-            String uuid= UUID.randomUUID().toString();
-            log.info("uuid : "+uuid);
-
-            // 저장할 파일 이름 중간에 "_"를 이용해서 구분
-            String saveName=uploadPath+ File.separator+folderPath+File.separator+uuid+"_"+fileName;
-            log.info("saveName : "+saveName);
-
-            Path savePath= Paths.get(saveName);
-            log.info("savePath : "+savePath);
-
-            try{
-                // 실제 이미지 저장
-                uploadFile.transferTo(savePath);
-
-                // 섬네일 생성
-                String thumbnailSaveName=uploadPath+File.separator+folderPath+File.separator+"s_"+uuid+"_"+fileName;
-
-                // 섬네일 파일 이름 중간에 s_시작하는점 기억해두기
-                File thumbnailFile=new File(thumbnailSaveName);
-
-                // 섬네일 생성
-                Thumbnailator.createThumbnail(savePath.toFile(),thumbnailFile,100,100);
-
-                resultDTOList.add(new UploadResultDTO(fileName,uuid,folderPath));
-            } catch(IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return new ResponseEntity<>(resultDTOList,HttpStatus.OK);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"파일 업로드 성공",resultDTOList));
     }
 
-    private String makeFolder() {
-        String str= LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 
-        String folderPath=str.replace("/",File.separator);
-
-        File uploadFolder=new File(uploadPath,folderPath);
-
-        if(uploadFolder.exists()==false) {
-            uploadFolder.mkdirs();
-        }
-
-        return folderPath;
-    }
-
+    @Operation(summary="파일 조회",description="로그인한 사용자는 파일을 조회 할 수 있습니다.")
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFile(@RequestParam("fileName") String fileName) {
-        log.info("display start : "+fileName);
+    public ResponseEntity<byte[]> getFile(@RequestParam("boardCode")int boardCode,@RequestParam("fileName") String fileName) {
+        log.info("fileName : " + fileName);
 
-        ResponseEntity<byte[]> result=null;
+        ResponseEntity<byte[]> result = null;
+        log.info("up result : " + result);
 
         try {
-            String srcFileName= URLDecoder.decode(fileName,"UTF-8");
-            log.info("fileName : "+srcFileName);
+            String srcFileName = URLDecoder.decode(fileName, "UTF-8");
+            log.info("fileName : " + srcFileName);
 
-            File file=new File(uploadPath+File.separator+srcFileName);
-            log.info("file : "+file);
+            File file = new File(uploadPath + File.separator + srcFileName);
+            log.info("file : " + file);
 
-            HttpHeaders header=new HttpHeaders();
+
+            HttpHeaders header = new HttpHeaders();
 
             // MIME 타입 처리
             header.add("Content-Type", Files.probeContentType(file.toPath()));
-            log.info("header : "+header);
+            log.info("header : " + header);
 
             // 파일 데이터 처리
-            result=new ResponseEntity<>(FileCopyUtils.copyToByteArray(file),header,HttpStatus.OK);
-            log.info("result : "+result);
-        } catch(Exception e) {
+            result = new ResponseEntity<>(FileCopyUtils.copyToByteArray(file), header, HttpStatus.OK);
+            log.info("result : " + result);
+        } catch (Exception e) {
             log.info("check");
             log.error(e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return  result;
+        log.info("result : " + result);
+        return result;
     }
 
+
+
+    @Operation(summary="파일 삭제",description="로그인한 사용자는 업로드 한 파일을 삭제할 수 있습니다.")
     @Transactional
     @DeleteMapping("/removeFile")
     public ResponseEntity<Boolean> removeFile(@RequestParam("fileName")String fileName) {
 
-        String srcFileName=null;
+        String srcFileName = null;
 
         try {
-            srcFileName=URLDecoder.decode(fileName,"UTF-8");
-            File file=new File(uploadPath+File.separator+srcFileName);
-            log.info("file : "+file);
 
-            boolean result=file.delete();
-            if(!result) return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+            srcFileName = URLDecoder.decode(fileName, "UTF-8");
+            File file = new File(uploadPath + File.separator + srcFileName);
+            log.info("file : " + file);
+            boolean result = file.delete();
+            if (!result) return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
 
-            File thumbnail=new File(file.getParent(),"s_"+file.getName());
+            File thumbnail = new File(file.getParent(), "s_" + file.getName());
 
-            result=thumbnail.delete();
+            result = thumbnail.delete();
 
-            return new ResponseEntity<>(result,HttpStatus.OK);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     @Operation(summary="게시글 조회",description="로그인한 사용자는 게시글을 조회할 수 있습니다.")
     @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> findAllList(@RequestParam(name = "boardTypeCode") int boardTypeCode,PageRequestDTO pageRequestDTO,@AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> findAllList(PageRequestDTO pageRequestDTO, @AuthenticationPrincipal UserDTO principal) {
 
-        log.info("[BoardController] boardTypeCode : "+boardTypeCode);
-        log.info("pageRequestDTO : "+pageRequestDTO);
-        pageRequestDTO.setBoardTypeCode(boardTypeCode);
+//        log.info("[BoardController] boardTypeCode : "+boardTypeCode);
+//        log.info("pageRequestDTO : "+pageRequestDTO);
+//        pageRequestDTO.setBoardTypeCode(boardTypeCode);
 
-        PageResultDTO response=boardService.findAllList(pageRequestDTO);
+        log.info("pageRequestDTO : " + pageRequestDTO);
+        PageResultDTO response  =boardService.findAllList(pageRequestDTO);
         log.info("response : "+response);
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 조회 성공",response));
@@ -206,7 +160,9 @@ public class BoardController {
         log.info("boardDTO : "+boardDTO);
         log.info("principal : "+principal);
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 등록 성공",boardService.register(boardDTO,principal)));
+        int boardCode=boardService.register(boardDTO,principal).getBoardCode();
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 등록 성공",boardCode));
 
     }
 
@@ -309,7 +265,7 @@ public class BoardController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"임시저장함 상세 조회 성공",boardService.findDetailTemporaryBoard(temporaryCode)));
     }
 
-    @Operation(summary="임시게시글 조회",description="로그인한 사용자는 임시게시글을 삭제할 수 있습니다.")
+    @Operation(summary="임시게시글 삭제",description="로그인한 사용자는 임시게시글을 삭제할 수 있습니다.")
     @DeleteMapping("/temporary/delete/{temporaryCode}")
     public ResponseEntity<ResponseDTO> deleteTemporaryBoard(@PathVariable(name="temporaryCode")int temporaryCode, @AuthenticationPrincipal UserDTO principal) {
 
