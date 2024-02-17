@@ -3,6 +3,7 @@ package com.energizor.restapi.approval.dto;
 import com.energizor.restapi.users.dto.UserDTO;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -16,7 +17,6 @@ public class ApprovalLineDTO {
     private UserDTO userDTO;
     private int sequence;
     private String approvalLineStatus;
-    private Date processingDate;
+    private LocalDateTime processingDate;
     private String reason;
-
 }

@@ -11,11 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Slf4j
 public class FileUploadUtils {
 
-    public static String saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
+    public static String saveFile(String uploadDir, String originalFileName, MultipartFile multipartFile) throws IOException {
 
         Path uploadPath = Paths.get(uploadDir);
 
@@ -23,16 +24,19 @@ public class FileUploadUtils {
             Files.createDirectories(uploadPath);
         }
 
-        String replaceFileName = fileName + "." + FilenameUtils.getExtension(multipartFile.getResource().getFilename());
+        // 파일 확장자를 포함한 고유한 파일 이름 생성
+        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+        String fileName = UUID.randomUUID().toString(); // UUID를 이용해 고유한 문자열 생성
+        String uniqueFileName = fileName + "." + extension; // 실제 저장될 고유 파일 이름
 
         try(InputStream inputStream = multipartFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(replaceFileName);
+            Path filePath = uploadPath.resolve(uniqueFileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
         }catch (IOException ex){
-            throw new IOException("Could not save file: " + fileName, ex);
+            throw new IOException("Could not save file: " + originalFileName, ex);
         }
 
-        return replaceFileName;
+        return uniqueFileName;
     }
 
     public static boolean deleteFile(String uploadDir, String fileName) {
