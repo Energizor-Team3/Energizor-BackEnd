@@ -7,4 +7,6 @@ public interface UserAndTeamRepository extends JpaRepository<UserAndTeam, Intege
 
 
     UserAndTeam findByUserCodeAndTeamTeamCode(int userCode, int teamCode);
+
+    UserAndTeam findByUserCode(int userCode);
 }
