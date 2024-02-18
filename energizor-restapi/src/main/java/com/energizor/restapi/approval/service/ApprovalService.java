@@ -43,6 +43,7 @@ public class ApprovalService {
     private final ModelMapper modelMapper;
 
     private final UserRepository userRepository;
+    private final UserAndTeamRepository userAndTeamRepository;
 
     /* 이미지 저장 할 위치 및 응답 할 이미지 주소 */
     @Value("${image.image-dir}")
@@ -51,7 +52,7 @@ public class ApprovalService {
     @Value("${image.image-url}")
     private String IMAGE_URL;
 
-    public ApprovalService(BusinessTripRepository businessTripRepository, DayOffApplyRepository dayOffApplyRepository, EducationRepository educationRepository, GeneralDraftRepository generalDraftRepository, ReferenceRepository referenceRepository, DocumentRepository documentRepository, ApprovalLineRepository approvalLineRepository, ApprovalCommentRepository approvalCommentRepository, ApprovalFileRepository approvalFileRepository, ProxyApprovalRepository proxyApprovalRepository, SharedDocumentRepository sharedDocumentRepository, DayOffRepository dayOffRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public ApprovalService(BusinessTripRepository businessTripRepository, DayOffApplyRepository dayOffApplyRepository, EducationRepository educationRepository, GeneralDraftRepository generalDraftRepository, ReferenceRepository referenceRepository, DocumentRepository documentRepository, ApprovalLineRepository approvalLineRepository, ApprovalCommentRepository approvalCommentRepository, ApprovalFileRepository approvalFileRepository, ProxyApprovalRepository proxyApprovalRepository, SharedDocumentRepository sharedDocumentRepository, DayOffRepository dayOffRepository, ModelMapper modelMapper, UserRepository userRepository, UserAndTeamRepository userAndTeamRepository) {
 
         this.businessTripRepository = businessTripRepository;
         this.dayOffApplyRepository = dayOffApplyRepository;
@@ -67,6 +68,7 @@ public class ApprovalService {
         this.dayOffRepository = dayOffRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
+        this.userAndTeamRepository = userAndTeamRepository;
     }
 
 
@@ -1331,4 +1333,14 @@ public class ApprovalService {
     }
 
 
+    public UserAndTeamDTO findUserDetail(UserDTO userDTO) {
+        System.out.println("userDTO=================================== = " + userDTO);
+        User user = userRepository.findByUserCode(userDTO.getUserCode());
+
+        UserAndTeam userAndTeam = userAndTeamRepository.findByUserCodeAndTeamTeamCode(user.getUserCode(),user.getTeam().getTeamCode());
+        System.out.println("userAndTeam = " + userAndTeam);
+        UserAndTeamDTO UserAndTeamDTO = modelMapper.map(userAndTeam, UserAndTeamDTO.class);
+        System.out.println("UserAndTeamDTO = " + UserAndTeamDTO);
+        return UserAndTeamDTO;
+    }
 }
