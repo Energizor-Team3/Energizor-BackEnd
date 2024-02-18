@@ -101,7 +101,6 @@ public class GroupService {
         UserAndTeam user = userAndTeamRepository.findByUserCode(userCode);
         UserAndTeamDTO userAndTeamDTO  = modelMapper.map(user, UserAndTeamDTO.class);
 
-        System.out.println("group ================ " + user);
 
         log.info("selectTeam End===============");
 
