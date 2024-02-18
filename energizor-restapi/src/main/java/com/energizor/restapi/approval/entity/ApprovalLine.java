@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @Entity
 @ToString
@@ -30,9 +31,8 @@ public class ApprovalLine {
     @Column(name = "approvalline_status")
     private String approvalLineStatus;
     @Column(name = "processingdate")
-    private Date processingDate;
-    @Column(name = "reason")
-    private String reason;
+    private LocalDateTime processingDate;
+
 
     public ApprovalLine() {
     }
@@ -58,17 +58,15 @@ public class ApprovalLine {
         this.approvalLineStatus = approvalLineStatus;
         return this;
     }
-    public ApprovalLine processingDate(Date processingDate) {
+    public ApprovalLine processingDate(LocalDateTime processingDate) {
         this.processingDate = processingDate;
         return this;
     }
-    public ApprovalLine reason(String reason) {
-        this.reason = reason;
-        return this;
-    }
+
+
 
 
     public ApprovalLine build() {
-        return new ApprovalLine(approvalLineCode, document, user, sequence, approvalLineStatus, processingDate, reason);
+        return new ApprovalLine(approvalLineCode, document, user, sequence, approvalLineStatus, processingDate);
     }
 }
