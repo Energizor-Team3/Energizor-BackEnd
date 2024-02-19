@@ -30,10 +30,6 @@ public class ApprovalFile {
     private Date apFileDate;
     @Column(name = "apfile_status")
     private String apFileStatus;
-    @Column(name = "apfilepath_origin")
-    private String apFilePathOrigin;
-    @Column(name = "apfilepath_change")
-    private String apFilePathChange;
 
     public ApprovalFile() {
     }
@@ -63,23 +59,13 @@ public class ApprovalFile {
         this.apFileStatus = apFileStatus;
         return this;
     }
-    public ApprovalFile apFilePathOrigin(String apFilePathOrigin) {
-        this.apFilePathOrigin = apFilePathOrigin;
-        return this;
-    }
-    public ApprovalFile apFilePathChange(String apFilePathChange) {
-        this.apFilePathChange = apFilePathChange;
-        return this;
-    }
-
-
 
 
 
 
 
     public ApprovalFile build() {
-        return new ApprovalFile(apFileCode, document, apFileNameOrigin, apFileNameChange, apFileDate, apFileStatus, apFilePathOrigin, apFilePathChange);
+        return new ApprovalFile(apFileCode, document, apFileNameOrigin, apFileNameChange, apFileDate, apFileStatus);
     }
 
 }
