@@ -3,7 +3,6 @@ package com.energizor.restapi.users.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;

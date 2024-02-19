@@ -10,6 +10,8 @@ import lombok.ToString;
 import javax.naming.Name;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "document")
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class  Document {
     @Id
     @Column(name = "document_code")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int documentCode;
+    private Integer documentCode;
     @Column(name = "document_title")
     private String documentTitle;
     @ManyToOne
@@ -31,12 +33,15 @@ public class  Document {
     private String form;
     @Column(name = "tempsavestatus")
     private String tempSaveStatus;
+    @JoinColumn(name = "ac_code")
+    @OneToMany
+    private List<ApprovalComment> approvalComment;
 
 
     public Document() {
     }
 
-    public Document documentCode(int documentCode) {
+    public Document documentCode(Integer documentCode) {
         this.documentCode = documentCode;
         return this;
     }
@@ -63,7 +68,12 @@ public class  Document {
         return this;
     }
 
+    public Document approvalComment(List<ApprovalComment> approvalComment) {
+        this.approvalComment = approvalComment;
+        return this;
+    }
+
     public Document build() {
-        return new Document(documentCode, documentTitle, userDTO, draftDay, form, tempSaveStatus);
+        return new Document(documentCode, documentTitle, userDTO, draftDay, form, tempSaveStatus, approvalComment);
     }
 }

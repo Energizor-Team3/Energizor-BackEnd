@@ -1,5 +1,4 @@
 package com.energizor.restapi.users.controller;
-
 import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.common.PageDTO;
 import com.energizor.restapi.common.PagingResponseDTO;

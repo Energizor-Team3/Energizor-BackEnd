@@ -3,6 +3,8 @@ package com.energizor.restapi.approval.repository;
 import com.energizor.restapi.approval.entity.ApprovalLine;
 import com.energizor.restapi.approval.entity.Document;
 import com.energizor.restapi.users.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -27,7 +29,7 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Inte
 
 
 
-    ApprovalLine findByDocumentDocumentCodeAndUserUserCode(int documentCode, int userCode);
+    ApprovalLine findByDocumentDocumentCodeAndUserUserCodeAndApprovalLineStatus(int documentCode, int userCode, String 미결);
 
     @Query(value =
             "SELECT " +
@@ -85,5 +87,7 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Inte
 
     List<ApprovalLine> findByDocument(Document document);
 
-    ApprovalLine findByUser(User originUser);
+
+
+
 }

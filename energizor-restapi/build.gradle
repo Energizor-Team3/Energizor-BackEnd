@@ -42,6 +42,7 @@ dependencies {
 
     /*메일 의존성 추가*/
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('test') {
