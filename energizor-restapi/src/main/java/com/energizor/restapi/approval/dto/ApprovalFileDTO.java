@@ -16,6 +16,4 @@ public class ApprovalFileDTO {
     private String apFileNameChange;
     private Date apFileDate;
     private String apFileStatus;
-    private String apFilePathOrigin;
-    private String apFilePathChange;
 }
