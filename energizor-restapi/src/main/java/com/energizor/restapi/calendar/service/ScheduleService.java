@@ -29,26 +29,16 @@ public class ScheduleService {
 
     private final ScheduleAndCategoryRepository scheduleAndCategoryRepository;
 
-    private final CalendarRepository calendarRepository;
-
-    private final CalendarParticipantRepository calendarParticipantRepository;
 
     private final ScheduleRepository scheduleRepository;
     private final ModelMapper modelMapper;
-    private final UserRepository userRepository;
-
-    private final CalendarService calendarService;
 
 
     public ScheduleService(ScheduleAndCategoryRepository scheduleAndCategoryRepository, CalendarRepository calendarRepository, CalendarParticipantRepository calendarParticipantRepository, ScheduleRepository scheduleRepository, ModelMapper modelMapper, UserRepository userRepository, CalendarService calendarService) {
         this.scheduleAndCategoryRepository = scheduleAndCategoryRepository;
-        this.calendarRepository = calendarRepository;
-
-        this.calendarParticipantRepository = calendarParticipantRepository;
         this.scheduleRepository = scheduleRepository;
         this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
-        this.calendarService = calendarService;
+
     }
 
     // 캘린더 코드로 해당 캘린더 일정 조회
@@ -59,19 +49,24 @@ public class ScheduleService {
                 .map(schedule -> modelMapper.map(schedule, ScheduleAndCalendarDTO.class))
                 .collect(Collectors.toList());
     }
-
-
-    // 유저 코드로 해당 유저가 참여하는 모든 캘린더의 일정 조회
-
-    public List<ScheduleDTO> findScheduleByUserCode(int userCode){
-        List<Schedule> scheduleList = scheduleRepository.findScheduleByUserCode(userCode);
-        return scheduleList.stream()
-                .map(schedule -> modelMapper.map(schedule,ScheduleDTO.class))
+    public List<ScheduleDTO> findSchedulesByParticipantUserCode(int userCode) {
+        return scheduleRepository.findScheduleAndColorByUserCode(userCode)
+                .stream()
+                .map(result -> {
+                    Schedule schedule = (Schedule) result[0];
+                    String calColor = (String) result[1];
+                    ScheduleDTO scheduleDTO = modelMapper.map(schedule, ScheduleDTO.class);
+                    scheduleDTO.setCalColor(calColor);
+                    return scheduleDTO;
+                })
                 .collect(Collectors.toList());
-
     }
-
-
+//    public List<ScheduleDTO> findSchedulesByParticipantUserCode(int userCode) {
+//        return scheduleRepository.findScheduleByUserCode(userCode)
+//                .stream()
+//                .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
+//                .collect(Collectors.toList());
+//    }
 
     @Transactional
 

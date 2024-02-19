@@ -144,7 +144,8 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
     // 유저 코드로 스케줄 조회
     @GetMapping("/scheduleByUserCode/{userCode}")
     public ResponseEntity<ResponseDTO> getScheduleByUserCode(@PathVariable int userCode){
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  userCode + "의 캘린더의 스케줄 조회 성공", scheduleService.findScheduleByUserCode(userCode)));
+        List<ScheduleDTO> schedules = scheduleService.findSchedulesByParticipantUserCode(userCode);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  userCode + "의 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByParticipantUserCode(userCode)));
     }
 
 

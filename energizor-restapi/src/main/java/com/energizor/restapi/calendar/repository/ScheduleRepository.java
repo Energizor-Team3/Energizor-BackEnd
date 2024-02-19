@@ -4,18 +4,19 @@ import com.energizor.restapi.calendar.entity.Schedule;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Integer> {
-
-    @Query(value =
-            "SELECT " +
-                    "a.sch_no, b.cal_no, c.user_code " +
-                    "FROM schedule a " +
-                    "inner join calendar b on a.cal_no = b.cal_no " +
-                    "inner join cal_participant c on b.cal_no = c.cal_no" +
-                    "where c.user_code = :userCode",
-            nativeQuery = true)
-    List<Schedule> findScheduleByUserCode(int userCode);
+    @Query("SELECT s, c.calColor FROM Schedule s " +
+            "INNER JOIN CalendarParticipant cp ON s.calNo = cp.calParticipant.calNo " +
+            "INNER JOIN Calendar c ON s.calNo = c.calNo " +
+            "WHERE cp.calParticipant.userCode = :userCode")
+    List<Object[]> findScheduleAndColorByUserCode(@Param("userCode") int userCode);
+//    @Query("SELECT s, c.calColor FROM Schedule s " +
+//            "INNER JOIN CalendarParticipant cp ON s.calNo = cp.calParticipant.calNo " +
+//            "INNER JOIN Calendar c ON s.calNo = c.calNo " +
+//            "WHERE cp.calParticipant.userCode = :userCode")
+//    List<Schedule> findScheduleByUserCode(@Param("userCode") int userCode);
 }
