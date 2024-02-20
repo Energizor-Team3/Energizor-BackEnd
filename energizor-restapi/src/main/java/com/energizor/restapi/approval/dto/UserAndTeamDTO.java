@@ -16,5 +16,6 @@ public class UserAndTeamDTO {
     private String userRank;
     private String email;
     private String phone;
+    private DayOffDTO dayOff;
     private TeamDTO team;
 }

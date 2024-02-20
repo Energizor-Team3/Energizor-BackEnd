@@ -321,6 +321,15 @@ public class ApprovalController {
 
     }
 
+    // 유저코드로 로그인 유저 조회
+    @Operation(summary = "완료된 문서 공유")
+    @GetMapping("/findUserDetail/{userCode}")
+    public ResponseEntity<ResponseDTO> findByUserCode(@RequestParam int userCode)  {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "유저 조회 성공", approvalService.findByUserCode(userCode)));
+
+    }
+
 
 
 

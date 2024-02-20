@@ -30,6 +30,9 @@ public class UserAndTeam {
     @JoinColumn(name = "team_code")
     @OneToOne
     private Team team;
+    @JoinColumn(name = "off_code")
+    @OneToOne
+    private DayOff dayOff;
 
     public UserAndTeam() {
     }
@@ -63,12 +66,16 @@ public class UserAndTeam {
         this.team = team;
         return this;
     }
+    public UserAndTeam dayOff(DayOff dayOff) {
+        this.dayOff = dayOff;
+        return this;
+    }
 
 
 
 
 
     public UserAndTeam build() {
-        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, team);
+        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, team, dayOff);
     }
 }

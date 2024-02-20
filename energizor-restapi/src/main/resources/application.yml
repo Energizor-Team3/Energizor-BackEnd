@@ -18,6 +18,9 @@ spring:
   web:
     resources:
       static-locations: classpath:/imgs/
+  devtools:
+    restart:
+      enabled: false
 
   # jpa config
   jpa:
