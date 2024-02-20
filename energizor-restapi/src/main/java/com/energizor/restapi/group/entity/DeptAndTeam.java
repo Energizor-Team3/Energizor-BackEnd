@@ -10,7 +10,6 @@ import java.util.List;
 @Table(name = "department")
 @AllArgsConstructor
 @Getter
-@ToString
 public class DeptAndTeam {
 
         /* 부서기준으로 하나의 부서안에 속해있는 팀 전부 조회 ( 부서 + 팀s ) */
@@ -48,5 +47,11 @@ public class DeptAndTeam {
                 return new DeptAndTeam(deptCode, deptName, teamList);
         }
 
-
+        @Override
+        public String toString() {
+                return "DeptAndTeam{" +
+                        "deptCode=" + deptCode +
+                        ", deptName='" + deptName + '\'' +
+                        '}';
+        }
 }
