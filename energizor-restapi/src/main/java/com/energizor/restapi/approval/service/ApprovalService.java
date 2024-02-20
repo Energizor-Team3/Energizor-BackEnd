@@ -92,8 +92,10 @@ public class ApprovalService {
                 .tempSaveStatus("N").build();
 
         System.out.println("document = " + document);
+        System.out.println("dayOffApplyDTO============================================= " + dayOffApplyDTO);
 
         Document result = documentRepository.save(document);
+        System.out.println("file = " + file);
 
 
         if(file != null){
@@ -116,7 +118,7 @@ public class ApprovalService {
             approvalFileRepository.save(approvalFile);
         }
 
-        if(dayOffApplyDTO.getRfUser().equals("")){
+        if(!dayOffApplyDTO.getRfUser().equals("")){
             // 참조, 결재선 지정
             int[] rfUser = changeUser(dayOffApplyDTO.getRfUser());
             for (int i = 0; i < rfUser.length; i++) {
@@ -297,7 +299,7 @@ public class ApprovalService {
         BusinessTrip businessTrip = new BusinessTrip();
 
 
-        businessTrip.documentDTO(result);
+        businessTrip.document(result);
         businessTrip.user(user);
         businessTrip.btDate(businessTripDTO.getBtDate());
         businessTrip.btPhone(businessTripDTO.getBtPhone());
@@ -1041,7 +1043,7 @@ public class ApprovalService {
         dayOffApply.offEnd(dayOffApplyDTO.getOffEnd());
         dayOffApply.offDay(dayOffApplyDTO.getOffDay());
         dayOffApply.offReason(dayOffApplyDTO.getOffReason());
-        dayOffApply.offState(dayOffApplyDTO.getOffState());
+        dayOffApply.offState("대기");
 
         System.out.println("dayOffApply : " + dayOffApply);
 
@@ -1121,7 +1123,7 @@ public class ApprovalService {
         BusinessTrip businessTrip = new BusinessTrip();
 
 
-        businessTrip.documentDTO(result);
+        businessTrip.document(result);
         businessTrip.user(user);
         businessTrip.btDate(businessTripDTO.getBtDate());
         businessTrip.btPhone(businessTripDTO.getBtPhone());
@@ -1375,5 +1377,28 @@ public class ApprovalService {
         UserAndTeamDTO UserAndTeamDTO = modelMapper.map(userAndTeam, UserAndTeamDTO.class);
         System.out.println("UserAndTeamDTO = " + UserAndTeamDTO);
         return UserAndTeamDTO;
+    }
+
+    public Object selectTempDocumentDetail(int documentCode) {
+
+        Document document = documentRepository.findByDocumentCode(documentCode);
+
+        switch (document.getForm()){
+            case"휴가신청서": DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(document);
+                DayOffApplyDTO dayOffApplyDTO = modelMapper.map(dayOffApply, DayOffApplyDTO.class);
+                return dayOffApplyDTO ;
+            case"출장신청서": BusinessTrip businessTrip = businessTripRepository.findByDocument(document);
+                BusinessTripDTO businessTripDTO = modelMapper.map(businessTrip, BusinessTripDTO.class);
+                return businessTripDTO ;
+            case"교육신청서": Education education = educationRepository.findByDocument(document);
+                EducationDTO educationDTO = modelMapper.map(education, EducationDTO.class);
+                return educationDTO ;
+            case"기안신청서": GeneralDraft generalDraft = generalDraftRepository.findByDocument(document);
+                GeneralDraftDTO generalDraftDTO = modelMapper.map(generalDraft, GeneralDraftDTO.class);
+                return generalDraftDTO ;
+
+        }
+
+        return "";
     }
 }

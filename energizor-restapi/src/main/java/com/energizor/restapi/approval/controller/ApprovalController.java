@@ -267,6 +267,12 @@ public class ApprovalController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.insertBySelectTempDocument(documentCode, dayOffApplyDTO ,businessTripDTO ,educationDTO ,generalDraftDTO ,file ,userDTO)));
     }
 
+    @Operation(summary = "임시 기안한 문서 상세 조회 ")
+    @GetMapping("/selectTempDocumentDetail/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectTempDocumentDetail(@PathVariable int documentCode){
+    return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectTempDocumentDetail(documentCode)));
+    }
+
     // 대리 결재 위임
     @Operation(summary = "대리 결재 위임")
     @PostMapping("/insertProxy")

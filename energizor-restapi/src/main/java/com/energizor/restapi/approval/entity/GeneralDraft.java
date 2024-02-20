@@ -27,7 +27,7 @@ public class GeneralDraft {
     @Column(name = "gd_content")
     private String gdContent;
     @JoinColumn(name = "document_code")
-    @ManyToOne
+    @OneToOne
     private Document document;
     @JoinColumn(name = "user_code")
     @OneToOne

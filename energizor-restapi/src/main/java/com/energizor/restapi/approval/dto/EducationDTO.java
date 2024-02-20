@@ -22,7 +22,7 @@ public class EducationDTO {
     private String eduInstitution;
     private int eduPrice;
     private String eduContent;
-    private List<DocumentDTO> documentDTO;
+    private DocumentDTO document;
     private UserDTO userDTO;
     private String lineUser;
     private String rfUser;
