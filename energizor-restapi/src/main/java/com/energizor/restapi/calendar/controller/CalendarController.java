@@ -141,6 +141,13 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
 
 //----------------------------------------** 스케줄 **-----------------------------------------------------
 
+    @Operation(summary = "스케줄 디테일 정보 조회 ",description = " 하나의 스케줄 정보를 조회한다 ")
+    @GetMapping("/schedule/detail/{schNo}")
+    public ResponseEntity<ResponseDTO> getSchedule(@PathVariable int schNo) {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"스케줄 정보 조회 성공",scheduleService.findSchedule(schNo)));
+    }
+
     // 유저 코드로 스케줄 조회
     @GetMapping("/scheduleByUserCode/{userCode}")
     public ResponseEntity<ResponseDTO> getScheduleByUserCode(@PathVariable int userCode){
@@ -196,5 +203,9 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
 //        String calName = calendar != null ? calendar.getCalName() : "Unknown";
 //        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, calNo+ "번캘린더" + calName + " 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByCalNo(calNo)));
 //    }
+
+
+
+
 
 }

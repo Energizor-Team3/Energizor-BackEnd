@@ -3,6 +3,7 @@ package com.energizor.restapi.calendar.service;
 import com.energizor.restapi.calendar.dto.CalendarDTO;
 import com.energizor.restapi.calendar.dto.ScheduleAndCalendarDTO;
 import com.energizor.restapi.calendar.dto.ScheduleDTO;
+import com.energizor.restapi.calendar.entity.Calendar;
 import com.energizor.restapi.calendar.entity.Schedule;
 import com.energizor.restapi.calendar.entity.ScheduleAndCalendar;
 import com.energizor.restapi.calendar.repository.CalendarParticipantRepository;
@@ -40,6 +41,19 @@ public class ScheduleService {
         this.modelMapper = modelMapper;
 
     }
+//일정 하나 조회
+public ScheduleDTO findSchedule(int schNo) {
+    Optional<Schedule> optionalSchedule = scheduleRepository.findById(schNo);
+    if (optionalSchedule.isPresent()) {
+        Schedule schedule = optionalSchedule.get();
+        ScheduleDTO scheduleDTO = modelMapper.map(schedule, ScheduleDTO.class);
+        return scheduleDTO;
+    } else {
+
+        return null;
+    }
+}
+
 
     // 캘린더 코드로 해당 캘린더 일정 조회
 
@@ -98,6 +112,8 @@ public class ScheduleService {
             return "Schedule not found";
         }
     }
+
+
 
 
 
