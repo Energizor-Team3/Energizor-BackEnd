@@ -2,7 +2,9 @@ package com.energizor.restapi.reservation.controller;
 
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.reservation.dto.AttendeeDTO;
+import com.energizor.restapi.reservation.dto.MeetingTimeDTO;
 import com.energizor.restapi.reservation.dto.ReservationDTO;
+import com.energizor.restapi.reservation.dto.ReservationTimeDTO;
 import com.energizor.restapi.reservation.entity.Attendee;
 import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.service.ReservationService;
@@ -52,10 +54,10 @@ public class ReservationController {
     //예약내역 추가
     @Operation(summary = "예약 추가하기")
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal, @RequestParam MeetingTimeDTO meetingTimeDTO) {
         System.out.println("userDTO11111111111111111111111111111111111111111111111111111111111111111111111111111111111= " + principal);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", reservationService.createReservation(reservationDTO,principal)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", reservationService.createReservation(reservationDTO,principal, meetingTimeDTO)));
     }
 
     //예약내역 수정

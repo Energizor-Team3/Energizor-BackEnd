@@ -1,7 +1,9 @@
 package com.energizor.restapi.reservation.service;
 
 import com.energizor.restapi.reservation.dto.AttendeeDTO;
+import com.energizor.restapi.reservation.dto.MeetingTimeDTO;
 import com.energizor.restapi.reservation.dto.ReservationDTO;
+import com.energizor.restapi.reservation.dto.ReservationTimeDTO;
 import com.energizor.restapi.reservation.entity.Attendee;
 import com.energizor.restapi.reservation.entity.Reservation;
 import com.energizor.restapi.reservation.repository.AttendeeRepository;
@@ -58,7 +60,7 @@ public class ReservationService {
 
     //예약내역 추가
     @Transactional
-    public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO) {
+    public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO, MeetingTimeDTO meetingTimeDTO) {
         System.out.println("userDTO service11111111111111111111111111111111 = " + userDTO);
         // 현재 날짜 가져오기
         LocalDate currentDate = LocalDate.now();

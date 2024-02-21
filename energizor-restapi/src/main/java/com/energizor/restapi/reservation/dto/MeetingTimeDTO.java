@@ -11,5 +11,5 @@ import java.sql.Time;
 @ToString
 public class MeetingTimeDTO {
     private int meetTime;
-    private Time time; //localTime? String? Time?
+    private String time; //localTime? String? Time?
 }

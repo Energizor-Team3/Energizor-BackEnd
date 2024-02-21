@@ -37,6 +37,11 @@ public class Reservation {
     @JoinColumn(name = "meet_code")
     private Meet meetCode;
 
+    @ManyToOne
+    @JoinColumn(name = "meet_time")
+    private Meet meetTime;
+
+
 
 
 
@@ -78,7 +83,7 @@ public class Reservation {
     }
 
     public Reservation build() {
-        return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
+        return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode,meetTime );
     }
 
 
