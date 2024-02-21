@@ -1169,7 +1169,10 @@ public class ApprovalService {
         generalDraft.document(result);
         generalDraft.user(user);
 
-        return "등록 성공";
+        generalDraftRepository.save(generalDraft);
+
+
+        return "임시저장 성공";
 
     }
 
