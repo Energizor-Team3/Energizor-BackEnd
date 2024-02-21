@@ -109,6 +109,22 @@ public class ApprovalController {
         return ResponseEntity.ok(result);
     }
 
+    // 문서별 결재, 참조 자 조회
+    @Operation(summary = "문서별 결재자 조회")
+    @GetMapping("/selectApprovalLine/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectApprovalLine(@PathVariable int documentCode) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectApprovalLine(documentCode)));
+
+    }
+
+    @Operation(summary = "문서별 참조자 조회")
+    @GetMapping("/selectApprovalRf/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectApprovalRf(@PathVariable int documentCode) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectApprovalRf(documentCode)));
+
+    }
+
+
     // 반려하기
     @Operation(summary = "문서 반려")
     @PutMapping("/rejection/{documentCode}")

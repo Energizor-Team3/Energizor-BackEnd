@@ -1404,4 +1404,20 @@ public class ApprovalService {
 
         return "";
     }
+
+    public List<ApprovalLineDTO> selectApprovalLine(int documentCode) {
+        List<ApprovalLine> approvalLine = approvalLineRepository.findByDocumentDocumentCode(documentCode);
+        System.out.println("approvalLine = " + approvalLine);
+        return approvalLine.stream()
+                .map(approvalLine1 -> modelMapper.map(approvalLine1, ApprovalLineDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ReferenceDTO> selectApprovalRf(int documentCode) {
+        List<Reference> reference = referenceRepository.findByDocumentDocumentCode(documentCode);
+        System.out.println("reference = " + reference);
+        return reference.stream()
+                .map(reference1 -> modelMapper.map(reference1, ReferenceDTO.class))
+                .collect(Collectors.toList());
+    }
 }

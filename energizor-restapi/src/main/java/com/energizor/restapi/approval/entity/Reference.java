@@ -23,10 +23,10 @@ public class Reference {
     @Column(name = "reference_status")
     private String referenceStatus;
     @JoinColumn(name = "user_code")
-    @ManyToOne
+    @OneToOne
     private User user;
     @JoinColumn(name = "document_code")
-    @ManyToOne
+    @OneToOne
     private Document document;
 
     public Reference() {
