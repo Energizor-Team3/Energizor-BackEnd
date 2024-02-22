@@ -15,10 +15,12 @@ import com.energizor.restapi.users.repository.UserRoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +44,13 @@ public class UserService {
     private final UserRoleRepository userRoleRepository;
     private final DayoffRepository dayoffRepository;
 
+    /* 이미지 저장 할 위치 및 응답 할 이미지 주소 */
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+
     public UserService(UserRepository userRepository,
                        ModelMapper modelMapper,
                        UserRoleRepository userRoleRepository,
@@ -50,6 +60,7 @@ public class UserService {
         this.userRoleRepository = userRoleRepository;
         this.dayoffRepository = dayoffRepository;
     }
+
 
     public Page<UserDTO> selectUserListWithPagingForAdmin(Criteria cri) {
         log.info("[UserService] selectUserListWithPagingForAdmin Start ===================================");
@@ -174,13 +185,52 @@ public class UserService {
     }
 
 
-    public Object selectMyInfo(String userId) {
+    public UserDTO selectMyInfo(String userId) {
         log.info("[UserService]  selectMyInfo   Start =============== ");
 
         User user = userRepository.findByUserId(userId);
         log.info("[UserService]  {} =============== ", user);
+
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setProfilePath(IMAGE_URL + userDTO.getProfilePath());
         log.info("[UserService]  selectMyInfo   End =============== ");
-        return modelMapper.map(user, UserDTO.class);
+        return userDTO;
+    }
+
+    public boolean isCorrectPassword(int userCode, String providedPassword) {
+
+        User user = userRepository.findById(Integer.valueOf(userCode)).orElse(null);
+
+        if (user != null) {
+
+            System.out.println("user 존재 확인 =========" + user.getUserName());
+            System.out.println("user 존재 확인 =========" + user.getUserPw());
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+            System.out.println("사용자에게 받은 '현재 비밀번호' 입력값 : " + providedPassword);
+            System.out.println("로그인한 사용자의 비밀번호 : " + user.getUserPw());
+
+            return passwordEncoder.matches(providedPassword, user.getUserPw());
+        }
+
+        return false;
+    }
+
+    public void changePassword(int userCode, String newPassword) {
+        Optional<User> optionalUser = userRepository.findById(userCode);
+
+        // Check if the user exists
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(newPassword);
+
+            user.userPw(encodedPassword);
+
+            userRepository.save(user);
+        }
     }
 
 }

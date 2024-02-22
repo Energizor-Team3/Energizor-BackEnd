@@ -1,15 +1,15 @@
-package com.energizor.restapi.project.dto;
+        package com.energizor.restapi.project.dto;
 
-import lombok.*;
+        import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
-@Getter
-@ToString
-public class ProjectParticipantDTO {
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Setter
+        @Getter
+        @ToString
+        public class ProjectParticipantDTO {
 
-        private int proParNo;
-        private int proNo;
-        private int userCode;
-}
+                private int proParNo;
+                private int proNo;
+                private int userCode;
+        }

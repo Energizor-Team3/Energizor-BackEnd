@@ -20,6 +20,8 @@ public class ReservationDTO {
     private String reservationContent;
     private UserDTO userCode;
     private MeetDTO meetCode;
+    private int[] member;
+    private  ReservationTimeDTO reservationTime;
 
     @Override
     public String toString() {
@@ -28,5 +30,9 @@ public class ReservationDTO {
                 ", reservationDate=" + reservationDate +
                 ", reservationContent='" + reservationContent + '\'' +
                 '}';
+    }
+
+    public ReservationDTO(int reservationCode) {
+        this.reservationCode = reservationCode;
     }
 }

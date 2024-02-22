@@ -1,5 +1,7 @@
 package com.energizor.restapi.reservation.entity;
 
+import com.energizor.restapi.reservation.dto.ReservationDTO;
+import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +19,7 @@ public class Attendee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int attCode;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reservation_code", referencedColumnName = "reservation_code")
+    @JoinColumn(name = "reservation_code")
     private Reservation reservation;
 
 
@@ -37,15 +39,17 @@ public class Attendee {
         this.reservation= reservation;
         return this;
     }
-
     public Attendee userCode(User userCode){
         this.userCode = userCode;
         return this;
     }
+
 
     public Attendee build() {
         return new Attendee(attCode, reservation, userCode);
     }
 
 
+    public void setUser(User user) {
+    }
 }
