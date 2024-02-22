@@ -357,6 +357,13 @@ public class ApprovalController {
     }
 
 
+    @Operation(summary = "유저정보")
+    @GetMapping("/user")
+    public ResponseEntity<ResponseDTO> insertgeneralDraft(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "공유 문서 조회 성공", approvalService.findUserDetail(userDTO)));
+
+    }
+
 
 
 

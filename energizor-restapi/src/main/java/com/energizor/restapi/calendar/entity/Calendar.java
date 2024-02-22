@@ -25,8 +25,4 @@ public class Calendar {
     @Column(name = "cal_name", length = 255, nullable = false)
     private String calName;
 
-
-
-
-
 }

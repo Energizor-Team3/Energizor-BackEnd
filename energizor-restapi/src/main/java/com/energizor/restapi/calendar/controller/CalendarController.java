@@ -59,7 +59,7 @@ public class CalendarController {
     }
 
 // 유저 코드로 캘린더 조회
-//    @Operation(summary = "유저코드별 캘린더 조회  ",description = " 한 유저의 캘린더를 조회한다  ")
+    @Operation(summary = "유저코드별 캘린더 조회  ",description = " 한 유저의 캘린더를 조회한다  ")
     @GetMapping("/calendarsByUserCode/{userCode}")
     public ResponseEntity<ResponseDTO> getCalendarsByUserCode(@PathVariable int userCode) {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "유저코드로 캘린더 조회 성공", calendarService.findCalendarsByUserCode(userCode)));
@@ -136,7 +136,19 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
 
 //----------------------------------------** 스케줄 **-----------------------------------------------------
 
+    @Operation(summary = "스케줄 디테일 정보 조회 ",description = " 하나의 스케줄 정보를 조회한다 ")
+    @GetMapping("/schedule/detail/{schNo}")
+    public ResponseEntity<ResponseDTO> getSchedule(@PathVariable int schNo) {
 
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"스케줄 정보 조회 성공",scheduleService.findSchedule(schNo)));
+    }
+
+    // 유저 코드로 스케줄 조회
+    @GetMapping("/scheduleByUserCode/{userCode}")
+    public ResponseEntity<ResponseDTO> getScheduleByUserCode(@PathVariable int userCode){
+        List<ScheduleDTO> schedules = scheduleService.findSchedulesByParticipantUserCode(userCode);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,  userCode + "의 캘린더의 스케줄 조회 성공", scheduleService.findSchedulesByParticipantUserCode(userCode)));
+    }
 
 
 // 캘린더 코드로 해당 캘린더 일정 조회
@@ -150,6 +162,9 @@ public ResponseEntity<ResponseDTO> deleteCalendar(@PathVariable int calNo,
     public ResponseEntity<ResponseDTO> insertSchedule(@RequestBody ScheduleDTO scheduleDTO) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"스케줄 등록 성공",scheduleService.insertSchedule(scheduleDTO)));
+
+//       한 유저의 유저코드로 스케줄을 조회
+
 
     }
     @Operation(summary = "일정 삭제  ",description = " 일정을 삭제한다 ")

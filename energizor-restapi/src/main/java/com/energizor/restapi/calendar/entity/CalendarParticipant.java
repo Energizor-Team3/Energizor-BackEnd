@@ -15,5 +15,4 @@ public class CalendarParticipant {
 
     @EmbeddedId
     private CalendarParticipantPK calParticipant;
-
-}
+   }

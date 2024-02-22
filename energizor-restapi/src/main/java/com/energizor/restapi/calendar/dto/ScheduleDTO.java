@@ -17,4 +17,6 @@ public class ScheduleDTO {
     private String schAllDay;
     private String schLocal;
     private int calNo;
+
+    private String calColor;
 }
