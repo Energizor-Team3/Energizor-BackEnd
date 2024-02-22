@@ -10,6 +10,7 @@ import com.energizor.restapi.board.repository.BoardRepository;
 import com.energizor.restapi.board.repository.InterestBoardRepository;
 import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.board.repository.BoardUserRepository;
+import com.energizor.restapi.users.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -235,7 +236,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Transactional
     @Override
-    public InterestBoardDTO deleteInterestBoard(int interestCode) {
+    public InterestBoardDTO deleteInterestBoard(int interestCode, int ownerCode) {
 
         Optional<InterestBoard> result=interestBoardRepository.findByInterestCode(interestCode);
         LocalDateTime dateTime=LocalDateTime.now();
@@ -345,6 +346,26 @@ public class BoardServiceImpl implements BoardService{
 
         return interestBoardDTO;
 
+    }
+
+    @Override
+    public PageResultDTO findTemporaryBoardList(PageRequestDTO pageRequestDTO) {
+        return null;
+    }
+
+    @Override
+    public Object findDetailTemporaryBoard(int temporaryCode) {
+        return null;
+    }
+
+    @Override
+    public Object deleteTemporaryBoard(int temporaryCode, UserDTO principal) {
+        return null;
+    }
+
+    @Override
+    public Object findAllList(PageRequestDTO pageRequestDTO) {
+        return null;
     }
 
 

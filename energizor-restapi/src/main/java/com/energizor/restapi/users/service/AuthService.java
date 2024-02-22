@@ -1,11 +1,11 @@
 package com.energizor.restapi.users.service;
 
 import com.energizor.restapi.exception.DuplicatedMemberEmailException;
+import com.energizor.restapi.users.dto.DeptDTO;
 import com.energizor.restapi.users.dto.MailDTO;
+import com.energizor.restapi.users.dto.TeamDTO;
 import com.energizor.restapi.users.dto.UserDTO;
-import com.energizor.restapi.users.entity.Dayoff;
-import com.energizor.restapi.users.entity.User;
-import com.energizor.restapi.users.entity.UserRole;
+import com.energizor.restapi.users.entity.*;
 import com.energizor.restapi.users.repository.DayoffRepository;
 import com.energizor.restapi.users.repository.UserRepository;
 import com.energizor.restapi.users.repository.UserRoleRepository;
@@ -82,7 +82,8 @@ public class AuthService {
             throw new DuplicatedMemberEmailException("이메일이 중복됩니다.");
         }
 
-        userDTO.setProfilePath("/defaultprofile.png");
+        userDTO.setProfilePath("defaultprofile.png");
+
 
         User registUser = modelMapper.map(userDTO, User.class);
 
@@ -138,9 +139,6 @@ public class AuthService {
 
         log.info("[AuthService] signup End ==================================");
 
-
-
-
         return userDTO;
     }
 
@@ -158,7 +156,7 @@ public class AuthService {
         user.userId(generatedUserId);
     }
 
-    //보낼 사용자 이메일의 정보 내가 보내는거면 내 이메일
+    //보낼 사용자 이메일의 정보
     private void sendPasswordSearchEmail(String email, String temporaryPassword) throws UnsupportedEncodingException {
         System.out.println("비번 변경 서비스 시작=====================================");
         System.out.println("사용자의 이메일 정보 =====================================" + email);
@@ -168,9 +166,9 @@ public class AuthService {
         message.setFrom(String.valueOf(fromAddress));
         message.setTo(email);
         message.setSubject("EveryWare 임시비밀번호 안내");
-        message.setText("안녕하세요. EveryWare 임시비밀번호 안내 관련 이메일 입니다." +
-                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다." +
-                "로그인 후에 비밀번호를 변경해주세요!");
+        message.setText("안녕하세요. \n EveryWare 임시비밀번호 안내 관련 이메일 입니다. \n " +
+                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n " +
+                " 로그인 후에 비밀번호를 변경해주세요!");
 
         javaMailSender.send(message);
     }
@@ -205,7 +203,7 @@ public class AuthService {
 
             System.out.println(" 비번 변경 서비스 끝=====================================");
 
-            return modelMapper.map(user.get(), UserDTO.class); //일단 오류는 안뜨게함
+            return modelMapper.map(user.get(), UserDTO.class);
         } else {
             throw new UserPrincipalNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
