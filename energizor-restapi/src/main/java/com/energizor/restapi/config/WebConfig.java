@@ -41,14 +41,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations(ADD_RESOURCE_LOCATION);
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry corsRegistry) {
-        corsRegistry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PATCH", "DELETE")
-                .maxAge(3000);
-    }
-
     @Bean
     public FilterRegistrationBean<HeaderFilter> getFilterRegistrationBean(){
         FilterRegistrationBean<HeaderFilter> registrationBean = new FilterRegistrationBean<>(createHeaderFilter());

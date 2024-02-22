@@ -1,6 +1,7 @@
 package com.energizor.restapi.board.controller;
 
 import com.energizor.restapi.board.dto.*;
+import com.energizor.restapi.board.entity.Board;
 import com.energizor.restapi.board.entity.BoardFile;
 import com.energizor.restapi.board.service.BoardService;
 import com.energizor.restapi.common.Criteria;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.ServerEndpoint;
 import lombok.AllArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.apache.tomcat.util.descriptor.web.ErrorPage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,20 +55,20 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    @Operation(summary="파일 업로드",description="로그인한 사용자는 글 작성 시에 파일을 업로드 할 수 있습니다.")
-    @PostMapping("/upload")
-    public ResponseEntity<ResponseDTO> uploadFile(@RequestParam("boardCode") int boardCode,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
-        log.info("start");
-
-        List<UploadResultDTO> resultDTOList = boardService.uploadFile(uploadFiles,boardCode);
-
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"파일 업로드 성공",resultDTOList));
-    }
+//    @Operation(summary="파일 업로드",description="로그인한 사용자는 글 작성 시에 파일을 업로드 할 수 있습니다.")
+//    @PostMapping("/upload")
+//    public ResponseEntity<ResponseDTO> uploadFile(@RequestParam("uploadFiles") MultipartFile[] uploadFiles,@RequestParam("boardCode")int boardCode) {
+//        log.info("start");
+//
+//        List<UploadResultDTO> resultDTOList = boardService.uploadFile(uploadFiles,boardCode);
+//
+//        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"파일 업로드 성공",resultDTOList));
+//    }
 
 
     @Operation(summary="파일 조회",description="로그인한 사용자는 파일을 조회 할 수 있습니다.")
     @GetMapping("/display")
-    public ResponseEntity<byte[]> getFile(@RequestParam("boardCode")int boardCode,@RequestParam("fileName") String fileName) {
+    public ResponseEntity<byte[]> getFile(@RequestParam("fileName") String fileName) {
         log.info("fileName : " + fileName);
 
         ResponseEntity<byte[]> result = null;
@@ -131,11 +133,11 @@ public class BoardController {
 
     @Operation(summary="게시글 조회",description="로그인한 사용자는 게시글을 조회할 수 있습니다.")
     @GetMapping("/list")
-    public ResponseEntity<ResponseDTO> findAllList(PageRequestDTO pageRequestDTO, @AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> findAllList(PageRequestDTO pageRequestDTO, @AuthenticationPrincipal UserDTO principal,@RequestParam("boardTypeCode")int boardTypeCode) {
 
-//        log.info("[BoardController] boardTypeCode : "+boardTypeCode);
-//        log.info("pageRequestDTO : "+pageRequestDTO);
-//        pageRequestDTO.setBoardTypeCode(boardTypeCode);
+        log.info("[BoardController] boardTypeCode : "+boardTypeCode);
+        log.info("pageRequestDTO : "+pageRequestDTO);
+        pageRequestDTO.setBoardTypeCode(boardTypeCode);
 
         log.info("pageRequestDTO : " + pageRequestDTO);
         PageResultDTO response  =boardService.findAllList(pageRequestDTO);
@@ -148,21 +150,25 @@ public class BoardController {
 
     @Operation(summary="게시글 상세 조회",description="로그인한 사용자는 게시글을 상세 조회할 수 있습니다.")
     @GetMapping("list/detail/{boardCode}")
-    public ResponseEntity<ResponseDTO> findDetailBoard(@PathVariable(name="boardCode") int boardCode) {
+    public ResponseEntity<ResponseDTO> findDetailBoard(@PathVariable(name="boardCode") int boardCode,@AuthenticationPrincipal UserDTO principal) {
 
+        if(!boardService.addViews(boardCode)){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body(new ResponseDTO(HttpStatus.NOT_FOUND, "게시글을 찾을 수 없습니다.", null));
+        }
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시판 상세글 조회 성공",boardService.findDetailBoard(boardCode)));
     }
 
     @Operation(summary="게시글 등록",description="로그인한 사용자는 게시글을 등록할 수 있습니다.")
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@RequestBody BoardDTO boardDTO,@AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> register(@RequestBody BoardDTO boardDTO,@AuthenticationPrincipal UserDTO principal,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
 
         log.info("boardDTO : "+boardDTO);
         log.info("principal : "+principal);
 
-        int boardCode=boardService.register(boardDTO,principal).getBoardCode();
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 등록 성공",boardCode));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 등록 성공",boardService.register(boardDTO,principal,uploadFiles)));
 
     }
 
@@ -173,7 +179,7 @@ public class BoardController {
     }
 
     @Operation(summary="게시글 삭제",description="게시글을 작성한 작성자는 게시글을 삭제할 수 있습니다.")
-    @PatchMapping("/delete/{boardCode}")
+    @DeleteMapping("/delete/{boardCode}")
     public ResponseEntity<ResponseDTO> delete(@PathVariable int boardCode,@AuthenticationPrincipal UserDTO principal) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"게시글 삭제 성공",boardService.delete(boardCode,principal)));
@@ -182,7 +188,7 @@ public class BoardController {
 
     @Operation(summary="댓글 조회",description="로그인한 사용자는 댓글을 조회할 수 있습니다.")
     @GetMapping("/comment/{boardCode}")
-    public ResponseEntity<ResponseDTO> findComment(@PathVariable int boardCode) {
+    public ResponseEntity<ResponseDTO> findComment(@PathVariable(name="boardCode") int boardCode) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"댓글 조회 성공",boardService.findComment(boardCode)));
     }
@@ -195,14 +201,14 @@ public class BoardController {
     }
 
     @Operation(summary="댓글 수정",description="댓글을 작성한 작성자는 댓글을 수정할 수 있습니다.")
-    @PatchMapping("/comment/update")
-    public ResponseEntity<ResponseDTO> updateComment(@RequestBody BoardCommentDTO boardCommentDTO,@AuthenticationPrincipal UserDTO principal) {
+    @PatchMapping("/comment/update/{commentCode}")
+    public ResponseEntity<ResponseDTO> updateComment(@PathVariable(name="commentCode") int commentCode,@AuthenticationPrincipal UserDTO principal) {
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"댓글 수정 성공",boardService.updateComment(boardCommentDTO,principal)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"댓글 수정 성공",boardService.updateComment(commentCode,principal)));
     }
 
     @Operation(summary="댓글 삭제",description="댓글을 작성한 작성자는 댓글을 삭제할 수 있습니다.")
-    @PatchMapping("/comment/delete/{commentCode}")
+    @DeleteMapping("/comment/delete/{commentCode}")
     public ResponseEntity<ResponseDTO> deleteComment(@PathVariable int commentCode,@AuthenticationPrincipal UserDTO principal) {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"댓글 삭제 성공",boardService.deleteComment(commentCode,principal)));
@@ -238,7 +244,7 @@ public class BoardController {
     }
 
     @Operation(summary="관심게시글 삭제",description="로그인한 사용자는 관심게시글을 삭제할 수 있습니다.")
-    @PatchMapping("/interest/delete")
+    @PutMapping("/interest/delete")
     public ResponseEntity<ResponseDTO> deleteInterestBoard(@RequestBody InterestBoardDTO interestBoardDTO,@AuthenticationPrincipal UserDTO owner) {
 
         int interestCode=interestBoardDTO.getInterestCode();
@@ -271,5 +277,6 @@ public class BoardController {
 
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"임시저장글 삭제 성공",boardService.deleteTemporaryBoard(temporaryCode,principal)));
     }
+
 
 }

@@ -17,7 +17,7 @@ public interface BoardService {
 
     Object findDetailBoard(int boardCode);
 
-    BoardDTO register(BoardDTO boardDTO,UserDTO principal);
+    BoardDTO register(BoardDTO boardDTO, UserDTO principal, MultipartFile[] uploadFiles);
 
     String update(BoardDTO boardDTO,UserDTO principal);
 
@@ -28,7 +28,7 @@ public interface BoardService {
 
     BoardCommentDTO registerComment(BoardCommentDTO boardCommentDTO,UserDTO user);
 
-    BoardCommentDTO updateComment(BoardCommentDTO boardCommentDTO,UserDTO user);
+    BoardCommentDTO updateComment(int commentCode,UserDTO user);
 
     BoardCommentDTO deleteComment(int commentCode,UserDTO user);
 
@@ -106,5 +106,5 @@ public interface BoardService {
     }
 
 
-    List<UploadResultDTO> uploadFile(MultipartFile[] uploadFiles, int boardCode);
+    boolean addViews(int boardCode);
 }

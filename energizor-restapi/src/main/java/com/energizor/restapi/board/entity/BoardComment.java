@@ -25,6 +25,9 @@ public class BoardComment extends BaseEntity{
     @Column(name="delete_date")
     private LocalDateTime deleteDate;
 
+    @Column(name="parent")
+    private int parent;
+
     @ManyToOne
     @JoinColumn(name="board_code")
     private Board board;
@@ -44,7 +47,7 @@ public class BoardComment extends BaseEntity{
     }
 
     public BoardComment build() {
-        return new BoardComment(commentCode,commentContent,deleteDate,board,user);
+        return new BoardComment(commentCode,commentContent,deleteDate,parent,board,user);
     }
 
     public void changeReplyDeleteDate(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}

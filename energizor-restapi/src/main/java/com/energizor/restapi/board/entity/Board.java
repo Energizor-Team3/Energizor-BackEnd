@@ -73,6 +73,11 @@ public class Board extends BaseEntity{
         return this;
     }
 
+    public Board boardType(BoardType boardType){
+        this.boardType=boardType;
+        return this;
+    }
+
     public Board build() {
         return new Board(boardCode,title,content,viewCount,deleteDate,user,boardType,interestBoards,temporaryOpt);
     }
