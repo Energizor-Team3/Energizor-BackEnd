@@ -16,11 +16,6 @@ public class UserRoleDTO {
     public UserRoleDTO() {
     }
 
-//    public UserRoleDTO(int userCode, int authCode) {
-//        this.userCode = userCode;
-//        this.authCode = authCode;
-//    }
-
     public UserRoleDTO(int userCode, int authCode, AuthorityDTO authority) {
         this.userCode = userCode;
         this.authCode = authCode;

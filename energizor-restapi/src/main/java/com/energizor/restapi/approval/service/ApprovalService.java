@@ -92,51 +92,57 @@ public class ApprovalService {
                 .tempSaveStatus("N").build();
 
         System.out.println("document = " + document);
+        System.out.println("dayOffApplyDTO============================================= " + dayOffApplyDTO);
 
         Document result = documentRepository.save(document);
+        System.out.println("file = " + file);
 
 
-        // 파일의 원본 이름을 가져옵니다.
-        String originalFileName = file.getOriginalFilename();
+        if(file != null){
+            // 파일의 원본 이름을 가져옵니다.
+            String originalFileName = file.getOriginalFilename();
 
-        // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
-        String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
-
-
-        // 데이터베이스에 파일 정보를 저장합니다.
-        ApprovalFile approvalFile = new ApprovalFile();
-        approvalFile.apFileNameOrigin(originalFileName);
-        approvalFile.apFileNameChange(storedFileName);
-        approvalFile.apFileDate(new Date());
-        approvalFile.apFileStatus("N");
-        approvalFile.document(result);
-
-        // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
-        approvalFileRepository.save(approvalFile);
-
-        // 참조, 결재선 지정
-        int[] rfUser = changeUser(dayOffApplyDTO.getRfUser());
-        for (int i = 0; i < rfUser.length; i++) {
-            if (rfUser[i] > 0) {
+            // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
+            String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
 
 
-                User userCode1 = userRepository.findByUserCode(rfUser[i]);
-                User userCode = modelMapper.map(userCode1, User.class);
+            // 데이터베이스에 파일 정보를 저장합니다.
+            ApprovalFile approvalFile = new ApprovalFile();
+            approvalFile.apFileNameOrigin(originalFileName);
+            approvalFile.apFileNameChange(storedFileName);
+            approvalFile.apFileDate(new Date());
+            approvalFile.apFileStatus("N");
+            approvalFile.document(result);
+
+            // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
+            approvalFileRepository.save(approvalFile);
+        }
+
+        if(!dayOffApplyDTO.getRfUser().equals("")){
+            // 참조, 결재선 지정
+            int[] rfUser = changeUser(dayOffApplyDTO.getRfUser());
+            for (int i = 0; i < rfUser.length; i++) {
+                if (rfUser[i] > 0) {
 
 
-                System.out.println("userCode================================ " + userCode);
+                    User userCode1 = userRepository.findByUserCode(rfUser[i]);
+                    User userCode = modelMapper.map(userCode1, User.class);
 
 
-                Reference reference = new Reference();
-                reference.document(result);
-                reference.user(userCode);
-                reference.referenceStatus("N");
+                    System.out.println("userCode================================ " + userCode);
 
 
-                referenceRepository.save(reference);
+                    Reference reference = new Reference();
+                    reference.document(result);
+                    reference.user(userCode);
+                    reference.referenceStatus("N");
+
+
+                    referenceRepository.save(reference);
+
+                }
 
             }
-
         }
 
         int[] lineUser = changeUser(dayOffApplyDTO.getLineUser());
@@ -178,7 +184,7 @@ public class ApprovalService {
         dayOffApply.offEnd(dayOffApplyDTO.getOffEnd());
         dayOffApply.offDay(dayOffApplyDTO.getOffDay());
         dayOffApply.offReason(dayOffApplyDTO.getOffReason());
-        dayOffApply.offState(dayOffApplyDTO.getOffState());
+        dayOffApply.offState("대기");
 
         System.out.println("dayOffApply : " + dayOffApply);
 
@@ -211,50 +217,54 @@ public class ApprovalService {
 
         System.out.println("result = " + result);
 
-        // 파일의 원본 이름을 가져옵니다.
-        String originalFileName = file.getOriginalFilename();
+        if(file != null){
+            // 파일의 원본 이름을 가져옵니다.
+            String originalFileName = file.getOriginalFilename();
 
-        // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
-        String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
+            // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
+            String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
 
 
-        // 데이터베이스에 파일 정보를 저장합니다.
-        ApprovalFile approvalFile = new ApprovalFile();
-        approvalFile.apFileNameOrigin(originalFileName);
-        approvalFile.apFileNameChange(storedFileName);
-        approvalFile.apFileDate(new Date());
-        approvalFile.apFileStatus("N");
-        approvalFile.document(result);
+            // 데이터베이스에 파일 정보를 저장합니다.
+            ApprovalFile approvalFile = new ApprovalFile();
+            approvalFile.apFileNameOrigin(originalFileName);
+            approvalFile.apFileNameChange(storedFileName);
+            approvalFile.apFileDate(new Date());
+            approvalFile.apFileStatus("N");
+            approvalFile.document(result);
 
-        // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
-        approvalFileRepository.save(approvalFile);
+            // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
+            approvalFileRepository.save(approvalFile);
+        }
 
         // 참조, 결재선 지정
 
-        int[] rfUser = changeUser(businessTripDTO.getRfUser());
+        if(!businessTripDTO.getRfUser().equals("")){
+            int[] rfUser = changeUser(businessTripDTO.getRfUser());
 
 
-        for (int i = 0; i < rfUser.length; i++) {
-            if (rfUser[i] > 0) {
+            for (int i = 0; i < rfUser.length; i++) {
+                if (rfUser[i] > 0) {
 
 
-                User userCode1 = userRepository.findByUserCode(rfUser[i]);
-                User userCode = modelMapper.map(userCode1, User.class);
+                    User userCode1 = userRepository.findByUserCode(rfUser[i]);
+                    User userCode = modelMapper.map(userCode1, User.class);
 
 
-                System.out.println("userCode================================ " + userCode);
+                    System.out.println("userCode================================ " + userCode);
 
 
-                Reference reference = new Reference();
-                reference.document(result);
-                reference.user(userCode);
-                reference.referenceStatus("N");
+                    Reference reference = new Reference();
+                    reference.document(result);
+                    reference.user(userCode);
+                    reference.referenceStatus("N");
 
 
-                referenceRepository.save(reference);
+                    referenceRepository.save(reference);
+
+                }
 
             }
-
         }
 
         int[] lineUser = changeUser(businessTripDTO.getLineUser());
@@ -289,7 +299,7 @@ public class ApprovalService {
         BusinessTrip businessTrip = new BusinessTrip();
 
 
-        businessTrip.documentDTO(result);
+        businessTrip.document(result);
         businessTrip.user(user);
         businessTrip.btDate(businessTripDTO.getBtDate());
         businessTrip.btPhone(businessTripDTO.getBtPhone());
@@ -327,47 +337,51 @@ public class ApprovalService {
 
         System.out.println("result = " + result);
 
-        // 파일의 원본 이름을 가져옵니다.
-        String originalFileName = file.getOriginalFilename();
+        if(file != null){
+            // 파일의 원본 이름을 가져옵니다.
+            String originalFileName = file.getOriginalFilename();
 
-        // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
-        String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
+            // FileUploadUtils를 사용하여 파일을 저장하고, 저장된 파일 이름을 반환 받습니다.
+            String storedFileName = FileUploadUtils.saveFile(IMAGE_DIR, originalFileName, file);
 
 
-        // 데이터베이스에 파일 정보를 저장합니다.
-        ApprovalFile approvalFile = new ApprovalFile();
-        approvalFile.apFileNameOrigin(originalFileName);
-        approvalFile.apFileNameChange(storedFileName);
-        approvalFile.apFileDate(new Date());
-        approvalFile.apFileStatus("N");
-        approvalFile.document(result);
+            // 데이터베이스에 파일 정보를 저장합니다.
+            ApprovalFile approvalFile = new ApprovalFile();
+            approvalFile.apFileNameOrigin(originalFileName);
+            approvalFile.apFileNameChange(storedFileName);
+            approvalFile.apFileDate(new Date());
+            approvalFile.apFileStatus("N");
+            approvalFile.document(result);
 
-        // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
-        approvalFileRepository.save(approvalFile);
+            // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
+            approvalFileRepository.save(approvalFile);
+        }
 
 
         // 참조, 결재선 지정
-        int[] rfUser = changeUser(educationDTO.getRfUser());
-        for (int i = 0; i < rfUser.length; i++) {
-            if (rfUser[i] > 0) {
+        if(!educationDTO.getRfUser().equals("")){
+            int[] rfUser = changeUser(educationDTO.getRfUser());
+            for (int i = 0; i < rfUser.length; i++) {
+                if (rfUser[i] > 0) {
 
 
-                User userCode1 = userRepository.findByUserCode(rfUser[i]);
-                User userCode = modelMapper.map(userCode1, User.class);
+                    User userCode1 = userRepository.findByUserCode(rfUser[i]);
+                    User userCode = modelMapper.map(userCode1, User.class);
 
 
-                System.out.println("userCode================================ " + userCode);
+                    System.out.println("userCode================================ " + userCode);
 
 
-                Reference reference = new Reference();
-                reference.document(result);
-                reference.user(userCode);
-                reference.referenceStatus("N");
+                    Reference reference = new Reference();
+                    reference.document(result);
+                    reference.user(userCode);
+                    reference.referenceStatus("N");
 
-                referenceRepository.save(reference);
+                    referenceRepository.save(reference);
+
+                }
 
             }
-
         }
 
         int[] lUser = changeUser(educationDTO.getLineUser());
@@ -415,7 +429,7 @@ public class ApprovalService {
         educationRepository.save(education);
         return "등록 성공";
     }
-
+    @Transactional
     public String insertgeneralDraft(GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO principal, Document document) throws IOException {
 
         System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
@@ -439,6 +453,10 @@ public class ApprovalService {
 
         System.out.println("result = " + result);
 
+        System.out.println("file = " + file);
+        if (file != null){
+
+
         // 파일의 원본 이름을 가져옵니다.
         String originalFileName = file.getOriginalFilename();
 
@@ -456,31 +474,37 @@ public class ApprovalService {
 
         // ApprovalFile 엔터티를 데이터베이스에 저장합니다.
         approvalFileRepository.save(approvalFile);
-
-        // 참조, 결재선 지정
-        int[] rfUser = changeUser(generalDraftDTO.getRfUser());
-        for (int i = 0; i < rfUser.length; i++) {
-            if (rfUser[i] > 0) {
+        }
 
 
-                User userCode1 = userRepository.findByUserCode(rfUser[i]);
-                User userCode = modelMapper.map(userCode1, User.class);
+            // 참조, 결재선 지정
+            if(!generalDraftDTO.getRfUser().equals("")){
+            int[] rfUser = changeUser(generalDraftDTO.getRfUser());
+            for (int i = 0; i < rfUser.length; i++) {
+                if (rfUser[i] > 0) {
 
 
-                System.out.println("userCode================================ " + userCode);
+                    User userCode1 = userRepository.findByUserCode(rfUser[i]);
+                    User userCode = modelMapper.map(userCode1, User.class);
 
 
-                Reference reference = new Reference();
-                reference.document(result);
-                reference.user(userCode);
-                reference.referenceStatus("N");
+                    System.out.println("userCode================================ " + userCode);
 
 
-                referenceRepository.save(reference);
+                    Reference reference = new Reference();
+                    reference.document(result);
+                    reference.user(userCode);
+                    reference.referenceStatus("N");
+
+
+
+                        referenceRepository.save(reference);
+                    }
+
+                }
 
             }
 
-        }
 
         int[] lUser = changeUser(generalDraftDTO.getLineUser());
         for (int i = 0; i < lUser.length; i++) {
@@ -1019,7 +1043,7 @@ public class ApprovalService {
         dayOffApply.offEnd(dayOffApplyDTO.getOffEnd());
         dayOffApply.offDay(dayOffApplyDTO.getOffDay());
         dayOffApply.offReason(dayOffApplyDTO.getOffReason());
-        dayOffApply.offState(dayOffApplyDTO.getOffState());
+        dayOffApply.offState("대기");
 
         System.out.println("dayOffApply : " + dayOffApply);
 
@@ -1099,7 +1123,7 @@ public class ApprovalService {
         BusinessTrip businessTrip = new BusinessTrip();
 
 
-        businessTrip.documentDTO(result);
+        businessTrip.document(result);
         businessTrip.user(user);
         businessTrip.btDate(businessTripDTO.getBtDate());
         businessTrip.btPhone(businessTripDTO.getBtPhone());
@@ -1145,7 +1169,10 @@ public class ApprovalService {
         generalDraft.document(result);
         generalDraft.user(user);
 
-        return "등록 성공";
+        generalDraftRepository.save(generalDraft);
+
+
+        return "임시저장 성공";
 
     }
 
@@ -1342,5 +1369,55 @@ public class ApprovalService {
         UserAndTeamDTO UserAndTeamDTO = modelMapper.map(userAndTeam, UserAndTeamDTO.class);
         System.out.println("UserAndTeamDTO = " + UserAndTeamDTO);
         return UserAndTeamDTO;
+    }
+
+    public UserAndTeamDTO findByUserCode(int userCode) {
+
+        User user = userRepository.findByUserCode(userCode);
+
+        UserAndTeam userAndTeam = userAndTeamRepository.findByUserCodeAndTeamTeamCodeAndDayOffOffCode(user.getUserCode(),user.getTeam().getTeamCode(),user.getDayoff().getOffCode());
+        System.out.println("userAndTeam = " + userAndTeam);
+        UserAndTeamDTO UserAndTeamDTO = modelMapper.map(userAndTeam, UserAndTeamDTO.class);
+        System.out.println("UserAndTeamDTO = " + UserAndTeamDTO);
+        return UserAndTeamDTO;
+    }
+
+    public Object selectTempDocumentDetail(int documentCode) {
+
+        Document document = documentRepository.findByDocumentCode(documentCode);
+
+        switch (document.getForm()){
+            case"휴가신청서": DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(document);
+                DayOffApplyDTO dayOffApplyDTO = modelMapper.map(dayOffApply, DayOffApplyDTO.class);
+                return dayOffApplyDTO ;
+            case"출장신청서": BusinessTrip businessTrip = businessTripRepository.findByDocument(document);
+                BusinessTripDTO businessTripDTO = modelMapper.map(businessTrip, BusinessTripDTO.class);
+                return businessTripDTO ;
+            case"교육신청서": Education education = educationRepository.findByDocument(document);
+                EducationDTO educationDTO = modelMapper.map(education, EducationDTO.class);
+                return educationDTO ;
+            case"기안신청서": GeneralDraft generalDraft = generalDraftRepository.findByDocument(document);
+                GeneralDraftDTO generalDraftDTO = modelMapper.map(generalDraft, GeneralDraftDTO.class);
+                return generalDraftDTO ;
+
+        }
+
+        return "";
+    }
+
+    public List<ApprovalLineDTO> selectApprovalLine(int documentCode) {
+        List<ApprovalLine> approvalLine = approvalLineRepository.findByDocumentDocumentCode(documentCode);
+        System.out.println("approvalLine = " + approvalLine);
+        return approvalLine.stream()
+                .map(approvalLine1 -> modelMapper.map(approvalLine1, ApprovalLineDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public List<ReferenceDTO> selectApprovalRf(int documentCode) {
+        List<Reference> reference = referenceRepository.findByDocumentDocumentCode(documentCode);
+        System.out.println("reference = " + reference);
+        return reference.stream()
+                .map(reference1 -> modelMapper.map(reference1, ReferenceDTO.class))
+                .collect(Collectors.toList());
     }
 }

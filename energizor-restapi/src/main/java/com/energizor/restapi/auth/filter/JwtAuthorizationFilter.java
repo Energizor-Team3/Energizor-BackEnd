@@ -36,7 +36,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         /*
-         * 권한이 필요없는 리소스    ---> 추후 수정 (로그인만!!!!!!!!!!!!!!!!!!!!!!!!!!) 비밀번호 찾기?
+         * 권한이 필요없는 리소스
          * */
 
         List<String> roleLeessList = Arrays.asList(
@@ -72,6 +72,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     authentication.setEmail(claims.get("email").toString());
                     System.out.println("claims userRole ==================== " + claims.get("userRole")); // [{userCode=2, authCode=1, authority={authCode=1, authName=ROLE_USER}}]
                     System.out.println("claims offCode ==================== " + claims.get("dayoff"));
+                    authentication.setUserPw(claims.get("userPw").toString());
+                    System.out.println("claims offCode ==================== " + claims.get("userPw"));
 
                     // List<UserRoleDTO> 설정
                     List<UserRoleDTO> userRoles = mapToUserRoleList(claims.get("userRole"));
