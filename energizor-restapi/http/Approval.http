@@ -38,7 +38,7 @@ Content-Disposition: form-data; name="lineUser"
 
 1
 --WebAppBoundary
-Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
+Content-Disposition: form-data; name="file"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -86,7 +86,7 @@ Content-Disposition: form-data; name="lineUser"
 
 21,22,19
 --WebAppBoundary
-Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
+Content-Disposition: form-data; name="file"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -138,16 +138,16 @@ Content-Disposition: form-data; name="lineUser"
 
 21,22,19
 --WebAppBoundary
-Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
+Content-Disposition: form-data; name="file"; filename="3333.png"
 
 < ./3333.png
 --WebAppBoundary--
 
-### 일반기안 작성
+### 일반기안 작성 2
 POST http://localhost:8031/approval/generalDraft
 Accept: */*
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJkYXRlIjoxNzA3NzU5MDUxMzkwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzc3NzA1MSwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.T3cyJqfaeaGrtL3IsbaZK15Hm1zq9dLQD-7a__usask
+Authorization: Bearer eyJkYXRlIjoxNzA4NTAyNTQ5NTIwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MjA1NDksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.cY-VmpWteXqLjG0Z75MyfpKuklS0xfqW_nYHdiS2EY8
 
 --WebAppBoundary
 Content-Disposition: form-data; name="gdTitle"
@@ -166,7 +166,7 @@ Content-Disposition: form-data; name="lineUser"
 
 1
 --WebAppBoundary
-Content-Disposition: form-data; name="apFileNameOrigin"; filename="3333.png"
+Content-Disposition: form-data; name="file" filename="apFileNameOrigin.png"
 
 < ./3333.png
 --WebAppBoundary--
@@ -188,6 +188,18 @@ PUT http://localhost:8031/approval/approvement/82
 Accept: */*
 Content-Type: application/json
 Authorization: Bearer eyJkYXRlIjoxNzA3ODE1MDQ3OTgwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzgzMzA0NywidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.OEQJXbUCp_BSNGrGm_tVt6LDrtbI-TNzmU51VCinaTU
+
+### 문서별 결재자
+GET http://localhost:8031/approval/selectApprovalLine/142
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer eyJkYXRlIjoxNzA4NTMyNzg1MzU5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODU1MDc4NSwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.1cGBoTp4KA7dFMNqiN4EgvLcGI3hdpFlWhtSHK9yN6s
+
+### 문서별 참조자
+GET http://localhost:8031/approval/selectApprovalRf/142
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer eyJkYXRlIjoxNzA4NTMyNzg1MzU5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODU1MDc4NSwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.1cGBoTp4KA7dFMNqiN4EgvLcGI3hdpFlWhtSHK9yN6s
 
 ### 반려하기
 PUT http://localhost:8031/approval/rejection/85
@@ -219,12 +231,18 @@ Accept: */*
 Content-Type: application/json
 Authorization: Bearer eyJkYXRlIjoxNzA3ODkxMzM2OTQ0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc5MDkzMzYsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.lZQgz7W2Rc571SyCn-jwpHRrPcL8_zeW9lOo9Q42A2o
 
+
 ### 회수 문서 조회
 GET http://localhost:8031/approval/withdraw
 Accept: */*
 Content-Type: application/json
 Authorization: Bearer eyJkYXRlIjoxNzA3ODkxMzM2OTQ0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc5MDkzMzYsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.lZQgz7W2Rc571SyCn-jwpHRrPcL8_zeW9lOo9Q42A2o
 
+### 임시저장 문서 상세조회
+GET http://localhost:8031/approval/selectTempDocumentDetail/89
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer eyJkYXRlIjoxNzA4NTEzMDQzMzI4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MzEwNDMsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.exib4zUTaD-hJH3l4IMmIShhmLRXYeO8vC06oaeeTIc
 
 
 ### 임시 휴가기안 작성
@@ -644,10 +662,6 @@ Content-Disposition: form-data; name="offReason"
 
 연차
 --WebAppBoundary
-Content-Disposition: form-data; name="offState"
-
-대기
---WebAppBoundary
 
 
 ### 문서 공유하기 문서 번호 , 유저코드
@@ -667,5 +681,10 @@ Authorization: Bearer eyJkYXRlIjoxNzA3OTYxNTg2NDY4LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 GET http://localhost:8031/approval/user
 Accept: */*
 Content-Type: application/json
-Authorization: Bearer eyJkYXRlIjoxNzA4MjQ0NDcxODAyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODI2MjQ3MSwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.PihEnl7NYtUC811Z-w7a5BV6DWH0UXF61fZ4Wx8Lmrg
+Authorization: Bearer eyJkYXRlIjoxNzA4NDI5MjMyMzU3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODQ0NzIzMiwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.0K-VrkwKyJOGh1NIK7lQI6ARz_a332ks54GZ1FqmfpA
 
+### 유저 정보 조회 사용안함
+GET http://localhost:8031/approval/findUserDetail/1
+Accept: */*
+Content-Type: application/json
+Authorization: Bearer eyJkYXRlIjoxNzA4MzA4Nzk4Mzk5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAzIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODMyNjc5OCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.5whNpUyfRfslqQTTIp7NKaObN6qz3ej0DLmkZhB25YQ

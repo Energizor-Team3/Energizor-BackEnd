@@ -11,6 +11,6 @@ import lombok.*;
 public class ReferenceDTO {
     private int referenceCode;
     private String referenceStatus;
-    private UserDTO userDTO;
-    private DocumentDTO documentDTO;
+    private UserDTO user;
+    private DocumentDTO document;
 }
