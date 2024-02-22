@@ -41,7 +41,15 @@ public class ReservationService {
         this.modelMapper = modelMapper;
     }
 
-    //예약내역 전체조회
+    //전체 예약 조회
+    public List<ReservationDTO> selectTotalReservations() {
+        List<Reservation> allReservations = reservationRepository.findAll();
+        return allReservations.stream()
+                .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    //내 예약내역 전체조회
     public List<ReservationDTO> selectAllReservations(UserDTO userDTO) {
 
         User user = modelMapper.map(userDTO, User.class);
@@ -169,13 +177,6 @@ public class ReservationService {
                 .map(attendee -> modelMapper.map(attendee, AttendeeDTO.class))
                 .collect(Collectors.toList());
     }
-
-
-
-
-
-
-
 
 
 }

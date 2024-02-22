@@ -29,6 +29,13 @@ public class ReservationController {
     public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
+    //전체 예약내약 조회
+    @Operation(summary = "전체 예약 내역 조회")
+    @GetMapping("/total")
+    public ResponseEntity<ResponseDTO> selectAllReservations() {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 예약 내역 조회 성공",
+                reservationService.selectTotalReservations()));
+    }
 
     //예약내역 전체조회
     @Operation(summary = "내 예약 조회")
