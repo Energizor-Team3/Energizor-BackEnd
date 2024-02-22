@@ -572,6 +572,8 @@ public class BoardServiceImpl implements BoardService{
 
         String res = result.toString();
 
+
+
         System.out.println(res);
         log.info(res);
 

@@ -35,6 +35,7 @@ public class InterestBoard extends BaseEntity{
     @JoinColumn(name="owner_code", insertable=false, updatable=false)
     private User owner;
 
+
     public InterestBoard board(Board board) {
         this.board=board;
         return this;
@@ -49,6 +50,8 @@ public class InterestBoard extends BaseEntity{
         this.owner=owner;
         return this;
     }
+
+
 
 
     @Override

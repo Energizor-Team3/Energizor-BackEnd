@@ -162,7 +162,8 @@ public class BoardController {
 
     @Operation(summary="게시글 등록",description="로그인한 사용자는 게시글을 등록할 수 있습니다.")
     @PostMapping("/register")
-    public ResponseEntity<ResponseDTO> register(@RequestBody BoardDTO boardDTO,@AuthenticationPrincipal UserDTO principal,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
+    public ResponseEntity<ResponseDTO> register(@RequestBody
+                                                    BoardDTO boardDTO,@AuthenticationPrincipal UserDTO principal,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
 
         log.info("boardDTO : "+boardDTO);
         log.info("principal : "+principal);
