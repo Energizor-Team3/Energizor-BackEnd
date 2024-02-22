@@ -1,4 +1,4 @@
-package com.energizor.restapi.group.dto;
+package com.energizor.restapi.attendance.dto;
 import lombok.*;
 
 @NoArgsConstructor
@@ -6,10 +6,9 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class UsersDTO {
+public class UserDTO {
 
     private int userCode;
     private String userName;
-    private TeamDTO team;
 
 }

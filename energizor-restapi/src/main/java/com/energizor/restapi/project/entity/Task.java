@@ -3,6 +3,33 @@ package com.energizor.restapi.project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Setter
+//@Getter
+//@ToString
+//@Entity
+//@Table(name = "task")
+//public class Task {
+//
+//    @Id
+//    @Column(name = "task_no")
+//    private int taskNo;
+//
+//    @Column(name = "task_content")
+//    private String taskContent;
+//
+//    @Column(name = "task_status")
+//    private String taskStatus;
+//
+//    @ManyToOne
+//    @JoinColumn(name = "pro_par_no")
+//    private ProjectParticipant proParNo;
+//}
+
+import jakarta.persistence.*;
+import lombok.*;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -13,7 +40,6 @@ import lombok.*;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_no")
     private int taskNo;
 
@@ -23,7 +49,7 @@ public class Task {
     @Column(name = "task_status")
     private String taskStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pro_par_no")
-    private ProjectParticipant  projectParticipant;
+    private ProjectParticipant proParNo;
 }

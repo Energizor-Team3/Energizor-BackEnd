@@ -1,6 +1,6 @@
 package com.energizor.restapi.note.dto;
 
-import com.energizor.restapi.group.dto.UsersDTO;
+import com.energizor.restapi.group.dto.UserGroupDTO;
 import lombok.*;
 
 import javax.xml.crypto.Data;
@@ -18,7 +18,7 @@ public class SendNoteNotYetDTO {
     private String notYetContent;
     private Data notYetSaveDate;
 
-    private UsersDTO sendUserCode;
-    private List<UsersDTO> renUserCode;
+    private UserGroupDTO sendUserCode;
+    private List<UserGroupDTO> renUserCode;
 
 }

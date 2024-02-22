@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.entity;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,30 +9,32 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class Dept {
+public class DeptGroup {
+
+    /*  */
 
     @Id
     @Column(name = "dept_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int deptCode;
+    private Long deptCode;
 
     @Column(name = "dept_name", length = 20, nullable = false)
     private String deptName;
 
-    public Dept() {}
+    public DeptGroup() {}
 
-    public Dept deptCode(int deptCode) {
+    public DeptGroup deptCode(Long deptCode) {
         this.deptCode = deptCode;
         return this;
     }
 
-    public Dept deptName(String deptName) {
+    public DeptGroup deptName(String deptName) {
         this.deptName = deptName;
         return this;
     }
 
-    public Dept build() {
-        return new Dept(deptCode, deptName);
+    public DeptGroup build() {
+        return new DeptGroup(deptCode, deptName);
     }
 
 }

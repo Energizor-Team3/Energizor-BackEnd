@@ -3,7 +3,6 @@ package com.energizor.restapi.users.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.util.Date;
 import java.util.List;
@@ -60,6 +59,9 @@ public class User {
     @OneToOne
     @JoinColumn(name = "off_code")
     private Dayoff dayoff;
+
+    @Column(name = "profile_path")
+    private String profilePath;
 
     @PrePersist
     public void prePersist() {
@@ -133,18 +135,18 @@ public class User {
         return this;
     }
 
-    public User team(int teamCode) {
-        this.team = team.teamCode(teamCode);
-        return this;
-    }
-
     public User dayoff(Dayoff dayoff) {
         this.dayoff = dayoff;
         return this;
     }
 
+    public User profilePath(String profilePath) {
+        this.profilePath = profilePath;
+        return this;
+    }
+
     public User build() {
-        return new User(userCode, userId, userName, userPw, userRank, email, phone, entDate, resignDate, userStatus, userRole, team, dayoff);
+        return new User(userCode, userId, userName, userPw, userRank, email, phone, entDate, resignDate, userStatus, userRole, team, dayoff, profilePath);
     }
 
 }

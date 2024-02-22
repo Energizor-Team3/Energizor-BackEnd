@@ -1,5 +1,6 @@
 package com.energizor.restapi.users.service;
 
+import com.energizor.restapi.exception.LoginFailedException;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import com.energizor.restapi.users.entity.UserRole;
@@ -34,7 +35,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
 
         User user = userRepository.findByUserId(userId);
-        /* MemberDTO는 엔티티를 옮겨 담는 DTO이자 UserDetails이다. */
+        if (user == null) {
+            throw new LoginFailedException("사용자가 존재하지 않습니다.");
+        }
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
 
         List<GrantedAuthority> authorities = new ArrayList<>();

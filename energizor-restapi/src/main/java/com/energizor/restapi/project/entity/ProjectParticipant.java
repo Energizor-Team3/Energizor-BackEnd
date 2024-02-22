@@ -1,8 +1,8 @@
 package com.energizor.restapi.project.entity;
 
+import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -21,4 +21,8 @@ public class ProjectParticipant {
 
     @Column(name = "user_code")
     private int userCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_code", referencedColumnName = "user_code", insertable = false, updatable = false)
+    private User user;
 }

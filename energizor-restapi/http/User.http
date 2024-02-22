@@ -5,67 +5,108 @@ Accept: */*
 Access-Control-Allow-Origin: *
 
 {
-  "userId": "200302002",
+  "userId": "200302001",
   "userPw": "1234"
 }
 
-### 내 정보 조회
-GET http://localhost:8031/users/user/200302001
+### 비밀번호 찾기
+POST http://localhost:8031/auth/searchpwd
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA2OTI0OTAwMTM5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyTmFtZSI6IjIwMDMwMjAwMSIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX0seyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjIsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MiwiYXV0aE5hbWUiOiJST0xFX0FETUlOIn19XSwiZXhwIjoxNzA2OTI2NzAwLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.GEV2CBD3cXZWTD8DP7SfOOetMuEioyp7Ip-g-hGVDQQ
+Access-Control-Allow-Origin: *
+
+{
+  "userId": "240201001",
+  "email": "sueyeon777@gmail.com"
+}
+
+### 비밀번호 변경 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+PUT http://localhost:8031/users/change-password
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3ODA4MDcwNjcxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUHciOiIkMmEkMTAkWG9nU0JNT3hpT0tzQy5UT0NCejVSZWRjVnlLbTc4MG1Wd0FnMHRrZWVkZGlKNFlEekVPVE8iLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoi7J6l7J6s7JiBIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzgyNjA3MCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.F43yADKgiLEPZCSHwRuUhxPQMM1wLgRxA-WYsedRR2c
+
+{
+  "currentPassword": "pass01",
+  "newPassword": "1234",
+  "confirmPassword": "1234"
+}
+
+### 내 정보 조회
+GET http://localhost:8031/users/mypage
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA3OTc1NDA0OTQxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUHciOiIkMmEkMTAkaXh6NFdXb2RXS3JSdlRFZ3B5QkNWLnZubWROeFRFZDFLa2NsOHNKVklRTTlBNnBtN1RkVHEiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoi7J6l7J6s7JiBIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzk5MzQwNCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.K3gEw5C77KJ1_-nGTSeEB7Ypf94yY9UYxE5_BLK-NfM
+
+### 팀 목록 조회
+GET http://localhost:8031/users/teams
+Content-Type: application/json
+Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA4NDg2MzMwNjg5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ0ZWFtRFRPIjpudWxsLCJ1c2VyUHciOiIkMmEkMTAkaXh6NFdXb2RXS3JSdlRFZ3B5QkNWLnZubWROeFRFZDFLa2NsOHNKVklRTTlBNnBtN1RkVHEiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoi7J6l7J6s7JiBIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODUwNDMzMCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.sJTWkWE4QRaPg6mQvkjznhnEFwpyV2RTnOByLuDu2KY
+
+
 
 ### 직원 등록(회원가입)
 POST http://localhost:8031/auth/signup
 Content-Type: application/json
 Accept: */*
+Authorization: Bearer eyJkYXRlIjoxNzA4MDcwNjU1MTk0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDgwODg2NTUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fN9I_XpqAcQzqkaXP49O2yuKwt5oKPbp_QDaEqu3E8k
 
 {
-  "userName": "차과장",
-  "userPw": "1111",
-  "userRank": "과장",
-  "email": "gwagwa@gmail.com",
-  "phone": "010-1111-1811",
-  "entDate": "2024-02-06",
-  "teamCode": "2"
+  "userName": "김대리",
+  "userPw": "1234",
+  "userRank": "대리",
+  "email": "deriderie@gmail.com",
+  "phone": "010-2313-1234",
+  "entDate": "2024-02-16",
+  "teamDTO": {
+    "teamCode": 6,
+    "teamName": "개발2팀",
+    "deptDTO": {
+      "deptCode": 3,
+      "deptName": "기술본부"
+    }
+  }
 }
 
 ### 직원 전체 조회
 GET http://localhost:8031/users/users-management
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA2OTI3NzMwNTgzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyTmFtZSI6IjIwMDMwMjAwMSIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX0seyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjIsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MiwiYXV0aE5hbWUiOiJST0xFX0FETUlOIn19XSwiZXhwIjoxNzA2OTI5NTMwLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.SE9qkQaiKaC-OsBGj89KpLTBavJlZ5KXC8LW6uadSCw
+Authorization: Bearer eyJkYXRlIjoxNzA4NDk5NDgxNzMwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjpudWxsLCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MTc0ODEsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.Vf4IwkyjQLLRNQvO02fu9MrCeNtUQje0uTrrC6xG5Pg
 
 ### 직원 개별 조회
-GET http://localhost:8031/users/users-management/1
+GET http://localhost:8031/users/users-management/22
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA2OTMwMDI3MTM2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyTmFtZSI6IjIwMDMwMjAwMSIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX0seyJ1c2VyQ29kZSI6MSwiYXV0aENvZGUiOjIsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MiwiYXV0aE5hbWUiOiJST0xFX0FETUlOIn19XSwiZXhwIjoxNzA2OTMxODI3LCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.5EctueEyzGqpCndYZlWrrTMGyzwUObdGiKtmXzSpZj0
+Authorization: Bearer eyJkYXRlIjoxNzA4NTIwMDgyODI0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MzgwODIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.yWAymegTuUpNg2ahlf4__y1ETZOsZPrByj3FJ0vku14
 
-### 직원 정보 수정
-PUT http://localhost:8031/users/user-update
+### 직원 정보 수정 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+PUT http://localhost:8031/users/user-update/22
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA3MTIwMjU1MzIyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDcxMzgyNTUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.F69syzx6hG-f7OKpFz1CtTGX8PXTTbr2tnZFCtyEwHY
+Authorization: Bearer eyJkYXRlIjoxNzA4NTIwMDgyODI0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MzgwODIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.yWAymegTuUpNg2ahlf4__y1ETZOsZPrByj3FJ0vku14
 
 {
-  "userCode": "22",
   "userId": "240203003",
-  "userName": "김사원사원",
+  "userName": "김사원사원사원",
   "userRank": "사원",
   "email": "sawon@gmail.com",
-  "phone": "010-8888-3333",
+  "phone": "010-8888-3334",
   "entDate": "2024-02-03",
-  "teamCode": "2",
-  "resignDate": "9999-12-31",
+  "team": {
+    "teamCode": 1
+  },
+  "resignDate": "2024-02-19",
   "userRole": [
     {
       "userCode": 1,
-      "authCode": 2,
+      "authCode": 1,
       "authority": {
-        "authCode": 2,
-        "authName": "ROLE_ADMIN"
+        "authCode": 1,
+        "authName": "ROLE_USER"
       }
     }
+
   ]
 }

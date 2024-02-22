@@ -3,6 +3,7 @@ package com.energizor.restapi.approval.service;
 import com.energizor.restapi.approval.dto.*;
 import com.energizor.restapi.approval.entity.*;
 import com.energizor.restapi.approval.repository.*;
+import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import com.energizor.restapi.users.repository.UserRepository;
@@ -10,6 +11,7 @@ import com.energizor.restapi.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -155,7 +157,6 @@ public class ApprovalService {
                 approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
-                approvalLine.reason(null);
 
                 approvalLineRepository.save(approvalLine);
 
@@ -275,7 +276,6 @@ public class ApprovalService {
                 approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
-                approvalLine.reason(null);
 
                 approvalLineRepository.save(approvalLine);
 
@@ -388,7 +388,6 @@ public class ApprovalService {
                 approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
-                approvalLine.reason(null);
 
                 approvalLineRepository.save(approvalLine);
 
@@ -497,7 +496,6 @@ public class ApprovalService {
                 approvalLine.sequence(i + 1);
                 approvalLine.approvalLineStatus("미결");
                 approvalLine.processingDate(null);
-                approvalLine.reason(null);
 
                 approvalLineRepository.save(approvalLine);
 
@@ -528,43 +526,65 @@ public class ApprovalService {
     }
 
     // 기안한 문서 조회
-    public List<DocumentDTO> findDocumentsByUserCode(UserDTO userDTO) {
+    public Page<DocumentDTO> findDocumentsByUserCode(UserDTO userDTO, Criteria cri) {
         // 로그인한 사용자의 정보 가져오기
         System.out.println("userDTO1111111111111111111111111 = " + userDTO);
         User user = modelMapper.map(userDTO, User.class);
         System.out.println("user1111111111111111111111111111 = " + user);
+        //페이징
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").descending());
 
         // 해당 사용자의 결재 상신 문서 리스트 조회
-        List<Document> documentList = documentRepository.findByUserDTOAndTempSaveStatus(user, "N");
+        Page<Document> documentList = documentRepository.findByUserDTOAndTempSaveStatus(user, "N", paging);
 
-        return documentList.stream()
-                .map(document -> modelMapper.map(document, DocumentDTO.class))
-                .collect(Collectors.toList());
+        // 기안 문서 댓글 조회
+        List<Document> document1 = new ArrayList<>();
+        for (Document document2 : documentList){
+            Document document3 = documentRepository.findByDocumentCode(document2.getDocumentCode());
+            List<ApprovalComment> approvalComment = approvalCommentRepository.findByDocument(document2);
+            document3.approvalComment(approvalComment);
+            document1.add(document3);
+        }
+
+
+
+
+        return documentList.map(document -> modelMapper.map(document, DocumentDTO.class));
     }
 
     // 결재 대기 문서 조회
     public List<DocumentDTO> inBoxDocumentByUserCode(UserDTO userDTO) {
 
         User changeUser = modelMapper.map(userDTO, User.class);
+        System.out.println("changeUser===================================== " + changeUser);
 
         // 대리결재자 조회
-        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserUserCode(changeUser.getUserCode());
 
-        if (proxyApproval.getProxyStatus().equals("Y")) {
+        System.out.println("proxyApproval========================= = " + proxyApproval);
+
+        if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y")) {
             // 문서 코드 목록 가져오기
             List<Integer> inboxDocumentList = documentRepository.inboxDocumentByUserDTO(proxyApproval.getOriginUser().getUserCode());
 
             System.out.println("inboxDocumentList ============================= " + inboxDocumentList);
-            // 문서 코드 목록으로 Document 정보 가져오기
+            // 문서 코드 목록으로 Document 정보 가져오기 댓글 함꼐 조회
             List<Document> proxyDocumentList = new ArrayList<>();
             for (int documentCode : inboxDocumentList) {
                 System.out.println("documentCode =========================== " + documentCode);
                 Document document = documentRepository.findByDocumentCodeAndTempSaveStatus(documentCode, "N");
                 System.out.println("document ============================== " + document);
+
+                List<ApprovalComment> approvalComment = approvalCommentRepository.findByDocument(document);
+                document.approvalComment(approvalComment);
                 if (document != null) {
                     proxyDocumentList.add(document);
                 }
             }
+            System.out.println("proxyDocumentList = " + proxyDocumentList);
 
             return proxyDocumentList.stream()
                     .map(document -> modelMapper.map(document, DocumentDTO.class))
@@ -582,6 +602,8 @@ public class ApprovalService {
             System.out.println("documentCode =========================== " + documentCode);
             Document document = documentRepository.findByDocumentCodeAndTempSaveStatus(documentCode, "N");
             System.out.println("document ============================== " + document);
+            List<ApprovalComment> approvalComment = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalComment);
             if (document != null) {
                 documentList.add(document);
             }
@@ -596,7 +618,7 @@ public class ApprovalService {
 
     // 결재하기
     @Transactional
-    public String approvement(ApprovalCommentDTO approvalCommentDTO, int documentCode, UserDTO userDTO) {
+    public String approvement(int documentCode, UserDTO userDTO) {
 
         //결재 대상 조회
         int approvalLineUser = approvalLineRepository.approvalSubjectUserCode(documentCode);
@@ -607,25 +629,15 @@ public class ApprovalService {
         ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
 
 
-        if (proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
-            ApprovalLine porxyApprovalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCode(documentCode, proxyApproval.getOriginUser().getUserCode());
+        if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
+            ApprovalLine porxyApprovalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCodeAndApprovalLineStatus(documentCode, proxyApproval.getOriginUser().getUserCode(), "미결");
 
 
             // 결재 상태 업데이트
             porxyApprovalLine.processingDate(LocalDateTime.now());
             porxyApprovalLine.approvalLineStatus("결재");
-            porxyApprovalLine.getUser().userCode(proxyApproval.getOriginUser().getUserCode());
+            porxyApprovalLine.getUser().userCode(proxyApproval.getChangeUser().getUserCode());
             approvalLineRepository.save(porxyApprovalLine);
-
-            // 코멘트 달기
-
-            ApprovalComment approvalComment = new ApprovalComment();
-            approvalComment.acContent(approvalCommentDTO.getAcContent());
-            approvalComment.acDate(LocalDate.now());
-            approvalComment.getDocument().documentCode(documentCode);
-            approvalComment.user(proxyApproval.getChangeUser());
-
-            approvalCommentRepository.save(approvalComment);
 
 
             // 휴가일수 차감
@@ -665,7 +677,7 @@ public class ApprovalService {
 
 
         int userCode = userDTO.getUserCode();
-        ApprovalLine approvalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCode(documentCode, userCode);
+        ApprovalLine approvalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCodeAndApprovalLineStatus(documentCode, userCode, "미결");
 
         System.out.println("approvalLine ================================== " + approvalLine);
 
@@ -674,13 +686,6 @@ public class ApprovalService {
         approvalLine.approvalLineStatus("결재");
         approvalLineRepository.save(approvalLine);
 
-        // 코멘트 달기
-
-        ApprovalComment approvalComment = new ApprovalComment();
-        approvalComment.acContent(approvalCommentDTO.getAcContent());
-        approvalComment.acDate(LocalDate.now());
-        approvalComment.getDocument().documentCode(documentCode);
-        approvalComment.user(proxyApproval.getChangeUser());
 
         // 휴가일수 차감
         Document document = documentRepository.findByDocumentCodeAndForm(documentCode, "휴가신청서");
@@ -714,7 +719,7 @@ public class ApprovalService {
 
     // 반려하기
     @Transactional
-    public String rejection(ApprovalCommentDTO approvalCommentDTO, int documentCode, UserDTO userDTO) {
+    public String rejection(int documentCode, UserDTO userDTO) {
 
         //결재 대상 조회
         int approvalLineUser = approvalLineRepository.approvalSubjectUserCode(documentCode);
@@ -722,7 +727,7 @@ public class ApprovalService {
         User changeUser = modelMapper.map(userDTO, User.class);
         // 대리위임자 결재
         ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
-        if (proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
+        if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
 
             // 미결 상태인 모든 approvalLine 조회
             List<Integer> approvalLineList = approvalLineRepository.findLineUser(documentCode);
@@ -738,18 +743,6 @@ public class ApprovalService {
                     approvalLineRepository.save(approvalLine);
                 });
             }
-
-
-
-            // 코멘트 달기
-
-            ApprovalComment approvalComment = new ApprovalComment();
-            approvalComment.acContent(approvalCommentDTO.getAcContent());
-            approvalComment.acDate(LocalDate.now());
-            approvalComment.getDocument().documentCode(documentCode);
-            approvalComment.user(proxyApproval.getChangeUser());
-
-
             return "반려 성공";
 
         }
@@ -773,15 +766,6 @@ public class ApprovalService {
                 approvalLineRepository.save(approvalLine);
             });
         }
-
-        // 코멘트 달기
-
-        ApprovalComment approvalComment = new ApprovalComment();
-        approvalComment.acContent(approvalCommentDTO.getAcContent());
-        approvalComment.acDate(LocalDate.now());
-        approvalComment.getDocument().documentCode(documentCode);
-        approvalComment.user(proxyApproval.getChangeUser());
-
         return "반려 성공";
     }
     // 상신 기안 회수하기
@@ -827,25 +811,32 @@ public class ApprovalService {
         User changeUser = modelMapper.map(userDTO, User.class);
 
         ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
-        if (proxyApproval.getProxyStatus().equals("Y")) {
+        if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y")) {
             // 해당 위임받은 결재문서 의 결재 상신 문서 리스트 조회
             List<Document> documents = documentRepository.findByUserDTOUserCode(proxyApproval.getOriginUser().getUserCode());
             // 해당 사용자의 결재 상신 문서 리스트 조회
             List<Document> mydocuments = documentRepository.findByUserDTOUserCode(changeUser.getUserCode());
 
-            
+
             // 결재 상태 중에 미결이 존재하는 문서 리스트 조회
             // 위임받은 문서
             List<Document> documentList = new ArrayList<>();
             for (Document document1 : documents) {
                 List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                // 문서 댓글 조회후 넣어주기
+                List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+                document1.approvalComment(approvalCommentList);
                 if (!approvalLines.isEmpty()) {
                     documentList.add(document1);
+
                 }
             }
             // 자기 문서
             for (Document document1 : mydocuments) {
                 List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                // 문서 댓글 조회후 넣어주기
+                List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+                document1.approvalComment(approvalCommentList);
                 if (!approvalLines.isEmpty()) {
                     documentList.add(document1);
                 }
@@ -864,6 +855,9 @@ public class ApprovalService {
         List<Document> documentList = new ArrayList<>();
         for (Document document1 : documents) {
             List<Integer> approvalLines = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+            // 문서 댓글 조회후 넣어주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+            document1.approvalComment(approvalCommentList);
             if (!approvalLines.isEmpty()) {
                 documentList.add(document1);
             }
@@ -874,55 +868,98 @@ public class ApprovalService {
     }
 
     // 결재 완료 문서 조회
-    public List<DocumentDTO> approvalComplete(UserDTO userDTO) {
+    public Page<DocumentDTO> approvalComplete(UserDTO userDTO, Criteria cri) {
 
+        // 페이징
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").descending());
 
         // 해당 사용자의 결재 상신 문서 리스트 조회
-        List<Document> documentList = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
-
+        Page<Document> documentList = documentRepository.findDocByUserDTOUserCode(userDTO.getUserCode(), paging);
 
         // 상태가 결재인 문서
         List<Document> approvalComplete = new ArrayList<>();
 
         // 해당 사용자의 결재 상신 문서 리스트를 순회하며 쿼리를 통해 검색한 결과와 비교하여 결과 리스트에 추가
+        List<Integer> completeDocCodes = approvalLineRepository.approvalComplete(userDTO.getUserCode());
         for (Document document : documentList) {
-            List<Integer> completeDocCodes = approvalLineRepository.approvalComplete(userDTO.getUserCode());
+            // 문서 댓글 조회 후 넣어주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalCommentList);
+
             if (completeDocCodes.contains(document.getDocumentCode())) {
                 approvalComplete.add(document);
             }
         }
 
+        // 전체 문서의 수를 얻어옵니다. 이것은 실제 데이터베이스 쿼리를 통해 얻어야 할 수도 있습니다.
+        long totalDocuments = documentList.getTotalElements(); // 이 예에서는 documentList에서 가져옵니다.
 
-        return approvalComplete.stream()
-                .map(document -> modelMapper.map(document, DocumentDTO.class))
-                .collect(Collectors.toList());
+        // List<Document>를 Page<DocumentDTO>로 변환
+        Page<DocumentDTO> documentDTOPage = new PageImpl<>(
+                approvalComplete.stream()
+                        .map(document -> modelMapper.map(document, DocumentDTO.class))
+                        .collect(Collectors.toList()),
+                paging, // 필요한 페이징 정보를 전달합니다.
+                totalDocuments // 전체 문서의 수를 전달합니다.
+        );
+
+        return documentDTOPage;
     }
-
     // 반려 문서 조회
-    public List<DocumentDTO> rejectionInOutbox(UserDTO userDTO) {
+    public Page<DocumentDTO> rejectionInOutbox(UserDTO userDTO, Criteria cri) {
+
+        // 페이징
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").descending());
+
 
         // 해당 사용자의 결재 상신 문서 리스트 조회
-        List<Document> documentList = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
+        Page<Document> documentList = documentRepository.findDocByUserDTOUserCode(userDTO.getUserCode(), paging);
 
         System.out.println("documentList = " + documentList);
 
 
-        // 상태가 결재인 문서
+        // 상태가 반려인 문서
         List<Document> rejectionDocument = new ArrayList<>();
         for (Document document : documentList) {
             List<Integer> rejectionApprovalLine = approvalLineRepository.rejectionDocument(document.getDocumentCode());
+            // 댓글 조회 후 담아주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalCommentList);
             if (!rejectionApprovalLine.isEmpty()) {
                 rejectionDocument.add(document);
             }
         }
-        return rejectionDocument.stream()
-                .map(document -> modelMapper.map(document, DocumentDTO.class))
-                .collect(Collectors.toList());
+
+        // 전체 문서의 수를 얻어옵니다. 이것은 실제 데이터베이스 쿼리를 통해 얻어야 할 수도 있습니다.
+        long totalDocuments = documentList.getTotalElements(); // 이 예에서는 documentList에서 가져옵니다.
+
+        // List<Document>를 Page<DocumentDTO>로 변환
+        Page<DocumentDTO> documentDTOPage = new PageImpl<>(
+                rejectionDocument.stream()
+                        .map(document -> modelMapper.map(document, DocumentDTO.class))
+                        .collect(Collectors.toList()),
+                paging, // 필요한 페이징 정보를 전달합니다.
+                totalDocuments // 전체 문서의 수를 전달합니다.
+        );
+
+        return documentDTOPage;
     }
 
-    public List<DocumentDTO> withdrawInOutbox(UserDTO userDTO) {
+    public Page<DocumentDTO> withdrawInOutbox(UserDTO userDTO, Criteria cri) {
+
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").descending());
+
         // 해당 사용자의 결재 상신 문서 리스트 조회
-        List<Document> documentList = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
+        Page<Document> documentList = documentRepository.findDocByUserDTOUserCode(userDTO.getUserCode(), paging);
 
         System.out.println("documentList = " + documentList);
 
@@ -934,9 +971,19 @@ public class ApprovalService {
                 withdrawDocument.add(document);
             }
         }
-        return withdrawDocument.stream()
-                .map(document -> modelMapper.map(document, DocumentDTO.class))
-                .collect(Collectors.toList());
+        // 전체 문서의 수를 얻어옵니다. 이것은 실제 데이터베이스 쿼리를 통해 얻어야 할 수도 있습니다.
+        long totalDocuments = documentList.getTotalElements(); // 이 예에서는 documentList에서 가져옵니다.
+
+        // List<Document>를 Page<DocumentDTO>로 변환
+        Page<DocumentDTO> documentDTOPage = new PageImpl<>(
+                withdrawDocument.stream()
+                        .map(document -> modelMapper.map(document, DocumentDTO.class))
+                        .collect(Collectors.toList()),
+                paging, // 필요한 페이징 정보를 전달합니다.
+                totalDocuments // 전체 문서의 수를 전달합니다.
+        );
+
+        return documentDTOPage;
     }
 
     @Transactional
@@ -1101,18 +1148,24 @@ public class ApprovalService {
     }
 
     // 임시 기안 조회
-    public List<DocumentDTO> findTempSaveDocument(UserDTO userDTO) {
+    public Page<DocumentDTO> findTempSaveDocument(UserDTO userDTO, Criteria cri) {
         // 로그인한 사용자의 정보 가져오기
         System.out.println("userDTO1111111111111111111111111 = " + userDTO);
         User user = modelMapper.map(userDTO, User.class);
         System.out.println("user1111111111111111111111111111 = " + user);
 
-        // 해당 사용자의 결재 상신 문서 리스트 조회
-        List<Document> documentList = documentRepository.findByUserDTOAndTempSaveStatus(user, "Y");
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("documentCode").descending());
 
-        return documentList.stream()
-                .map(document -> modelMapper.map(document, DocumentDTO.class))
-                .collect(Collectors.toList());
+        // 해당 사용자의 결재 상신 문서 리스트 조회
+        Page<Document> result = documentRepository.findByUserDTOAndTempSaveStatus(user, "Y", paging);
+        Page<DocumentDTO> documentList = result.map(document -> modelMapper.map(document, DocumentDTO.class));
+
+
+
+        return documentList;
     }
 
     public String insertBySelectTempDocument(int documentCode, DayOffApplyDTO dayOffApplyDTO, BusinessTripDTO businessTripDTO, EducationDTO educationDTO, GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO userDTO) throws IOException {
@@ -1168,4 +1221,114 @@ public class ApprovalService {
 
         return "등록 성공";
     }
+
+    // 문서 댓글 작성
+    @Transactional
+    public String insertApprovalComment(int documentCode, ApprovalCommentDTO approvalCommentDTO, UserDTO userDTO) {
+
+        Document document = documentRepository.findByDocumentCode(documentCode);
+        User user = modelMapper.map(userDTO, User.class);
+
+        ApprovalComment approvalComment = new ApprovalComment();
+        approvalComment.acContent(approvalCommentDTO.getAcContent());
+        approvalComment.acDate(LocalDate.now());
+        approvalComment.document(document);
+        approvalComment.user(user);
+
+        approvalCommentRepository.save(approvalComment);
+
+        return "댓글 등록 성공";
+    }
+
+    // 재기안
+    public String reDraft(int documentCode, DayOffApplyDTO dayOffApplyDTO, BusinessTripDTO businessTripDTO, EducationDTO educationDTO, GeneralDraftDTO generalDraftDTO, MultipartFile file, UserDTO userDTO) throws IOException {
+
+        // 해당 사용자의 결재 상신 문서 리스트 조회
+        Document document1 = documentRepository.findDocumentByDocumentCode(documentCode);
+
+        Document document = new Document();
+
+        document.form(document1.getForm());
+        document.userDTO(document1.getUserDTO());
+        document.documentTitle(document1.getDocumentTitle());
+
+
+
+
+        System.out.println("document=================================== " + document);
+
+        switch (document.getForm()) {
+            case "휴가신청서":
+                insertDayOffApply(dayOffApplyDTO, file, userDTO, document);
+                break;
+            case "출장신청서":
+                insertBusinessTrip(businessTripDTO, file, userDTO, document);
+                break;
+            case "교육신청서":
+                insertEducation(educationDTO, file, userDTO, document);
+                break;
+            case "기안신청서":
+                insertgeneralDraft(generalDraftDTO, file, userDTO, document);
+                break;
+            default:
+                break;
+        }
+
+        return "재기안 성공";
+    }
+    // 문서 공유 하기
+    public String insertSharedDocument(int documentCode, int userCode) {
+        Document document = documentRepository.findByDocumentCode(documentCode);
+        User user = userRepository.findByUserCode(userCode);
+
+        SharedDocument sharedDocument = new SharedDocument();
+        sharedDocument.document(document);
+        sharedDocument.user(user);
+        sharedDocument.sdStatus("N");
+
+        sharedDocumentRepository.save(sharedDocument);
+
+
+
+        return "문서 공유 성공";
+    }
+    // 공유 받은 문서 조회하기
+    public Page<DocumentDTO> selectSharedDocument(UserDTO userDTO, Criteria cri) {
+        log.info("[ProductService] selectProductListWithPaging Start ===================");
+        int index = cri.getPageNum() - 1;
+        int count = cri.getAmount();
+        Pageable paging = PageRequest.of(index, count, Sort.by("sdCode").descending());
+
+
+        Page<SharedDocument> documentCode = sharedDocumentRepository.findByUserUserCode(userDTO.getUserCode(), paging);
+        List<Document> documentList = new ArrayList<>();
+
+        for (SharedDocument sharedDocument : documentCode){
+            Document document = documentRepository.findByDocumentCode(sharedDocument.getDocument().getDocumentCode());
+            // 댓글 조회
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalCommentList);
+            if(document != null){
+                documentList.add(document);
+            }
+
+            }
+
+
+        // 전체 문서의 수를 얻어옵니다. 이것은 실제 데이터베이스 쿼리를 통해 얻어야 할 수도 있습니다.
+        long totalDocuments = documentCode.getTotalElements(); // 이 예에서는 documentList에서 가져옵니다.
+
+        // List<Document>를 Page<DocumentDTO>로 변환
+        Page<DocumentDTO> documentDTOPage = new PageImpl<>(
+                documentList.stream()
+                        .map(document -> modelMapper.map(document, DocumentDTO.class))
+                        .collect(Collectors.toList()),
+                paging, // 필요한 페이징 정보를 전달합니다.
+                totalDocuments // 전체 문서의 수를 전달합니다.
+        );
+
+        return documentDTOPage;
+    }
+
+
 }
