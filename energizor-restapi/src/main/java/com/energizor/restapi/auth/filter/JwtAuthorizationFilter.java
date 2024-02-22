@@ -54,7 +54,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-
         String header = request.getHeader(AuthConstants.AUTH_HEADER);
 
         try {

@@ -137,6 +137,7 @@ public class TokenUtils {
         claims.put("userRole", user.getUserRole());
         claims.put("email", user.getEmail());
 //        claims.put("dayoff", user.getDayoff());
+        claims.put("teamDTO", user.getTeam());
 
 
         return claims;

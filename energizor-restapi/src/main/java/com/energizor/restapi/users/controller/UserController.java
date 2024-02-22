@@ -4,6 +4,7 @@ import com.energizor.restapi.common.PageDTO;
 import com.energizor.restapi.common.PagingResponseDTO;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.users.dto.ChangePasswordRequest;
+import com.energizor.restapi.users.dto.TeamDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +17,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "인사 관리 API")
 @RestController
@@ -36,10 +39,11 @@ public class UserController {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
         System.out.println("principal ==-=-=-=-=-=-=- " + principal);
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 10);
+        Criteria cri = new Criteria(Integer.valueOf(offset), 20);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         Page<UserDTO> userDTOPage = userService.selectUserListWithPagingForAdmin(cri);
+        System.out.println("userDTOPage = " + userDTOPage);
         pagingResponseDTO.setData(userDTOPage);
         pagingResponseDTO.setPageInfo(new PageDTO(cri, (int) userDTOPage.getTotalElements()));
 
@@ -47,7 +51,6 @@ public class UserController {
     }
 
     @Operation(summary = "직원 상세정보 조회", description = "관리자 권한을 가진 인사담당자가 개별 직원 정보를 조회할 수 있습니다.")
-    // 바로 수정으로 넘어갈거면 삭제 !!!!!!!!!!!!!!!!!!!!
     @GetMapping("/users-management/{userCode}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO> selectUserDetailForAdmin(@PathVariable int userCode, @AuthenticationPrincipal UserDTO principal) {
@@ -57,12 +60,14 @@ public class UserController {
     }
 
     @Operation(summary = "직원 정보 수정", description = "관리자 권한을 가진 인사담당자가 직원 정보를 수정할 수 있습니다.")
-    @PutMapping(value = "/user-update")
+    @PutMapping(value = "/user-update/{userCode}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ResponseDTO> updateUserForAdmin(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> updateUserForAdmin(@PathVariable int userCode,
+                                                          @RequestBody UserDTO userDTO,
+                                                          @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("principal =============>>>>>>>>>> " + principal);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "직원 정보 수정 성공", userService.updateUserForAdmin(userDTO, principal)));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "직원 정보 수정 성공", userService.updateUserForAdmin(userCode, userDTO, principal)));
     }
 
     @Operation(summary = "내 정보 조회", description = "내 정보를 조회할 수 있습니다.")
@@ -80,7 +85,7 @@ public class UserController {
 
     @Operation(summary = "비밀번호 변경", description = "현재 비밀번호, 변경할 비밀번호, 재입력한 비밀번호를 받아서 비밀번호를 변경합니다.")
     @PutMapping(value = "/change-password")
-    @PreAuthorize("hasRole('ROLE_USER')") // Assuming only authenticated users can change their password
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<ResponseDTO> changePassword(
             @RequestBody ChangePasswordRequest changePasswordRequest,
             @AuthenticationPrincipal UserDTO principal) {
@@ -108,6 +113,13 @@ public class UserController {
         return ResponseEntity
                 .ok()
                 .body(new ResponseDTO(HttpStatus.OK, "비밀번호 변경 성공", null));
+    }
+
+    @GetMapping(value = "/teams")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
+        List<TeamDTO> teams = userService.getAllTeams();
+        return ResponseEntity.ok(teams);
     }
 
 

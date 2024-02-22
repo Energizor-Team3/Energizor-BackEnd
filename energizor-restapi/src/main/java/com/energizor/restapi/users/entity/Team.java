@@ -1,5 +1,6 @@
 package com.energizor.restapi.users.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,9 +22,13 @@ public class Team {
     private Dept dept;
 
     @Column(name = "team_name", length = 20, nullable = false)
+    @JsonProperty("teamName")
     private String teamName;
 
     public Team() {}
+
+    public Team(int teamCode, String teamName) {
+    }
 
     public Team teamCode(int teamCode) {
         this.teamCode = teamCode;
@@ -52,4 +57,5 @@ public class Team {
                 ", teamName='" + teamName + '\'' +
                 '}';
     }
+
 }

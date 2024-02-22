@@ -49,7 +49,7 @@ public class AuthController {
 
         try {
             authService.sendSearchPwd((request.getUserId()), request.getEmail());
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "임시 비밀번호로 변경 성공", "변경 성공"));
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "임시 비밀번호로 변경 성공", "Update"));
         }  catch (UserPrincipalNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다.", "User not found."));
         } catch (Exception e) {
