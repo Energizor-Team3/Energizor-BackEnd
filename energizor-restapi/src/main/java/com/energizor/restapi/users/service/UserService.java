@@ -177,12 +177,16 @@ public class UserService {
         // Dayoff 업데이트!!!
         if (userDTO.getDayoff() != null) {
             DayOffDTO dayoffDTO = userDTO.getDayoff();
-            Dayoff dayoff = new Dayoff()
-                    .offYear(dayoffDTO.getOffYear())
-                    .offCount(dayoffDTO.getOffCount())
-                    .offUsed(dayoffDTO.getOffUsed())
-                    .user(user);
-            user.dayoff(dayoffRepository.save(dayoff));
+
+            // 기존 Dayoff 정보 불러오기
+            Dayoff existingDayoff = dayoffRepository.findByUser_UserCode(userCode)
+                    .orElseThrow(() -> new RuntimeException("연차 정보를 찾을 수 없습니다."));
+
+            // 기존 정보를 바탕으로 새 Dayoff 객체 생성 또는 기존 값을 업데이트
+            existingDayoff.offUsed(dayoffDTO.getOffUsed());
+
+            // 변경된 정보 저장
+            dayoffRepository.save(existingDayoff);
         }
 
         userRepository.save(user);

@@ -18,4 +18,12 @@ public class DayOffDTO {
     private int offUsed;
     private int userCode;
 
+    // 문자열 인자를 받는 생성자
+    public DayOffDTO(String dayoffString) {
+        String[] parts = dayoffString.split("/");
+        this.offCount = Integer.parseInt(parts[0]);
+        this.offUsed = Integer.parseInt(parts[1]);
+    }
+
+
 }

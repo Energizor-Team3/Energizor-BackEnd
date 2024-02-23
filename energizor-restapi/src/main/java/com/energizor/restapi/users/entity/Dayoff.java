@@ -30,7 +30,7 @@ public class Dayoff {
     private int offUsed;
 
     @OneToOne
-    @JoinColumn(name = "user_code")
+    @JoinColumn(name = "user_code", insertable = false, updatable = false)
     private User user;
 
     public Dayoff() {}

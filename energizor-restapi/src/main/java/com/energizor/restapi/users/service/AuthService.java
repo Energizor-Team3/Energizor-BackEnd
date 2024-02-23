@@ -166,9 +166,9 @@ public class AuthService {
         message.setFrom(String.valueOf(fromAddress));
         message.setTo(email);
         message.setSubject("EveryWare 임시비밀번호 안내");
-        message.setText("안녕하세요. \n EveryWare 임시비밀번호 안내 관련 이메일 입니다. \n " +
-                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n " +
-                " 로그인 후에 비밀번호를 변경해주세요!");
+        message.setText("안녕하세요. \nEveryWare 임시비밀번호 안내 관련 이메일 입니다. \n " +
+                "회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n " +
+                "로그인 후에 비밀번호를 변경해주세요!");
 
         javaMailSender.send(message);
     }
