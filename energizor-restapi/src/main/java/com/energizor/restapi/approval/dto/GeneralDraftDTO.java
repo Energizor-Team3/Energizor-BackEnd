@@ -17,7 +17,7 @@ public class GeneralDraftDTO {
     private LocalDate gdDate;
     private String gdTitle;
     private String gdContent;
-    private List<DocumentDTO> documentDTO;
+    private DocumentDTO document;
     private UserDTO userDTO;
     private String lineUser;
     private String rfUser;

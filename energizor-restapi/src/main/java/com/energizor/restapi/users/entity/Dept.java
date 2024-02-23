@@ -20,7 +20,7 @@ public class Dept {
     @Column(name = "dept_name", length = 20, nullable = false)
     private String deptName;
 
-    protected Dept() {}
+    public Dept() {}
 
     public Dept deptCode(int deptCode) {
         this.deptCode = deptCode;
