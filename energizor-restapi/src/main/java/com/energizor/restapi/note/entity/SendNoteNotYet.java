@@ -1,5 +1,5 @@
 package com.energizor.restapi.note.entity;
-import com.energizor.restapi.group.entity.Users;
+import com.energizor.restapi.group.entity.UsersGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,11 +31,11 @@ public class SendNoteNotYet {
 
     @JoinColumn(name = "user_code")
     @OneToOne
-    private Users sendUserCode;
+    private UsersGroup sendUserCode;
 
     @JoinColumn(name = "user_code")
     @OneToMany
-    private List<Users> renUserCode;
+    private List<UsersGroup> renUserCode;
 
     public SendNoteNotYet(){}
 
@@ -59,12 +59,12 @@ public class SendNoteNotYet {
         return this;
     }
 
-    public SendNoteNotYet sendUserCode(Users sendUserCode) {
+    public SendNoteNotYet sendUserCode(UsersGroup sendUserCode) {
         this.sendUserCode = sendUserCode;
         return this;
     }
 
-    public SendNoteNotYet renUserCode(List<Users> renUserCode) {
+    public SendNoteNotYet renUserCode(List<UsersGroup> renUserCode) {
         this.renUserCode = renUserCode;
         return this;
     }

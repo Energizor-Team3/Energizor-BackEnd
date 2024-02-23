@@ -15,11 +15,13 @@ import java.util.List;
 @ToString
 
 public class DocumentDTO {
-    private int documentCode;
+    private Integer documentCode;
     private String documentTitle;
     private UserDTO userDTO;
     private LocalDate draftDay;
     private String form;
     private String tempSaveStatus;
+    private List<ApprovalCommentDTO> approvalCommentDTOList;
+
 
 }

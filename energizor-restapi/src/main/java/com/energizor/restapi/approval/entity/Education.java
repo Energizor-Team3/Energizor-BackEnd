@@ -37,7 +37,7 @@ public class Education {
     @Column(name = "edu_content")
     private String eduContent;
     @JoinColumn(name = "document_code")
-    @ManyToOne
+    @OneToOne
     private Document document;
     @JoinColumn(name = "user_code")
     @OneToOne

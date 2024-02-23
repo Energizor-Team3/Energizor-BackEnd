@@ -45,7 +45,7 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
 
             responseMap.put("userInfo", jsonValue);
             responseMap.put("status", 200);
-            responseMap.put("message", "로그인 성공");
+            responseMap.put("message", "Login Success");
         }
 
         jsonObject = new JSONObject(responseMap);

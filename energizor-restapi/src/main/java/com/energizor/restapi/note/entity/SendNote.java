@@ -1,8 +1,7 @@
 package com.energizor.restapi.note.entity;
 
 
-import com.energizor.restapi.group.entity.Users;
-import com.energizor.restapi.users.entity.User;
+import com.energizor.restapi.group.entity.UsersGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,11 +33,11 @@ public class SendNote {
 
     @JoinColumn(name = "user_code")
     @OneToOne
-    private Users sendUserCode;
+    private UsersGroup sendUserCode;
 
     @JoinColumn(name = "user_code")
     @OneToMany
-    private List<Users> renUserCode;
+    private List<UsersGroup> renUserCode;
 
     public SendNote() {
     }
@@ -63,12 +62,12 @@ public class SendNote {
         return this;
     }
 
-    public SendNote sendUserCode(Users sendUserCode) {
+    public SendNote sendUserCode(UsersGroup sendUserCode) {
         this.sendUserCode = sendUserCode;
         return this;
     }
 
-    public SendNote renUserCode(List<Users> renUserCode) {
+    public SendNote renUserCode(List<UsersGroup> renUserCode) {
         this.renUserCode = renUserCode;
         return this;
     }

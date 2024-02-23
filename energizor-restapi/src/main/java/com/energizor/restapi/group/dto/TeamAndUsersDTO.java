@@ -1,5 +1,4 @@
 package com.energizor.restapi.group.dto;
-import com.energizor.restapi.users.entity.User;
 import lombok.*;
 import java.util.List;
 
@@ -14,6 +13,6 @@ public class TeamAndUsersDTO {
     private String teamName;
     private int deptCode;
 
-    private List<User> userList;
+    private List<UserGroupDTO> userList;
 
 }

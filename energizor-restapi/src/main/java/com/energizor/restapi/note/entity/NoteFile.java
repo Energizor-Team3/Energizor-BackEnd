@@ -1,6 +1,5 @@
 package com.energizor.restapi.note.entity;
 
-import com.energizor.restapi.group.entity.Users;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;

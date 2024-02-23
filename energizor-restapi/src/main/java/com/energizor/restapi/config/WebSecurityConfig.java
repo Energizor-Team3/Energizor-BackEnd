@@ -5,10 +5,12 @@ import com.energizor.restapi.auth.filter.JwtAuthorizationFilter;
 import com.energizor.restapi.auth.handler.CustomAuthFailUserHandler;
 import com.energizor.restapi.auth.handler.CustomAuthSuccessHandler;
 import com.energizor.restapi.auth.handler.CustomAuthenticationProvider;
+import jakarta.servlet.DispatcherType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -21,6 +23,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     /**
@@ -48,6 +51,11 @@ public class WebSecurityConfig {
                 .formLogin(form -> form.disable())
                 .addFilterBefore(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .httpBasic(basic -> basic.disable())
+//                .authorizeHttpRequests(request -> request
+//                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+//                        .requestMatchers("auth/**").hasRole("ROLE_ADMIN")
+//                        .requestMatchers("users/**").hasRole("ROLE_ADMIN")
+//                )
                 ;
 
         return http.build();

@@ -20,7 +20,7 @@ public class DayOffApplyDTO {
     private String offReason;
     private String offState;
     private DayOffDTO dayOffDTO;
-    private DocumentDTO documentDTO;
+    private DocumentDTO document;
     private UserDTO userDTO;
     private String offApplyTitle;
 
@@ -40,7 +40,7 @@ public class DayOffApplyDTO {
                 ", offDay=" + offDay +
                 ", offReason='" + offReason + '\'' +
                 ", offState='" + offState + '\'' +
-                ", documentDTO=" + documentDTO +
+                ", documentDTO=" + document +
                 ", offApplyTitle='" + offApplyTitle + '\'' +
                 '}';
     }
