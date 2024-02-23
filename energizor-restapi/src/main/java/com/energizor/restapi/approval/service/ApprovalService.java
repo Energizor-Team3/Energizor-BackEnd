@@ -1366,6 +1366,7 @@ public class ApprovalService {
         User user = userRepository.findByUserCode(userDTO.getUserCode());
 
         UserAndTeam userAndTeam = userAndTeamRepository.findByUserCodeAndTeamTeamCode(user.getUserCode(),user.getTeam().getTeamCode());
+        userAndTeam.imgName(IMAGE_URL + userAndTeam.getImgName());
         System.out.println("userAndTeam = " + userAndTeam);
         UserAndTeamDTO UserAndTeamDTO = modelMapper.map(userAndTeam, UserAndTeamDTO.class);
         System.out.println("UserAndTeamDTO = " + UserAndTeamDTO);
