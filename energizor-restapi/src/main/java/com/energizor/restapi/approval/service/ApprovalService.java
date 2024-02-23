@@ -1236,12 +1236,13 @@ public class ApprovalService {
         System.out.println("userDTO ============= " + userDTO);
 
         User originUser = modelMapper.map(userDTO, User.class);
-        ProxyApproval proxyApproval1 = modelMapper.map(proxyApprovalDTO, ProxyApproval.class);
+
+        User changeUser = userRepository.findByUserCode(proxyApprovalDTO.getChangeUser().getUserCode());
 
 
         ProxyApproval proxyApproval = new ProxyApproval();
         proxyApproval.originUser(originUser);
-        proxyApproval.changeUser(proxyApproval1.getChangeUser());
+        proxyApproval.changeUser(changeUser);
         proxyApproval.startDate(proxyApprovalDTO.getStartDate());
         proxyApproval.finishDate(proxyApprovalDTO.getFinishDate());
         proxyApproval.proxyStatus("N");
