@@ -353,6 +353,16 @@ public class ApprovalController {
     }
 
 
+    // 대리결재 조회
+    @Operation(summary = "대리결재 조회")
+    @GetMapping("/proxy")
+    public ResponseEntity<ResponseDTO> proxy(@AuthenticationPrincipal UserDTO userDTO)  {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 조회 성공", approvalService.selectProxy(userDTO)));
+
+    }
+
+
 
 
 

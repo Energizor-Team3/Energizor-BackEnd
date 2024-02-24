@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.lang.model.SourceVersion;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -1409,8 +1410,15 @@ public class ApprovalService {
 
     public List<ApprovalLineDTO> selectApprovalLine(int documentCode) {
         List<ApprovalLine> approvalLine = approvalLineRepository.findByDocumentDocumentCode(documentCode);
+
+        List<ApprovalLine> approvalLineList = new ArrayList<>();
+        approvalLine.get(0).getDocument().getUserDTO().profilePath(IMAGE_URL + approvalLine.get(0).getDocument().getUserDTO().getProfilePath());
+        for(ApprovalLine approvalLine2 : approvalLine){
+            approvalLine2.getUser().profilePath(IMAGE_URL + approvalLine2.getUser().getProfilePath());
+            approvalLineList.add(approvalLine2);
+        }
         System.out.println("approvalLine = " + approvalLine);
-        return approvalLine.stream()
+        return approvalLineList.stream()
                 .map(approvalLine1 -> modelMapper.map(approvalLine1, ApprovalLineDTO.class))
                 .collect(Collectors.toList());
     }
@@ -1421,5 +1429,22 @@ public class ApprovalService {
         return reference.stream()
                 .map(reference1 -> modelMapper.map(reference1, ReferenceDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public Object selectProxy(UserDTO userDTO) {
+
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByOriginUserUserCodeAndProxyStatus(userDTO.getUserCode(), "N");
+
+        if(proxyApproval != null){
+        ProxyApprovalDTO proxyApprovalDTO = modelMapper.map(proxyApproval, ProxyApprovalDTO.class);
+
+        System.out.println("proxyApprovalDTO = " + proxyApprovalDTO);
+        proxyApprovalDTO.getChangeUser().setProfilePath(IMAGE_URL + proxyApprovalDTO.getChangeUser().getProfilePath());
+
+        return proxyApprovalDTO;
+        }
+
+
+        return "조회성공";
     }
 }
