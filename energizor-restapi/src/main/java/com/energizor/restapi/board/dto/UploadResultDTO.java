@@ -2,6 +2,8 @@ package com.energizor.restapi.board.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -9,14 +11,17 @@ import java.net.URLEncoder;
 
 @Data
 @AllArgsConstructor
+@Getter
+@Setter
 public class UploadResultDTO implements Serializable {
 
     private String fileName;
     private String uuid;
     private String folderPath;
-    private String getImageURL() {
-        try{
-            return URLEncoder.encode(folderPath+"/"+uuid+"_"+fileName,"UTF-8");
+
+    public String getImageURL() {
+        try {
+            return URLEncoder.encode(folderPath + "/" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -25,8 +30,9 @@ public class UploadResultDTO implements Serializable {
     }
 
     public String getThumbnailURL() {
-        try{
-            return URLEncoder.encode(folderPath+"/s_"+uuid+"_"+fileName,"UTF-8");
+        try {
+
+            return URLEncoder.encode(folderPath + "/s_" + uuid + "_" + fileName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

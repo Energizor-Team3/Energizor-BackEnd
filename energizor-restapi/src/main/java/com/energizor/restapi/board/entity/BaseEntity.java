@@ -22,7 +22,7 @@ public class BaseEntity {
 
     @LastModifiedDate
     @Column(name="update_date")
-    private LocalDateTime updateDate;
+    LocalDateTime updateDate;
 
     @Column(name="delete_date", nullable = true)
     private LocalDateTime deleteDate;

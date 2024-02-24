@@ -13,8 +13,9 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment,Integ
     @Query("select bc "+
             "from BoardComment bc "+
             "left join bc.board b "+
-            "where b.boardCode= :boardCode")
-    BoardComment findByCodeWithComment(@Param("boardCode") int boardCode);
+            "where b.boardCode= :boardCode " +
+            "and bc.deleteDate IS NULL ")
+    List<BoardComment> findByCodeWithComment(@Param("boardCode") int boardCode);
 
     @Query("select bc "+
             "from BoardComment bc "+
@@ -23,6 +24,7 @@ public interface BoardCommentRepository extends JpaRepository<BoardComment,Integ
 
     @Query("select bc "+
             "from BoardComment bc "+
-            "where bc.board.boardCode= :boardCode")
+            "where bc.board.boardCode= :boardCode "+
+            "and bc.board.deleteDate IS NULL ")
     Optional<List<BoardComment>> findByBoardCode(@Param("boardCode") int boardCode);
 }

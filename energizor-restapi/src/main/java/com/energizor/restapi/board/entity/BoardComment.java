@@ -1,5 +1,6 @@
 package com.energizor.restapi.board.entity;
 
+import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,9 +25,17 @@ public class BoardComment extends BaseEntity{
     @Column(name="delete_date")
     private LocalDateTime deleteDate;
 
+    @Column(name="parent")
+    private int parent;
+
     @ManyToOne
     @JoinColumn(name="board_code")
     private Board board;
+
+    @ManyToOne
+    @JoinColumn(name="user_code")
+    private User user;
+
 
     public BoardComment commentCode(int commentCode) {
         this.commentCode=commentCode;
@@ -38,8 +47,14 @@ public class BoardComment extends BaseEntity{
         return this;
     }
 
+    public BoardComment updateDate(LocalDateTime updateDate) {
+        this.updateDate=updateDate;
+        return this;
+    }
+
+
     public BoardComment build() {
-        return new BoardComment(commentCode,commentContent,deleteDate,board);
+        return new BoardComment(commentCode,commentContent,deleteDate,parent,board,user);
     }
 
     public void changeReplyDeleteDate(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}
