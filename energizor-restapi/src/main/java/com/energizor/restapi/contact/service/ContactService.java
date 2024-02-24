@@ -2,6 +2,7 @@ package com.energizor.restapi.contact.service;
 
 import com.energizor.restapi.contact.dto.CompanyContactDTO;
 import com.energizor.restapi.contact.dto.PersonalContactDTO;
+import com.energizor.restapi.contact.dto.UserDTO;
 import com.energizor.restapi.contact.entity.CompanyContact;
 import com.energizor.restapi.contact.entity.PersonalContact;
 import com.energizor.restapi.contact.entity.User;
@@ -35,14 +36,23 @@ public class ContactService {
     }
     /*----------------------------------------------------------------------------------------------------------------*/
     /* 회사 연락처 목록 조회 */
-    public List<CompanyContactDTO> findAllCompanyList() {
-        log.info("companyList start ==============================");
-        List<CompanyContact> companyContacts = companyContactRepository.findAll();
+    // public List<CompanyContactDTO> findAllCompanyList() {
+    //     log.info("companyList start ==============================");
+    //     List<CompanyContact> companyContacts = companyContactRepository.findAll();
+    //
+    //     return companyContacts.stream()
+    //             .map(companyContact -> modelMapper.map(companyContact, CompanyContactDTO.class))
+    //             .collect(Collectors.toList());
+    // }
 
-        return companyContacts.stream()
-                .map(companyContact -> modelMapper.map(companyContact, CompanyContactDTO.class))
+    /* 수정본 */
+    public List<UserDTO> findAllCompanyUserList() {
+        log.info("company user list start --------------------------");
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserDTO.class))
                 .collect(Collectors.toList());
-
     }
 
     /* 회사 연락처 상세 조회 */

@@ -1,16 +1,19 @@
 package com.energizor.restapi.users.dto;
 
-import com.energizor.restapi.users.entity.Dept;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString
 public class TeamDTO {
+
     private int teamCode;
-    private Dept dept;
+
+    @JsonProperty("teamName")
     private String teamName;
+    private DeptDTO dept;
+
 }

@@ -1,11 +1,11 @@
 package com.energizor.restapi.users.service;
 
 import com.energizor.restapi.exception.DuplicatedMemberEmailException;
+import com.energizor.restapi.users.dto.DeptDTO;
 import com.energizor.restapi.users.dto.MailDTO;
+import com.energizor.restapi.users.dto.TeamDTO;
 import com.energizor.restapi.users.dto.UserDTO;
-import com.energizor.restapi.users.entity.Dayoff;
-import com.energizor.restapi.users.entity.User;
-import com.energizor.restapi.users.entity.UserRole;
+import com.energizor.restapi.users.entity.*;
 import com.energizor.restapi.users.repository.DayoffRepository;
 import com.energizor.restapi.users.repository.UserRepository;
 import com.energizor.restapi.users.repository.UserRoleRepository;
@@ -15,6 +15,7 @@ import jakarta.mail.internet.InternetAddress;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,6 +49,13 @@ public class AuthService {
 
     private final JavaMailSender javaMailSender;
 
+    /* 이미지 저장 할 위치 및 응답 할 이미지 주소 */
+    @Value("${image.image-dir}")
+    private String IMAGE_DIR;
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
+
     public AuthService(UserRepository userRepository
                         , PasswordEncoder passwordEncoder
                         , ModelMapper modelMapper
@@ -73,6 +81,9 @@ public class AuthService {
             log.info("[AuthService] 이메일이 중복됩니다.");
             throw new DuplicatedMemberEmailException("이메일이 중복됩니다.");
         }
+
+        userDTO.setProfilePath("defaultprofile.png");
+
 
         User registUser = modelMapper.map(userDTO, User.class);
 
@@ -128,9 +139,6 @@ public class AuthService {
 
         log.info("[AuthService] signup End ==================================");
 
-
-
-
         return userDTO;
     }
 
@@ -148,19 +156,19 @@ public class AuthService {
         user.userId(generatedUserId);
     }
 
-    //보낼 사용자 이메일의 정보 내가 보내는거면 내 이메일
+    //보낼 사용자 이메일의 정보
     private void sendPasswordSearchEmail(String email, String temporaryPassword) throws UnsupportedEncodingException {
         System.out.println("비번 변경 서비스 시작=====================================");
-        System.out.println("사용자의 이메일 정보 =====================================");
+        System.out.println("사용자의 이메일 정보 =====================================" + email);
 
         SimpleMailMessage message = new SimpleMailMessage();
-        InternetAddress fromAddress = new InternetAddress("hrmanager690@gmail.com", "EveryWare 인사담당자");
+        InternetAddress fromAddress = new InternetAddress("sueyeon777@gmail.com", "EveryWare 인사담당자");
         message.setFrom(String.valueOf(fromAddress));
         message.setTo(email);
         message.setSubject("EveryWare 임시비밀번호 안내");
-        message.setText("안녕하세요. EveryWare 임시비밀번호 안내 관련 이메일 입니다." +
-                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다." +
-                "로그인 후에 비밀번호를 변경해주세요!");
+        message.setText("안녕하세요. \n EveryWare 임시비밀번호 안내 관련 이메일 입니다. \n " +
+                " 회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n " +
+                " 로그인 후에 비밀번호를 변경해주세요!");
 
         javaMailSender.send(message);
     }
@@ -195,7 +203,7 @@ public class AuthService {
 
             System.out.println(" 비번 변경 서비스 끝=====================================");
 
-            return modelMapper.map(user.get(), UserDTO.class); //일단 오류는 안뜨게함
+            return modelMapper.map(user.get(), UserDTO.class);
         } else {
             throw new UserPrincipalNotFoundException("사용자 정보를 찾을 수 없습니다.");
         }
@@ -217,42 +225,4 @@ public class AuthService {
         return str;
     }
 
-//    public MailDTO createMailAndChangePassword(String email) {
-//
-//        String str = getTempPassword();
-//        MailDTO mailDTO = new MailDTO();
-//        mailDTO.setAddress(email);
-//        mailDTO.setTitle("EveryWare 임시비밀번호 안내 이메일입니다.");
-//        mailDTO.setMessage("안녕하세요. EveryWare 임시비밀번호 안내 관련 이메일 입니다." + " 회원님의 임시 비밀번호는 " + str + " 입니다." + "로그인 후에 비밀번호를 변경해주세요!");
-//        updatePassword(str, email);
-//
-//        return mailDTO;
-//    }
-//
-//    // MailDto를 바탕으로 실제 이메일 전송
-////    public void mailSend(MailDTO mailDTO) {
-////        System.out.println("전송 완료!");
-////        SimpleMailMessage message = new SimpleMailMessage();
-////        message.setTo(mailDTO.getAddress());
-////        message.setSubject(mailDTO.getTitle());
-////        message.setText(mailDTO.getMessage());
-////        message.setFrom("wisejohn950330@gmail.com");
-////        message.setReplyTo("wisejohn950330@gmail.com");
-////        System.out.println("message"+message);
-////        javaMailSender.send(message);
-////    }
-//
-//    //임시 비밀번호로 업데이트
-//    public boolean updatePassword(String str, String email){
-//        try {
-//            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//            String encodePw = encoder.encode(str); // 패스워드 암호화
-//            User user = userRepository.findByEmail(email);
-////            user.updatePassword(encodePw);
-//            userRepository.save(user);
-//            return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
 }

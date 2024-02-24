@@ -9,6 +9,7 @@ import java.sql.Time;
 @Setter
 @ToString
 public class ReservationTimeDTO {
+    private int reservationTimeCode;
     private int reservationCode;
-    private Time meetTime;
+    private String meetTime;
 }

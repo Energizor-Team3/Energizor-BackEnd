@@ -1,5 +1,6 @@
 package com.energizor.restapi.users.dto;
 
+import com.energizor.restapi.group.dto.TeamGroupDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,8 +36,10 @@ public class UserDTO implements UserDetails {
     private List<UserRoleDTO> userRole;
     private Collection<GrantedAuthority> authorities;
 
-    private int teamCode;
+    private TeamDTO team;
     private DayOffDTO dayoff;
+
+    private String profilePath;
 
     public String getUserId() {
         return userId;

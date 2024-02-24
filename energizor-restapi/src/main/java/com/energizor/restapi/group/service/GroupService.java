@@ -7,6 +7,7 @@ import com.energizor.restapi.group.entity.*;
 import com.energizor.restapi.group.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,9 @@ public class GroupService {
     private final UserAndTeamRepository userAndTeamRepository;
 
     private final ModelMapper modelMapper;
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
 
     public GroupService(ModelMapper modelMapper
             , AllGroupRepository allGroupRepository
@@ -99,6 +103,8 @@ public class GroupService {
         log.info("selectTeam start=============");
 
         UserAndTeam user = userAndTeamRepository.findByUserCode(userCode);
+        user.imgName(IMAGE_URL + user.getImgName());
+
         UserAndTeamDTO userAndTeamDTO  = modelMapper.map(user, UserAndTeamDTO.class);
 
 

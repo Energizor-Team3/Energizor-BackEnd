@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 
-@Tag(name = "Auth Controller 스웨거 연동")
+@Tag(name = "Auth API")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -30,7 +30,7 @@ public class AuthController {
 
     @Operation(summary = "직원 등록", description = "관리자 권한을 가진 인사담당자가 새로운 직원 등록을 할 수 있습니다.")
     @PostMapping("/signup")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<ResponseDTO> signup(@RequestBody UserDTO userDTO, @AuthenticationPrincipal UserDTO principal) {
         System.out.println("principal =================================== " + principal);
         // 멤버의 기본 상태값 설정
@@ -40,18 +40,6 @@ public class AuthController {
                 .body(new ResponseDTO(HttpStatus.CREATED, "회원가입 성공", authService.signup(userDTO)));
     }
 
-//    @GetMapping("/password")
-//    public String findPassword(Model model) {
-//        return "/auth/findPwForm";
-//    }
-//
-//    @PostMapping("/password")
-//    public String sendEmail(@RequestParam("email") String email) {
-//        MailDTO mailDTO = authService.createMailAndChangePassword(email);
-////        authService.mailSend(mailDTO);
-//
-//        return "auth/findPwForm";
-//    }
 
     @Operation(summary = "비밀번호 찾기", description = "비밀번호를 잊었을 때 찾을 수 있습니다.")
     @PostMapping("/searchpwd")
@@ -61,7 +49,7 @@ public class AuthController {
 
         try {
             authService.sendSearchPwd((request.getUserId()), request.getEmail());
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "임시 비밀번호로 변경 성공", "변경 성공"));
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "임시 비밀번호로 변경 성공", "Update"));
         }  catch (UserPrincipalNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다.", "User not found."));
         } catch (Exception e) {

@@ -5,6 +5,7 @@ import com.energizor.restapi.board.entity.Board;
 import com.energizor.restapi.board.entity.InterestBoard;
 import com.energizor.restapi.board.entity.User;
 import com.energizor.restapi.common.Criteria;
+import com.energizor.restapi.users.dto.UserDTO;
 import org.springframework.data.domain.Page;
 
 public interface BoardService {
@@ -31,7 +32,7 @@ public interface BoardService {
 
     InterestBoardDTO registerInterestBoard(int boardCode, int userCode);
 
-    InterestBoardDTO deleteInterestBoard(int interestCode);
+    InterestBoardDTO deleteInterestBoard(int interestCode, int ownerCode);
 
 
     PageResultDTO<InterestBoardDTO,Object []> findInterestBoardList(PageRequestDTO pageRequestDTO);
@@ -58,4 +59,11 @@ public interface BoardService {
     }
 
 
+    PageResultDTO findTemporaryBoardList(PageRequestDTO pageRequestDTO);
+
+    Object findDetailTemporaryBoard(int temporaryCode);
+
+    Object deleteTemporaryBoard(int temporaryCode, UserDTO principal);
+
+    Object findAllList(PageRequestDTO pageRequestDTO);
 }
