@@ -58,5 +58,4 @@ public class WebConfig implements WebMvcConfigurer {
         return new JwtTokenInterceptor();
     }
 
-
 }

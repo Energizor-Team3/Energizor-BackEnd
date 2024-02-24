@@ -54,4 +54,5 @@ public class Dayoff {
         this.user = user;
         return this;
     }
+
 }

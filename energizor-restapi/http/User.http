@@ -24,10 +24,10 @@ Access-Control-Allow-Origin: *
 PUT http://localhost:8031/users/change-password
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA3ODA4MDcwNjcxLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ1c2VyUHciOiIkMmEkMTAkWG9nU0JNT3hpT0tzQy5UT0NCejVSZWRjVnlLbTc4MG1Wd0FnMHRrZWVkZGlKNFlEekVPVE8iLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoi7J6l7J6s7JiBIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwNzgyNjA3MCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.F43yADKgiLEPZCSHwRuUhxPQMM1wLgRxA-WYsedRR2c
+Authorization: Bearer eyJkYXRlIjoxNzA4NTkxMzA5Mzc3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkVm1USW1ncldSdUU5VnhSaEg3V2F6T21pYkNEY3BERXhwd2VPUXpHaWNzQjZvWDlFaWVVOUsiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg2MDkzMDksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.OZLVe4JmbUQCOQttAz1K_7fqTURUh8I2bk9R3zq0kPc
 
 {
-  "currentPassword": "pass01",
+  "currentPassword": "12345",
   "newPassword": "1234",
   "confirmPassword": "1234"
 }
@@ -45,27 +45,23 @@ Accept: */*
 Authorization: Bearer eyJkYXRlIjoxNzA4NDg2MzMwNjg5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDMiLCJ0ZWFtRFRPIjpudWxsLCJ1c2VyUHciOiIkMmEkMTAkaXh6NFdXb2RXS3JSdlRFZ3B5QkNWLnZubWROeFRFZDFLa2NsOHNKVklRTTlBNnBtN1RkVHEiLCJ1c2VyUmFuayI6IuydtOyCrCIsInVzZXJOYW1lIjoi7J6l7J6s7JiBIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjozLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODUwNDMzMCwidXNlcklkIjoiMjAwMzAyMDAzIiwidXNlckNvZGUiOjMsImVtYWlsIjoiYXNkQGdtYWlsLmNvbSJ9.sJTWkWE4QRaPg6mQvkjznhnEFwpyV2RTnOByLuDu2KY
 
 
+>>>>>>>>> Temporary merge branch 2
 
 ### 직원 등록(회원가입)
 POST http://localhost:8031/auth/signup
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4MDcwNjU1MTk0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDgwODg2NTUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fN9I_XpqAcQzqkaXP49O2yuKwt5oKPbp_QDaEqu3E8k
+Authorization: Bearer eyJkYXRlIjoxNzA4NzQyNjE0NTUzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkdXRBL29TTVpHeFpEUEdKdVZxd0d0TzhwSTdJanMzcC9wZXIwa1k2eVJCamh2NWZ0Y0tEbjYiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg3NjA2MTQsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ._CZng8T0H29pyq8D0uwxjdJUAYrCqAHRCDuxgw5hxyQ
 
 {
-  "userName": "김대리",
+  "userName": "김대리대리",
   "userPw": "1234",
   "userRank": "대리",
-  "email": "deriderie@gmail.com",
+  "email": "deriderieee@gmail.com",
   "phone": "010-2313-1234",
-  "entDate": "2024-02-16",
-  "teamDTO": {
-    "teamCode": 6,
-    "teamName": "개발2팀",
-    "deptDTO": {
-      "deptCode": 3,
-      "deptName": "기술본부"
-    }
+  "entDate": "2024-02-24",
+  "team": {
+    "teamCode": 1
   }
 }
 
@@ -79,34 +75,16 @@ Authorization: Bearer eyJkYXRlIjoxNzA4NDk5NDgxNzMwLCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 GET http://localhost:8031/users/users-management/22
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4NTIwMDgyODI0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MzgwODIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.yWAymegTuUpNg2ahlf4__y1ETZOsZPrByj3FJ0vku14
+Authorization: Bearer eyJkYXRlIjoxNzA4NTczNDYyOTYwLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1OTE0NjIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.sOCo8q7kSOK7GawUYEVp3g9Rcddmqd2T9FschAGnF_4
 
 ### 직원 정보 수정 &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
 PUT http://localhost:8031/users/user-update/22
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4NTIwMDgyODI0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg1MzgwODIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.yWAymegTuUpNg2ahlf4__y1ETZOsZPrByj3FJ0vku14
+Authorization: Bearer eyJkYXRlIjoxNzA4Njc2ODkyMTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkdXRBL29TTVpHeFpEUEdKdVZxd0d0TzhwSTdJanMzcC9wZXIwa1k2eVJCamh2NWZ0Y0tEbjYiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg2OTQ4OTIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.7LDPqT7rIx1u9pIZqoapLgD0kgzb-_auP2GadR5ab48
 
 {
   "userId": "240203003",
-  "userName": "김사원사원사원",
-  "userRank": "사원",
-  "email": "sawon@gmail.com",
-  "phone": "010-8888-3334",
-  "entDate": "2024-02-03",
-  "team": {
-    "teamCode": 1
-  },
-  "resignDate": "2024-02-19",
-  "userRole": [
-    {
-      "userCode": 1,
-      "authCode": 1,
-      "authority": {
-        "authCode": 1,
-        "authName": "ROLE_USER"
-      }
-    }
+  "isAdmin": true
 
-  ]
 }
