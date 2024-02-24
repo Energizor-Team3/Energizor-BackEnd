@@ -27,6 +27,8 @@ public class UserAndTeam {
     private String email;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "profile_path")
+    private String imgName;
     @JoinColumn(name = "team_code")
     @OneToOne
     private Team team;
@@ -62,6 +64,10 @@ public class UserAndTeam {
         this.phone = phone;
         return this;
     }
+    public UserAndTeam imgName(String imgName) {
+        this.imgName = imgName;
+        return this;
+    }
     public UserAndTeam team(Team team) {
         this.team = team;
         return this;
@@ -76,6 +82,6 @@ public class UserAndTeam {
 
 
     public UserAndTeam build() {
-        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, team, dayOff);
+        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, imgName, team, dayOff);
     }
 }
