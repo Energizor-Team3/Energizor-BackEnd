@@ -84,29 +84,33 @@ public class AuthService {
 
         userDTO.setProfilePath("defaultprofile.png");
 
-
         User registUser = modelMapper.map(userDTO, User.class);
 
         /* 1. users 테이블에 회원 insert */
         // 입사일을 기반으로 하는 userId 생성
         Date entDate = registUser.getEntDate();
+        System.out.println("entDate = " + entDate);
         Instant instant = entDate.toInstant();
-        ZoneId zone = ZoneId.systemDefault();
+        ZoneId zone = ZoneId.of("UTC");
         LocalDate localDate = instant.atZone(zone).toLocalDate();
+        System.out.println("localDate = " + localDate);
         String baseUserId = DateTimeFormatter.ofPattern("yyMMdd").format(localDate);
+        System.out.println("baseUserId = " + baseUserId);
         generateUserId(registUser, baseUserId);
-        log.info("-------->>>>>>>>>>", userDTO.getUserId());
+        System.out.println("userDTO.getUserId() = " + userDTO.getUserId());
+        log.info("-------->>>>>>>>>>", registUser.getUserId());
 
         // 존재하는 userId인지 확인
         while (userRepository.existsByUserId(registUser.getUserId())) {
             // 이미 존재하면 새로운 userId 생성
             generateUserId(registUser, baseUserId);
         }
-        log.info(">>>>>>>>>>>>>>>>", userDTO.getUserId());
+        log.info(">>>>>>>>>>>>>>>>", registUser.getUserId());
 
         registUser = registUser.userPw(passwordEncoder.encode(registUser.getUserPw())).build(); // 평문의 암호문자열을 암호화시켜서 전달
         User result1 = userRepository.save(registUser);    // 반환형이 int값이 아니다.
-        log.info("[AuthService] result1 ================== {} ", result1);
+        log.info("[AuthService] result1.getUserId() ================== {} ", result1.getUserId());
+        log.info("[AuthService] result1.getUserCode() ================== {} ", result1.getUserCode());
 
         /* 2. user_role 테이블에 회원별 권한 insert (현재 엔티티에는 회원가입 후 pk값이 없는상태) */
         // 일반 권한의 회원을 추가(AuthorityCode값이 1번)
@@ -123,7 +127,7 @@ public class AuthService {
         Dayoff registDayoff = new Dayoff();
         registDayoff.offYear(Year.of(LocalDate.now().getYear()));
         long monthsWorked = ChronoUnit.MONTHS.between(
-                result1.getEntDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+                result1.getEntDate().toInstant().atZone(ZoneId.of("UTC")).toLocalDate(),
                 LocalDate.now().withMonth(12).withDayOfMonth(31));
         registDayoff.offCount((int) Math.floor(monthsWorked));
         registDayoff.offUsed(0);
@@ -145,6 +149,7 @@ public class AuthService {
     private void generateUserId(User user, String baseUserId) {
         int sequenceNumber = 1; // 초기값
         String generatedUserId = baseUserId + String.format("%03d", sequenceNumber);
+        System.out.println("generatedUserId ================================= " + generatedUserId);
 
         while (userRepository.existsByUserId(generatedUserId)) {
             sequenceNumber++;
@@ -152,7 +157,6 @@ public class AuthService {
             System.out.println("sequenceNumber = " + sequenceNumber);
             System.out.println(generatedUserId);
         }
-
         user.userId(generatedUserId);
     }
 
@@ -166,8 +170,8 @@ public class AuthService {
         message.setFrom(String.valueOf(fromAddress));
         message.setTo(email);
         message.setSubject("EveryWare 임시비밀번호 안내");
-        message.setText("안녕하세요. \nEveryWare 임시비밀번호 안내 관련 이메일 입니다. \n " +
-                "회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n " +
+        message.setText("안녕하세요. \nEveryWare 임시비밀번호 안내 관련 이메일 입니다. \n" +
+                "회원님의 임시 비밀번호는 " + temporaryPassword + " 입니다. \n" +
                 "로그인 후에 비밀번호를 변경해주세요!");
 
         javaMailSender.send(message);

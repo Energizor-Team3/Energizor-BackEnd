@@ -50,22 +50,17 @@ Authorization: Bearer eyJkYXRlIjoxNzA4NDg2MzMwNjg5LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 POST http://localhost:8031/auth/signup
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4MDcwNjU1MTk0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUHciOiIkMmEkMTAkQ092YXp5d2daUFhzZWVLYVlocnVoLnBBWVlmY1NlR081YVNySE9zTFpOMFg4am9Od1cyZFciLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDgwODg2NTUsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.fN9I_XpqAcQzqkaXP49O2yuKwt5oKPbp_QDaEqu3E8k
+Authorization: Bearer eyJkYXRlIjoxNzA4NzQyNjE0NTUzLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkdXRBL29TTVpHeFpEUEdKdVZxd0d0TzhwSTdJanMzcC9wZXIwa1k2eVJCamh2NWZ0Y0tEbjYiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg3NjA2MTQsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ._CZng8T0H29pyq8D0uwxjdJUAYrCqAHRCDuxgw5hxyQ
 
 {
-  "userName": "김대리",
+  "userName": "김대리대리",
   "userPw": "1234",
   "userRank": "대리",
-  "email": "deriderie@gmail.com",
+  "email": "deriderieee@gmail.com",
   "phone": "010-2313-1234",
-  "entDate": "2024-02-16",
-  "teamDTO": {
-    "teamCode": 6,
-    "teamName": "개발2팀",
-    "deptDTO": {
-      "deptCode": 3,
-      "deptName": "기술본부"
-    }
+  "entDate": "2024-02-24",
+  "team": {
+    "teamCode": 1
   }
 }
 
@@ -85,30 +80,10 @@ Authorization: Bearer eyJkYXRlIjoxNzA4NTczNDYyOTYwLCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 PUT http://localhost:8031/users/user-update/22
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4NTk0Njc5NTMyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkdXRBL29TTVpHeFpEUEdKdVZxd0d0TzhwSTdJanMzcC9wZXIwa1k2eVJCamh2NWZ0Y0tEbjYiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg2MTI2NzksInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.bTodXsfO0X0TznqTMi9npx3NN27JQVbBOUJJ_snEzvk
+Authorization: Bearer eyJkYXRlIjoxNzA4Njc2ODkyMTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjoxLCJkZXB0Ijp7ImRlcHRDb2RlIjoxLCJkZXB0TmFtZSI6Iuq0gOumrOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuyduOyCrO2MgCJ9LCJ1c2VyUHciOiIkMmEkMTAkdXRBL29TTVpHeFpEUEdKdVZxd0d0TzhwSTdJanMzcC9wZXIwa1k2eVJCamh2NWZ0Y0tEbjYiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoi6rmA7J247IKsIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDg2OTQ4OTIsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.7LDPqT7rIx1u9pIZqoapLgD0kgzb-_auP2GadR5ab48
 
 {
   "userId": "240203003",
-  "userName": "김사원사원사원",
-  "userRank": "사원",
-  "email": "sawon@gmail.com",
-  "phone": "010-8888-3334",
-  "entDate": "2024-02-03",
-  "team": {
-    "teamCode": 1
-  },
-  "resignDate": "2024-02-19",
-  "userRole": [
-    {
-      "userCode": 1,
-      "authCode": 1,
-      "authority": {
-        "authCode": 1,
-        "authName": "ROLE_USER"
-      }
-    }
-  ],
-  "dayoff": {
-    "offUsed": 1
-  }
+  "isAdmin": true
+
 }
