@@ -14,6 +14,7 @@ import com.energizor.restapi.users.entity.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude="user")
 public class Board extends BaseEntity{
 
@@ -43,7 +44,7 @@ public class Board extends BaseEntity{
     private BoardType boardType;
 
     @OneToMany(mappedBy = "board")
-    private List<InterestBoard> interestBoards=new ArrayList<>();
+    private List<InterestBoard> interestBoards = new ArrayList<>();
 
     @Column(name="temporary_opt")
     private Boolean temporaryOpt;
@@ -79,7 +80,7 @@ public class Board extends BaseEntity{
     }
 
     public Board build() {
-        return new Board(boardCode,title,content,viewCount,deleteDate,user,boardType,interestBoards,temporaryOpt);
+        return new Board(boardCode,title,content,viewCount,deleteDate,user, boardType,interestBoards,temporaryOpt);
     }
 
     public void changeBoardDeletedAt(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}

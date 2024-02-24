@@ -36,6 +36,7 @@ public class BoardComment extends BaseEntity{
     @JoinColumn(name="user_code")
     private User user;
 
+
     public BoardComment commentCode(int commentCode) {
         this.commentCode=commentCode;
         return this;
@@ -45,6 +46,12 @@ public class BoardComment extends BaseEntity{
         this.commentContent=commentContent;
         return this;
     }
+
+    public BoardComment updateDate(LocalDateTime updateDate) {
+        this.updateDate=updateDate;
+        return this;
+    }
+
 
     public BoardComment build() {
         return new BoardComment(commentCode,commentContent,deleteDate,parent,board,user);

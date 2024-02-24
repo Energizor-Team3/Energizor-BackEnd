@@ -28,11 +28,11 @@ public class InterestBoard extends BaseEntity{
     private Board board;
 
     @ManyToOne
-    @JoinColumn(name="user_code", insertable=false, updatable=false)
+    @JoinColumn(name="user_code",updatable=false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="owner_code", insertable=false, updatable=false)
+    @JoinColumn(name="owner_code",updatable=false)
     private User owner;
 
 

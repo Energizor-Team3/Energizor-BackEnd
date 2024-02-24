@@ -40,6 +40,9 @@ public class BoardFile {
     @Column(name="thumbnail_path")
     private String thumbnailPath;
 
+    @Column(name="data")
+    private String data;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="board_code")
     private Board board;

@@ -3,6 +3,7 @@ package com.energizor.restapi.board.service;
 import com.energizor.restapi.board.dto.*;
 import com.energizor.restapi.board.entity.*;
 import com.energizor.restapi.board.repository.*;
+import com.energizor.restapi.exception.DuplicatedInterestBoardException;
 import com.energizor.restapi.users.entity.User;
 import com.energizor.restapi.users.dto.UserDTO;
 //import com.querydsl.core.BooleanBuilder;
@@ -39,10 +40,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -118,6 +116,7 @@ public class BoardServiceImpl implements BoardService{
             boardDTO.setDeptName(board.getUser().getTeam().getDept().getDeptName());
         }
 
+
         log.info("[BoardService] findDetailBoard ======================");
 
         return boardDTO;
@@ -126,119 +125,155 @@ public class BoardServiceImpl implements BoardService{
 
 
     @Override
-    public BoardDTO register(BoardDTO boardDTO, UserDTO principal, MultipartFile[] uploadFiles) {
+    public BoardDTO register(CreateBoardDTO createBoardDTO, UserDTO principal, MultipartFile[] uploadFiles) {
         log.info("[BoardService] register start===============");
         log.info("principal :!!!!!!!!!!!! " + principal);
-        int boardCode = boardDTO.getBoardCode();
+//        int boardCode = boardDTO.getBoardCode();
+        log.info("===========createBoardDTO : "+ createBoardDTO);
+        
+        
 
         List<UploadResultDTO> resultDTOList = new ArrayList<>();
-        Board board = boardRepository.findByCode(boardCode);
-        int boardTypeCode=boardDTO.getBoardTypeCode();
+//        Board board = boardRepository.findByCode(boardCode);
 
+        int boardTypeCode=createBoardDTO.getBoardTypeCode();
+        System.out.println("boardTypeCode = " + boardTypeCode);
         BoardType boardType= boardTypeRepository.findByCode(boardTypeCode);
+
+        System.out.println("boardType = " + boardType);
 
         log.info("isEmpty : " + uploadFiles.length);
 
 
-            boardTypeRepository.save(boardType);
-            log.info("==============boardType : "+boardType);
-            int userCode = principal.getUserCode();
-            User user = userRepository.findByCode(userCode);
 
-            Board insertBoard = modelMapper.map(boardDTO, Board.class);
 
-            if (Boolean.TRUE.equals(boardDTO.isTemporaryOpt())) {
-                // 임시저장
-                TemporaryBoard temporaryBoard = new TemporaryBoard();
-                temporaryBoard.setTitle(boardDTO.getTitle());
-                temporaryBoard.setContent(boardDTO.getContent());
-                temporaryBoard.setUser(user);
-                temporaryBoard.setViewCount(boardDTO.getViewCount());
-                temporaryBoard.setBoardType(insertBoard.getBoardType());
-                TemporaryBoard savedTemporaryBoard = temporaryBoardRepository.save(temporaryBoard);
+//        boardTypeRepository.save(boardType);
+        log.info("==============boardType : "+boardType);
+        int userCode = principal.getUserCode();
+        User user = userRepository.findByCode(userCode);
 
-                log.info("임시저장 성공");
+//        Board insertBoard = modelMapper.map(boardDTO, Board.class);
 
-                BoardDTO tempBoardDto = new BoardDTO();
-                tempBoardDto.setBoardCode(savedTemporaryBoard.getTemporaryCode());
-                return tempBoardDto;
+        Board insertBoard = new Board();
+        insertBoard.setTitle(createBoardDTO.getTitle());
+        insertBoard.setContent(createBoardDTO.getContent());
+        insertBoard.setUser(user);
+        insertBoard.setBoardType(boardType);
 
-            } else {
-                insertBoard.user(user);
-                insertBoard.boardType(boardType);
-                Board savedBoard = boardRepository.save(insertBoard);
+        if (Boolean.TRUE.equals(createBoardDTO.isTemporaryOpt())) {
+            // 임시저장
+            TemporaryBoard temporaryBoard = new TemporaryBoard();
+            temporaryBoard.setTitle(createBoardDTO.getTitle());
+            temporaryBoard.setContent(createBoardDTO.getContent());
+            temporaryBoard.setUser(user);
+            temporaryBoard.setViewCount(insertBoard.getViewCount());
+            temporaryBoard.setBoardType(insertBoard.getBoardType());
+            TemporaryBoard savedTemporaryBoard = temporaryBoardRepository.save(temporaryBoard);
 
-                for (MultipartFile uploadFile : uploadFiles) {
-                    BoardFile boardFile = new BoardFile();
+            log.info("임시저장 성공");
 
-                    // 실제 파일 이름 IE나 Edge는 전체 경로가 들어오므로
-                    String originalName = uploadFile.getOriginalFilename();
-                    log.info("originalName : " + originalName);
-                    String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
+            BoardDTO tempBoardDto = new BoardDTO();
+            tempBoardDto.setBoardCode(savedTemporaryBoard.getTemporaryCode());
+            return tempBoardDto;
 
-                    log.info("fileName : " + fileName);
+        } else {
+//            insertBoard.user(user);
+//            insertBoard.boardType(boardType);
+//            Board savedBoard = boardRepository.save(insertBoard);
 
-                    // 날짜 폴더 생성
-                    String folderPath = makeFolder();
-                    log.info("folderPath : " + folderPath);
+            for (MultipartFile uploadFile : uploadFiles) {
+                BoardFile boardFile = new BoardFile();
 
-                    // UUID
-                    String uuid = UUID.randomUUID().toString();
-                    log.info("uuid : " + uuid);
+                // 실제 파일 이름 IE나 Edge는 전체 경로가 들어오므로
+                String originalName = uploadFile.getOriginalFilename();
+                log.info("originalName : " + originalName);
+                String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
-                    // 저장할 파일 이름 중간에 "_"를 이용해서 구분
-                    String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + fileName;
-                    // File.separator > unix / or window \\ 구분자 추가됨
-                    log.info("saveName : " + saveName);
+                log.info("fileName : " + fileName);
 
-                    Path savePath = Paths.get(saveName);
-                    log.info("savePath : " + savePath);
+                // 날짜 폴더 생성
+                String folderPath = makeFolder();
+                log.info("folderPath : " + folderPath);
 
-                    try {
-                        uploadFile.transferTo(savePath); // 실제 이미지 저장
+                // UUID
+                String uuid = UUID.randomUUID().toString();
+                log.info("uuid : " + uuid);
 
-                        if (uploadFile.getContentType() != null && uploadFile.getContentType().startsWith("image")) {
-                            // 섬네일 생성
-                            String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + fileName;
-                            // 섬네일 파일 이름은 중간에 s_로 시작하도록
-                            File thumbnailFile = new File(thumbnailSaveName);
-                            // 섬네일 생성
-                            Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+                // 저장할 파일 이름 중간에 "_"를 이용해서 구분
+                String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + fileName;
+                // File.separator > unix / or window \\ 구분자 추가됨
+                log.info("saveName : " + saveName);
 
-                        }
+                Path savePath = Paths.get(saveName);
+                log.info("savePath : " + savePath);
 
-                        resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                try {
+                    uploadFile.transferTo(savePath); // 실제 이미지 저장
+
+                    if (uploadFile.getContentType() != null && uploadFile.getContentType().startsWith("image")) {
+                        // 섬네일 생성
+                        String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + fileName;
+                        // 섬네일 파일 이름은 중간에 s_로 시작하도록
+                        File thumbnailFile = new File(thumbnailSaveName);
+                        // 섬네일 생성
+                        Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+
                     }
 
-                    boardFile.setFileName(fileName);
-                    boardFile.setUuid(uuid);
-                    boardFile.setFolderPath(folderPath);
-                    boardFile.setFileType(uploadFile.getContentType());
-                    boardFile.setFileSize((int) uploadFile.getSize());
-                    boardFile.setBoard(savedBoard);
+                    resultDTOList.add(new UploadResultDTO(fileName, uuid, folderPath));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-                    fileRepository.save(boardFile);
+                Base64.Encoder encoder = Base64.getEncoder();
+                String data = "";
+                byte[] photoEncode = new byte[0];
+                try {
+                    photoEncode = encoder.encode(uploadFile.getBytes());
+                    data = new String(photoEncode, "UTF8");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                System.out.println("data = " + data);
+
+
+                Board savedBoard = boardRepository.save(insertBoard);
+
+                boardFile.setFileName(fileName);
+                boardFile.setUuid(uuid);
+                boardFile.setFolderPath(folderPath);
+                boardFile.setFileType(uploadFile.getContentType());
+                boardFile.setFileSize((int) uploadFile.getSize());
+//                boardFile.setData(data);
+                boardFile.setBoard(savedBoard);
+
+
+                fileRepository.save(boardFile);
                 BoardDTO savedBoardDTO = modelMapper.map(savedBoard, BoardDTO.class);
                 savedBoardDTO.setUserCode(user.getUserCode());
-                log.info("[BoardService] register end ==================");
+                log.info("[BoardService] photo o register end ==================");
                 return savedBoardDTO;
-
             }
-
         }
-        return null;
+        Board savedBoard = boardRepository.save(insertBoard);
+        BoardDTO savedBoardDTO = modelMapper.map(savedBoard, BoardDTO.class);
+        savedBoardDTO.setUserCode(user.getUserCode());
+        log.info("[BoardService] photo x register end ==================");
+        return savedBoardDTO;
     }
 
     @Transactional
     @Override
-    public String update(BoardDTO boardDTO,UserDTO principal) {
+    public BoardDTO update(UpdateBoardDTO updateBoardDTO,UserDTO principal) {
 
         log.info("[BoardService] update start =================");
         log.info("principal : "+principal);
+        log.info("####updateBoardDTO : "+updateBoardDTO);
 
-        Board board=boardRepository.findByCode(boardDTO.getBoardCode());
+        Board board=boardRepository.findByCode(updateBoardDTO.getBoardCode());
+//        log.info("updateBoardDTO.getBoardCode() : "+updateBoardDTO.getBoardCode());
+        BoardDTO boardDTO=modelMapper.map(board,BoardDTO.class);
         if(board==null) {
             throw new EntityNotFoundException("게시글을 찾을 수 없습니다.");
         }
@@ -247,11 +282,17 @@ public class BoardServiceImpl implements BoardService{
             throw new SecurityException("수정 권한이 없습니다.");
         }
 
-        board.title(boardDTO.getTitle())
-                .content(board.getContent())
-                .build();
+        board.content(boardDTO.getContent());
+        board.content((updateBoardDTO.getUpdateContent()));
+        board.title(boardDTO.getTitle());
+        board.title(updateBoardDTO.getUpdateTitle());
+        Board updateBoard=boardRepository.save(board);
 
-        return "게시글 수정 성공";
+        BoardDTO saveBoardDTO=modelMapper.map(updateBoard,BoardDTO.class);
+
+
+
+        return saveBoardDTO;
     }
 
     @Transactional
@@ -288,6 +329,8 @@ public class BoardServiceImpl implements BoardService{
         Board boardEntity=boardRepository.save(board);
 
         BoardDTO response=modelMapper.map(boardEntity, BoardDTO.class);
+
+        log.info("$$$response : "+response);
 
         return response;
 
@@ -342,26 +385,28 @@ public class BoardServiceImpl implements BoardService{
 
     @Transactional
     @Override
-    public BoardCommentDTO updateComment(int commentCode,UserDTO principal) {
+    public BoardCommentDTO updateComment(UpdateBoardCommentDTO updateBoardCommentDTO,UserDTO principal) {
 
         log.info("[BoardService] updateComment start ================ ");
 
-        BoardComment boardComment= boardCommentRepository.findByCommentCode(commentCode);
+        BoardComment boardComment= boardCommentRepository.findByCommentCode(updateBoardCommentDTO.getCommentCode());
         BoardCommentDTO boardCommentDTO=modelMapper.map(boardComment, BoardCommentDTO.class);
 
-            if(boardComment.getUser().getUserCode()!= principal.getUserCode()) {
-                throw new SecurityException("수정 권한이 없습니다.");
-            }
+        if(boardComment.getUser().getUserCode()!= principal.getUserCode()) {
+            throw new SecurityException("수정 권한이 없습니다.");
+        }
 
-            boardComment.commentContent(boardCommentDTO.getCommentContent());
-            BoardComment updateComment=boardCommentRepository.save(boardComment);
+        boardComment.commentContent(updateBoardCommentDTO.getEditingCommentContent());
+        boardComment.updateDate(LocalDateTime.now());
+        BoardComment updateComment=boardCommentRepository.save(boardComment);
 
-            BoardCommentDTO commentDTO=modelMapper.map(updateComment,BoardCommentDTO.class);
+        BoardCommentDTO commentDTO=modelMapper.map(updateComment,BoardCommentDTO.class);
 
-            return commentDTO;
+        return commentDTO;
 
     }
 
+    @Transactional
     @Override
     public BoardCommentDTO deleteComment(int commentCode,UserDTO principal) {
 
@@ -369,30 +414,69 @@ public class BoardServiceImpl implements BoardService{
         BoardComment boardComment= boardCommentRepository.findByCommentCode(commentCode);
         LocalDateTime dateTime=LocalDateTime.now();
 
+        System.out.println("BoardServiceImpl.deleteComment");
+
         if(boardComment.getUser().getUserCode()!= principal.getUserCode()) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
+
+        System.out.println("BoardServiceImpl.deleteComment2");
         boardComment.changeReplyDeleteDate(dateTime);
-        BoardComment updateBoardComment=boardCommentRepository.save(boardComment);
+        BoardComment updatedBoardComment = boardCommentRepository.save(boardComment);
 
+        System.out.println("BoardServiceImpl.deleteComment3");
 
-        BoardCommentDTO boardCommentDTO=modelMapper.map(updateBoardComment,BoardCommentDTO.class);
+        BoardCommentDTO boardCommentDTO=modelMapper.map(updatedBoardComment,BoardCommentDTO.class);
 
         return boardCommentDTO;
     }
 
+
+    @Override
+    public List<BoardFileDTO> findBoardFile(int boardCode) {
+
+        log.info("[BoardService] findComment start ======================");
+        log.info("boardCode : "+boardCode);
+        List<BoardFile> boardFiles= fileRepository.findByBoardCode(boardCode);
+
+        System.out.println("boardFiles.get(0) = " + boardFiles.get(0));
+
+        List<BoardFileDTO> boardFileDTOS=boardFiles.stream()
+                .map(boardFile -> new BoardFileDTO(
+                        boardFile.getFileCode(),
+                        boardFile.getFileName(),
+                        boardFile.getUuid(),
+                        boardFile.getFileSize(),
+                        boardFile.getUploadDate(),
+                        boardFile.getFolderPath(),
+                        boardFile.getFileType(),
+                        boardFile.getThumbnailPath(),
+                        boardFile.getData())).collect(Collectors.toList());
+
+        log.info("=========================boardFileDTOS : "+boardFileDTOS);
+
+        return boardFileDTOS;
+    }
+
+    @Transactional
     @Override
     public InterestBoardDTO registerInterestBoard(int boardCode, int ownerCode) {
         User owner=userRepository.findByCode(ownerCode);
         Board board=boardRepository.findByCode(boardCode);
         User user=userRepository.findByCode(board.getUser().getUserCode());
-
+        System.out.println("BoardServiceImpl.registerInterestBoard");
         log.info("owner : "+owner);
         log.info("board : "+board);
         InterestBoard interestBoard=new InterestBoard();
         interestBoard.owner(owner);
         interestBoard.board(board);
         interestBoard.user(user);
+
+        InterestBoard existInterestBoard = interestBoardRepository.findByBoardAndOwner(boardCode, ownerCode);
+        if (existInterestBoard != null) {
+            System.out.println("BoardServiceImpl.registerInterestBoard2");
+            throw new DuplicatedInterestBoardException("관심게시글이 중복됩니다");
+        }
 
 
         InterestBoard interestEntity=interestBoardRepository.save(interestBoard);
@@ -454,6 +538,7 @@ public class BoardServiceImpl implements BoardService{
             booleanBuilder.and(qBoard.boardType.boardTypeCode.eq(boardTypeCode));
         }
 
+        booleanBuilder.and(qBoard.deleteDate.isNull());
         String keyword = requestDTO.getKeyword();
 
         BooleanExpression expression = qBoard.boardCode.gt(0);
@@ -504,6 +589,8 @@ public class BoardServiceImpl implements BoardService{
             // 검색 조건이 없는 경우
             return booleanBuilder;
         }
+
+        booleanBuilder.and(qInterestBoard.deleteDate.isNull());
 
         // 검색 조건을 작성하기
         BooleanBuilder conditionBuilder = new BooleanBuilder();
@@ -630,14 +717,18 @@ public class BoardServiceImpl implements BoardService{
     @Override
     public boolean addViews(int boardCode) {
         Board board=boardRepository.findByCode(boardCode);
+        log.info("$$$$$board : "+board);
         if(board==null) {
             return false;
         }
         int viewCount=board.getViewCount()+1;
         board.viewCount(viewCount);
-        board=boardRepository.save(board);
+        Board saveBoard=boardRepository.save(board);
 
-        return board.getViewCount()==viewCount;
+        log.info("###saveBoard.getViewCount() : "+saveBoard.getViewCount());
+        log.info("viewCount : "+viewCount);
+
+        return true;
     }
 
     private String makeFolder() {

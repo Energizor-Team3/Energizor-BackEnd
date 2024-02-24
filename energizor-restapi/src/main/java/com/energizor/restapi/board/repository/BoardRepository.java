@@ -25,12 +25,13 @@ public interface BoardRepository extends JpaRepository<Board,Integer> , Querydsl
 
     @Query("select b "+
             "from Board b left join b.user u "+
-            "where b.boardCode= :boardCode ")
+            "where b.boardCode= :boardCode " )
     Board findByCode(@Param("boardCode") int boardCode);
 
-    @Query("SELECT b FROM Board b WHERE b.boardCode < :boardCode AND b.boardType.boardTypeCode = :boardTypeCode ORDER BY b.boardCode DESC")
-    List<Board> findPreviousBoardByType(@Param("boardCode") int boardCode, @Param("boardTypeCode") int boardTypeCode);
 
-    @Query("SELECT b FROM Board b WHERE b.boardCode > :boardCode AND b.boardType.boardTypeCode = :boardTypeCode ORDER BY b.boardCode ASC")
-    List<Board> findNextBoardByType(@Param("boardCode") int boardCode, @Param("boardTypeCode") int boardTypeCode);
+    @Query("select b "+
+            "from Board b left join b.user u "+
+            "where b.boardCode= :boardCode " +
+            "and b.deleteDate is null ")
+    Board findByCodeForDelete(int boardCode);
 }
