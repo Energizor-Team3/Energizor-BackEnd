@@ -38,8 +38,10 @@ public class UserDTO implements UserDetails {
 
     private TeamDTO team;
     private DayOffDTO dayoff;
+    private int offUsed;
 
     private String profilePath;
+    private boolean adminRole;
 
     public String getUserId() {
         return userId;
@@ -48,6 +50,7 @@ public class UserDTO implements UserDetails {
     public String getUserName() {
         return userName;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
