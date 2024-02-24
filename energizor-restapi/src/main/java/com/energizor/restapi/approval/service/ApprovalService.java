@@ -1410,14 +1410,18 @@ public class ApprovalService {
 
     public List<ApprovalLineDTO> selectApprovalLine(int documentCode) {
         List<ApprovalLine> approvalLine = approvalLineRepository.findByDocumentDocumentCode(documentCode);
+        approvalLine.get(0).getDocument().getUserDTO().profilePath(IMAGE_URL + approvalLine.get(0).getDocument().getUserDTO().getProfilePath());
 
         List<ApprovalLine> approvalLineList = new ArrayList<>();
-        approvalLine.get(0).getDocument().getUserDTO().profilePath(IMAGE_URL + approvalLine.get(0).getDocument().getUserDTO().getProfilePath());
-        for(ApprovalLine approvalLine2 : approvalLine){
-            approvalLine2.getUser().profilePath(IMAGE_URL + approvalLine2.getUser().getProfilePath());
-            approvalLineList.add(approvalLine2);
+        
+        for(int i = 0; i < approvalLine.size(); i++){
+            approvalLine.get(i).getUser().profilePath(IMAGE_URL + approvalLine.get(i).getUser().getProfilePath());
+            
+            approvalLineList.add(approvalLine.get(i));
+            System.out.println("approvalLine = " + approvalLine.get(i));
         }
-        System.out.println("approvalLine = " + approvalLine);
+        
+
         return approvalLineList.stream()
                 .map(approvalLine1 -> modelMapper.map(approvalLine1, ApprovalLineDTO.class))
                 .collect(Collectors.toList());
@@ -1446,5 +1450,37 @@ public class ApprovalService {
 
 
         return "조회성공";
+    }
+    @Transactional
+    public Object deleteTempApproval(int[] documentCodeList) {
+//        int[] documentCodeList = changeUser(documentCode);
+
+        for(int i = 0; i <documentCodeList.length; i++){
+            Document document = documentRepository.findByDocumentCode(documentCodeList[i]);
+            switch (document.getForm()){
+                case"휴가신청서": dayOffApplyRepository.deleteByDocument(document);
+                    break;
+                case"교육신청서": educationRepository.deleteByDocument(document);
+                    break;
+                case"출장신청서": businessTripRepository.deleteByDocument(document);
+                    break;
+                case"기안신청서": generalDraftRepository.deleteByDocument(document);
+                    break;
+            }
+            documentRepository.deleteByDocumentCode(documentCodeList[i]);
+
+        }
+        return "삭제 성공";
+    }
+    @Transactional
+    public String updateProxy(int proxyCode) {
+        ProxyApproval proxyApproval1 = proxyApprovalRepository.findByProxyCode(proxyCode);
+
+        System.out.println("proxyApproval1 = " + proxyApproval1);
+
+        proxyApproval1.proxyStatus("Y");
+
+        proxyApprovalRepository.save(proxyApproval1);
+        return "대리결재 위임 취소 성공";
     }
 }

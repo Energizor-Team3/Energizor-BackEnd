@@ -289,11 +289,27 @@ public class ApprovalController {
     return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectTempDocumentDetail(documentCode)));
     }
 
+    // 임시 기안 삭제
+    @Operation(summary = "임시 기안 삭제")
+    @DeleteMapping("/deleteTempApproval")
+    public ResponseEntity<ResponseDTO> deleteTempApproval(@RequestParam("documentCode") int[] documentCode) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "임시 기안 삭제 성공", approvalService.deleteTempApproval(documentCode)));
+    }
+
     // 대리 결재 위임
     @Operation(summary = "대리 결재 위임")
     @PostMapping("/insertProxy")
     public ResponseEntity<ResponseDTO> insertProxy(@RequestBody ProxyApprovalDTO proxyApprovalDTO, @AuthenticationPrincipal UserDTO userDTO){
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 위임 성공", approvalService.insertProxy(proxyApprovalDTO, userDTO)));
+    }
+
+    //대리 결재 취소
+    @Operation(summary = "대리 결재 위임 취소")
+    @PutMapping("/updateProxy/{proxyCode}")
+    public ResponseEntity<ResponseDTO> updateProxy(@PathVariable int proxyCode) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "대리결재 위임 취소", approvalService.updateProxy(proxyCode)));
     }
 
     // 기안 문서에 댓글 달기
@@ -396,6 +412,7 @@ public class ApprovalController {
     public ResponseEntity<ResponseDTO> insertgeneralDraft(@ModelAttribute GeneralDraftDTO generalDraftDTO, MultipartFile file, @AuthenticationPrincipal UserDTO principal, Document document) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertgeneralDraft(generalDraftDTO, file, principal, document)));
     }
+
 
 
     @Operation(summary = "유저정보")
