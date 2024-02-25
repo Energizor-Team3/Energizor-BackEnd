@@ -20,7 +20,7 @@ public class MeetingTime {
     @Column(name = "meet_time")
     private int meetTime;
     @Column(name = "time")
-    private Time time;
+    private String time;
 
     public MeetingTime() {}
 
@@ -29,7 +29,7 @@ public class MeetingTime {
         return this;
     }
 
-    public MeetingTime time(Time time){
+    public MeetingTime time(String time){
         this.time = time;
         return this;
     }

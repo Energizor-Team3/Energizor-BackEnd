@@ -3,6 +3,8 @@ package com.energizor.restapi.approval.repository;
 import com.energizor.restapi.approval.entity.Document;
 
 import com.energizor.restapi.users.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,7 +17,7 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
 
 
-    List<Document> findByUserDTOAndTempSaveStatus(User user,String n);
+    Page<Document> findByUserDTOAndTempSaveStatus(User user,String n, Pageable paging);
 
 
     @Query(value =
@@ -43,4 +45,14 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
 
 
     Document findDocumentByDocumentCodeAndUserDTOAndTempSaveStatus(int documentCode, User user, String y);
+
+    Document findByDocumentCode(int documentCode);
+
+    Document findDocumentByDocumentCode(int documentCode);
+
+
+    Page<Document> findDocByUserDTOUserCode(int userCode, Pageable paging);
+
+
+
 }
