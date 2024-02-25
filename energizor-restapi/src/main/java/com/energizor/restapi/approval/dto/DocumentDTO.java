@@ -23,4 +23,5 @@ public class DocumentDTO {
     private String tempSaveStatus;
     private List<ApprovalCommentDTO> approvalCommentDTOList;
 
+
 }

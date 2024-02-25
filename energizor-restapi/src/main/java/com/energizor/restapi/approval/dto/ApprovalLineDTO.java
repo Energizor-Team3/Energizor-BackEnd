@@ -13,8 +13,8 @@ import java.util.Date;
 @ToString
 public class ApprovalLineDTO {
     private int approvalLineCode;
-    private DocumentDTO documentDTO;
-    private UserDTO userDTO;
+    private DocumentDTO document;
+    private UserDTO user;
     private int sequence;
     private String approvalLineStatus;
     private LocalDateTime processingDate;

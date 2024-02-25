@@ -1,6 +1,7 @@
 package com.energizor.restapi.reservation.dto;
 
 import com.energizor.restapi.reservation.entity.Meet;
+import com.energizor.restapi.reservation.entity.MeetingTime;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import lombok.*;
@@ -21,7 +22,8 @@ public class ReservationDTO {
     private UserDTO userCode;
     private MeetDTO meetCode;
     private int[] member;
-    private  ReservationTimeDTO reservationTime;
+    private int[] meetTime;
+    private String[] time;
 
     @Override
     public String toString() {

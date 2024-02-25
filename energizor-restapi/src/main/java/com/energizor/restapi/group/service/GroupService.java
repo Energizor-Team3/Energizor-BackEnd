@@ -1,9 +1,13 @@
 package com.energizor.restapi.group.service;
+import com.energizor.restapi.approval.dto.UserAndTeamDTO;
+import com.energizor.restapi.approval.entity.UserAndTeam;
+import com.energizor.restapi.approval.repository.UserAndTeamRepository;
 import com.energizor.restapi.group.dto.*;
 import com.energizor.restapi.group.entity.*;
 import com.energizor.restapi.group.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +26,12 @@ public class GroupService {
 
     private final AllGroupRepository allGroupRepository;
 
+    private final UserAndTeamRepository userAndTeamRepository;
+
     private final ModelMapper modelMapper;
+
+    @Value("${image.image-url}")
+    private String IMAGE_URL;
 
     public GroupService(ModelMapper modelMapper
             , AllGroupRepository allGroupRepository
@@ -30,7 +39,7 @@ public class GroupService {
             , DeptGroupRepository deptGroupRepository
             , TeamGroupRepository teamGroupRepository
             , TeamAndUsersRepository teamAndUsersRepository
-            , UserGroupRepository userGroupRepository) {
+            , UserGroupRepository userGroupRepository, UserAndTeamRepository userAndTeamRepository) {
         this.allGroupRepository = allGroupRepository;
         this.deptAndTeamRepository = deptAndTeamRepository;
         this.deptGroupRepository = deptGroupRepository;
@@ -39,6 +48,7 @@ public class GroupService {
         this.userGroupRepository = userGroupRepository;
         this.modelMapper = modelMapper;
 
+        this.userAndTeamRepository = userAndTeamRepository;
     }
 
 
@@ -92,10 +102,11 @@ public class GroupService {
     public UserAndTeamDTO selectUsers(int userCode) {
         log.info("selectTeam start=============");
 
-        UsersGroup user = userGroupRepository.findById(userCode).get();
-        UserAndTeamDTO userAndTeamDTO = modelMapper.map(user, UserAndTeamDTO.class);
+        UserAndTeam user = userAndTeamRepository.findByUserCode(userCode);
+        user.imgName(IMAGE_URL + user.getImgName());
 
-        System.out.println("group ================ " + user);
+        UserAndTeamDTO userAndTeamDTO  = modelMapper.map(user, UserAndTeamDTO.class);
+
 
         log.info("selectTeam End===============");
 

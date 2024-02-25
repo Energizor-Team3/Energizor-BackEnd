@@ -1,5 +1,6 @@
 package com.energizor.restapi.calendar.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,4 +18,6 @@ public class ScheduleDTO {
     private String schAllDay;
     private String schLocal;
     private int calNo;
+
+    private String calColor;
 }

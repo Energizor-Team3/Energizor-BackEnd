@@ -109,6 +109,22 @@ public class ApprovalController {
         return ResponseEntity.ok(result);
     }
 
+    // 문서별 결재, 참조 자 조회
+    @Operation(summary = "문서별 결재자 조회")
+    @GetMapping("/selectApprovalLine/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectApprovalLine(@PathVariable int documentCode) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectApprovalLine(documentCode)));
+
+    }
+
+    @Operation(summary = "문서별 참조자 조회")
+    @GetMapping("/selectApprovalRf/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectApprovalRf(@PathVariable int documentCode) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectApprovalRf(documentCode)));
+
+    }
+
+
     // 반려하기
     @Operation(summary = "문서 반려")
     @PutMapping("/rejection/{documentCode}")
@@ -267,6 +283,12 @@ public class ApprovalController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.insertBySelectTempDocument(documentCode, dayOffApplyDTO ,businessTripDTO ,educationDTO ,generalDraftDTO ,file ,userDTO)));
     }
 
+    @Operation(summary = "임시 기안한 문서 상세 조회 ")
+    @GetMapping("/selectTempDocumentDetail/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectTempDocumentDetail(@PathVariable int documentCode){
+    return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectTempDocumentDetail(documentCode)));
+    }
+
     // 대리 결재 위임
     @Operation(summary = "대리 결재 위임")
     @PostMapping("/insertProxy")
@@ -321,6 +343,15 @@ public class ApprovalController {
 
     }
 
+    // 유저코드로 로그인 유저 조회
+    @Operation(summary = "완료된 문서 공유")
+    @GetMapping("/findUserDetail/{userCode}")
+    public ResponseEntity<ResponseDTO> findByUserCode(@RequestParam int userCode)  {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "유저 조회 성공", approvalService.findByUserCode(userCode)));
+
+    }
+
 
 
 
@@ -356,6 +387,13 @@ public class ApprovalController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "기안 등록 성공", approvalService.insertgeneralDraft(generalDraftDTO, file, principal, document)));
     }
 
+
+    @Operation(summary = "유저정보")
+    @GetMapping("/user")
+    public ResponseEntity<ResponseDTO> insertgeneralDraft(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "공유 문서 조회 성공", approvalService.findUserDetail(userDTO)));
+
+    }
 
 
 
