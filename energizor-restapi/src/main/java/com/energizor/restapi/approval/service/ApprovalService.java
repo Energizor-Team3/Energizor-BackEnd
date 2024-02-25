@@ -1311,17 +1311,19 @@ public class ApprovalService {
     public String insertSharedDocument(int documentCode, int userCode) {
         Document document = documentRepository.findByDocumentCode(documentCode);
         User user = userRepository.findByUserCode(userCode);
+        SharedDocument sharedDocument2 = sharedDocumentRepository.findByDocumentAndUser(document,user);
+        if(sharedDocument2 == null) {
+            SharedDocument sharedDocument = new SharedDocument();
+            sharedDocument.document(document);
+            sharedDocument.user(user);
+            sharedDocument.sdStatus("N");
 
-        SharedDocument sharedDocument = new SharedDocument();
-        sharedDocument.document(document);
-        sharedDocument.user(user);
-        sharedDocument.sdStatus("N");
-
-        sharedDocumentRepository.save(sharedDocument);
+            sharedDocumentRepository.save(sharedDocument);
+            return "문서 공유 성공";
+        }
 
 
-
-        return "문서 공유 성공";
+        return "이미 중복된 문서공유입니다.";
     }
     // 공유 받은 문서 조회하기
     public Page<DocumentDTO> selectSharedDocument(UserDTO userDTO, Criteria cri) {
@@ -1482,5 +1484,345 @@ public class ApprovalService {
 
         proxyApprovalRepository.save(proxyApproval1);
         return "대리결재 위임 취소 성공";
+    }
+
+    // 참조 문서 진행중 조회
+    public Object selectRfDocument(UserDTO userDTO) {
+        List<Reference> reference = referenceRepository.findByUserUserCode(userDTO.getUserCode());
+
+        System.out.println("reference = " + reference);
+        List<Document> documentList = new ArrayList<>();
+        // 진행중 확인
+        for(Reference reference1 : reference){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(reference1.getDocument());
+
+                int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("미결") ){
+
+                    count++;
+                    System.out.println("count123123123123 = " + count);
+                    System.out.println("approvalLine1 123123123123123123= " + approvalLine2.size());
+                }
+            }
+                    if(count == approvalLine2.size()){
+                        Document document = documentRepository.findByDocumentCode(reference1.getDocument().getDocumentCode());
+                        documentList.add(document);
+                    }
+        }
+
+
+
+        return documentList.stream()
+                .map(documentList1 -> modelMapper.map(documentList1, DocumentDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public  List<DocumentDTO> selectRfDocumentComplete(UserDTO userDTO) {
+
+        List<Reference> reference = referenceRepository.findByUserUserCode(userDTO.getUserCode());
+
+        System.out.println("reference = " + reference);
+        List<Document> documentList = new ArrayList<>();
+        // 진행중 확인
+        for(Reference reference1 : reference){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(reference1.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("반려")){
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+                    if(count == approvalLine2.size()){
+                        Document document = documentRepository.findByDocumentCode(reference1.getDocument().getDocumentCode());
+                        documentList.add(document);
+                    }
+        }
+        return documentList.stream()
+                .map(documentList1 -> modelMapper.map(documentList1, DocumentDTO.class))
+                .collect(Collectors.toList());
+
+    }
+
+    // 결재한 문서 중에 완료 조회
+    public  List<DocumentDTO> selectLineDocumentComplete(UserDTO userDTO) {
+        List<ApprovalLine> approvalLines = approvalLineRepository.findByUserUserCode(userDTO.getUserCode());
+
+        List<Document> documentList = new ArrayList<>();
+        // 완료 문서 확인
+        for(ApprovalLine approvalLine : approvalLines){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(approvalLine.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("반려")){
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+            if(count == approvalLine2.size()){
+                Document document = documentRepository.findByDocumentCode(approvalLine.getDocument().getDocumentCode());
+                documentList.add(document);
+            }
+
+        }
+
+        return documentList.stream()
+                .map(documentList1 -> modelMapper.map(documentList1, DocumentDTO.class))
+                .collect(Collectors.toList());
+    }
+    // 결재한 문서 중에 진행중인 문서 조회
+    public Object selectLineDocument(UserDTO userDTO) {
+
+        List<ApprovalLine> approvalLines = approvalLineRepository.findByUserUserCode(userDTO.getUserCode());
+
+        List<Document> documentList = new ArrayList<>();
+        // 완료 문서 확인
+        for(ApprovalLine approvalLine : approvalLines){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(approvalLine.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("미결")){
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+            if(count == approvalLine2.size()){
+                Document document = documentRepository.findByDocumentCode(approvalLine.getDocument().getDocumentCode());
+                documentList.add(document);
+            }
+
+        }
+
+        return documentList.stream()
+                .map(documentList1 -> modelMapper.map(documentList1, DocumentDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+    // 내문서함 전체 갯수 조회
+    public Object totaldocument(UserDTO userDTO) {
+
+
+        List<ApprovalLine> approvalLines = approvalLineRepository.findByUserUserCode(userDTO.getUserCode());
+
+        List<Document> documentList = new ArrayList<>();
+        // 완료 문서 확인
+        for(ApprovalLine approvalLine : approvalLines) {
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(approvalLine.getDocument());
+
+            int count = 0;
+
+            for (ApprovalLine approvalLine1 : approvalLine2) {
+                if (approvalLine1.getApprovalLineStatus().equals("결재") || approvalLine1.getApprovalLineStatus().equals("반려")) {
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+            if (count == approvalLine2.size()) {
+                Document document = documentRepository.findByDocumentCode(approvalLine.getDocument().getDocumentCode());
+                documentList.add(document);
+            }
+        }
+
+        List<Reference> reference = referenceRepository.findByUserUserCode(userDTO.getUserCode());
+
+        List<Document> documentList2 = new ArrayList<>();
+        // 진행중 확인
+        for(Reference reference1 : reference){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(reference1.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("반려")){
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+            if(count == approvalLine2.size()){
+                Document document = documentRepository.findByDocumentCode(reference1.getDocument().getDocumentCode());
+                documentList2.add(document);
+            }
+        }
+
+        List<Document> documentList3 = documentRepository.findDoc2ByUserDTOUserCode(userDTO.getUserCode());
+
+        System.out.println("documentList = " + documentList);
+
+
+        // 상태가 반려인 문서
+        List<Document> rejectionDocument = new ArrayList<>();
+        for (Document document : documentList3) {
+            List<Integer> rejectionApprovalLine = approvalLineRepository.rejectionDocument(document.getDocumentCode());
+            // 댓글 조회 후 담아주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalCommentList);
+            if (!rejectionApprovalLine.isEmpty()) {
+                rejectionDocument.add(document);
+            }
+        }
+
+        List<Document> documentList4 = documentRepository.findDoc2ByUserDTOUserCode(userDTO.getUserCode());
+
+        // 상태가 결재인 문서
+        List<Document> approvalComplete = new ArrayList<>();
+
+        // 해당 사용자의 결재 상신 문서 리스트를 순회하며 쿼리를 통해 검색한 결과와 비교하여 결과 리스트에 추가
+        List<Integer> completeDocCodes = approvalLineRepository.approvalComplete(userDTO.getUserCode());
+        for (Document document : documentList4) {
+            // 문서 댓글 조회 후 넣어주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document);
+            document.approvalComment(approvalCommentList);
+
+            if (completeDocCodes.contains(document.getDocumentCode())) {
+                approvalComplete.add(document);
+            }
+        }
+        int num = approvalComplete.size() + rejectionDocument.size() + documentList2.size() + documentList.size();
+        System.out.println("num = " + num);
+        return num;
+
+    }
+
+    public Object totaldocumentproceeding(UserDTO userDTO) {
+
+        List<ApprovalLine> approvalLines = approvalLineRepository.findByUserUserCode(userDTO.getUserCode());
+
+        List<Document> documentList = new ArrayList<>();
+        // 완료 문서 확인
+        for(ApprovalLine approvalLine : approvalLines){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(approvalLine.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("미결")){
+
+                    count++;
+                    System.out.println("count123123123123123 = " + count);
+                    System.out.println("approvalLine1123123123123123123 = " + approvalLine2.size());
+                }
+            }
+            if(count == approvalLine2.size()){
+                Document document = documentRepository.findByDocumentCode(approvalLine.getDocument().getDocumentCode());
+                documentList.add(document);
+            }
+
+        }
+
+        List<Reference> reference = referenceRepository.findByUserUserCode(userDTO.getUserCode());
+
+        System.out.println("reference = " + reference);
+        List<Document> documentList2 = new ArrayList<>();
+        // 진행중 확인
+        for(Reference reference1 : reference){
+            List<ApprovalLine> approvalLine2 = approvalLineRepository.findByDocument(reference1.getDocument());
+
+            int count = 0;
+
+            for(ApprovalLine approvalLine1 : approvalLine2 ){
+                if(approvalLine1.getApprovalLineStatus().equals("결재") ||  approvalLine1.getApprovalLineStatus().equals("미결") ){
+
+                    count++;
+                    System.out.println("count123123123123 = " + count);
+                    System.out.println("approvalLine1 123123123123123123= " + approvalLine2.size());
+                }
+            }
+            if(count == approvalLine2.size()){
+                Document document = documentRepository.findByDocumentCode(reference1.getDocument().getDocumentCode());
+                documentList2.add(document);
+            }
+        }
+
+
+        User changeUser = modelMapper.map(userDTO, User.class);
+
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y")) {
+            // 해당 위임받은 결재문서 의 결재 상신 문서 리스트 조회
+            List<Document> documents = documentRepository.findByUserDTOUserCode(proxyApproval.getOriginUser().getUserCode());
+            // 해당 사용자의 결재 상신 문서 리스트 조회
+            List<Document> mydocuments = documentRepository.findByUserDTOUserCode(changeUser.getUserCode());
+
+
+
+            // 위임받은 문서
+            List<Document> documentList3 = new ArrayList<>();
+            for (Document document1 : documents) {
+                List<Integer> approvalLines22 = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                // 문서 댓글 조회후 넣어주기
+                List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+                document1.approvalComment(approvalCommentList);
+                if (!approvalLines22.isEmpty()) {
+                    documentList3.add(document1);
+
+                }
+            }
+            // 자기 문서
+            for (Document document1 : mydocuments) {
+                List<Integer> approvalLines22 = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+                // 문서 댓글 조회후 넣어주기
+                List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+                document1.approvalComment(approvalCommentList);
+                if (!approvalLines22.isEmpty()) {
+                    documentList3.add(document1);
+                }
+            }
+        int num = documentList.size() + documentList2.size() + documentList3.size();
+            return num;
+        }
+
+        // 해당 사용자의 결재 상신 문서 리스트 조회
+        List<Document> documents = documentRepository.findByUserDTOUserCode(userDTO.getUserCode());
+
+        // 결재 상태 중에 미결이 존재하는 문서 리스트 조회
+        List<Document> documentList4 = new ArrayList<>();
+        for (Document document1 : documents) {
+            List<Integer> approvalLines4 = approvalLineRepository.findSuspenseApprovalLines(document1.getDocumentCode());
+            // 문서 댓글 조회후 넣어주기
+            List<ApprovalComment> approvalCommentList = approvalCommentRepository.findByDocument(document1);
+            document1.approvalComment(approvalCommentList);
+            if (!approvalLines4.isEmpty()) {
+                documentList4.add(document1);
+            }
+        }
+        int num = documentList.size() + documentList2.size() + documentList4.size();
+
+
+        return num;
+    }
+
+    public Object selectfile(int documentCode) {
+        ApprovalFile approvalFile = approvalFileRepository.findByDocumentDocumentCode(documentCode);
+        if(approvalFile == null){
+
+
+
+        System.out.println("approvalFileDTO111111111111111111111111111111111111111111 = " + approvalFile);
+            return "첨부 파일이 없습니다.";
+        }
+        approvalFile.apFileNameChange(IMAGE_URL + approvalFile.getApFileNameChange());
+        System.out.println("approvalFileDTO111111111111111111111111111111111111111111 = " + approvalFile);
+
+        ApprovalFileDTO approvalFileDTO = modelMapper.map(approvalFile, ApprovalFileDTO.class);
+        return approvalFileDTO;
     }
 }

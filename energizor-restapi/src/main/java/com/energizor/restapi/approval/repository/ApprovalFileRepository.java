@@ -9,5 +9,5 @@ import java.util.List;
 public interface ApprovalFileRepository extends JpaRepository<ApprovalFile, Integer> {
 
 
-
+    ApprovalFile findByDocumentDocumentCode(int documentCode);
 }

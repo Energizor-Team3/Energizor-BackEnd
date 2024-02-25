@@ -10,4 +10,7 @@ public interface ReferenceRepository extends JpaRepository<Reference, Integer> {
 
 
     List<Reference> findByDocumentDocumentCode(int documentCode);
+
+
+    List<Reference> findByUserUserCode(int userCode);
 }
