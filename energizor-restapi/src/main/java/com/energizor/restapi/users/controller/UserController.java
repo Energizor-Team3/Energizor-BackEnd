@@ -39,7 +39,7 @@ public class UserController {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
         System.out.println("principal ==-=-=-=-=-=-=- " + principal);
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 20);
+        Criteria cri = new Criteria(Integer.valueOf(offset), 15);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         Page<UserDTO> userDTOPage = userService.selectUserListWithPagingForAdmin(cri);
@@ -67,6 +67,8 @@ public class UserController {
                                                           @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("principal =============>>>>>>>>>> " + principal);
+        System.out.println("userCode = " + userCode);
+        System.out.println("userDTO =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + userDTO);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "직원 정보 수정 성공", userService.updateUserForAdmin(userCode, userDTO, principal)));
     }
 
