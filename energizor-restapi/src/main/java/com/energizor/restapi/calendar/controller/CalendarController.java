@@ -88,34 +88,18 @@ public class CalendarController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "로그인한 유저의 캘린더 목록 조회 성공", userCalendars));
     }
 
-
-    // 캘린더 수정
-    @Operation(summary = "캘린더 수정  ", description = " 로그인한 유저의 캘린더를 수정한다  ")
-    @PatchMapping("/updateCalendar/{calNo}")
-    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo,
-                                                      @RequestBody CalendarAndParticipantDTO calendarAndParticipantDTO,
-                                                      @AuthenticationPrincipal UserDTO principal) {
-        System.out.println("principal=============================================================== = " + principal);
-//
-        // 로그인한 사용자의 캘린더 목록 조회
-        List<CalendarDTO> userCalendars = calendarService.findCalendarsForLoggedInUser(principal);
-
-//         해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
-        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
-
-//         사용자의 캘린더 목록에 해당 캘린더가 없으면 수정 실패 응답 반환
-        if (!calendarExists) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseDTO(HttpStatus.FORBIDDEN, "해당 캘린더를 수정할수 없습니다", null));
-        }
-        // 캘린더가 존재하고 사용자의 캘린더 목록에 있으면 수정 작업 수행
-        try {
-            calendarService.updateCalendar(calNo, calendarAndParticipantDTO, principal);
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 수정 성공", null));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "캘린더 수정 중 오류가 발생했습니다", null));
+    @Operation(summary = "캘린더 수정  ", description = " 캘린더를 수정 한다  ")
+    @PatchMapping("/update/{calNo}")
+    public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo, @RequestBody CalendarAndParticipantDTO calendarDTO) {
+        String result = calendarService.updateCalendar(calNo, calendarDTO);
+        if ("캘린더 업데이트 성공".equals(result)) {
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "캘린더 업데이트 성공", null));
+        } else {
+            // 오류 메시지
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseDTO(HttpStatus.BAD_REQUEST, result, null));
         }
     }
+
 
 
 // 캘린더 삭제
