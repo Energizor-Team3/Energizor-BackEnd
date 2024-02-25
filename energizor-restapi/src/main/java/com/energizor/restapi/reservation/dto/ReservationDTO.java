@@ -20,7 +20,7 @@ public class ReservationDTO {
     private LocalDate reservationDate;
     private String reservationContent;
     private UserDTO userCode;
-    private MeetDTO meetCode;
+    private Meet meetCode;
     private int[] member;
     private int[] meetTime;
     private String[] time;

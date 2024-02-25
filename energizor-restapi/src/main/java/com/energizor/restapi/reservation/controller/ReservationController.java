@@ -61,11 +61,17 @@ public class ReservationController {
     //예약내역 추가
     @Operation(summary = "예약 추가하기")
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal, @RequestParam MeetingTimeDTO meetingTimeDTO) {
-        System.out.println("userDTO11111111111111111111111111111111111111111111111111111111111111111111111111111111111= " + principal);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", reservationService.createReservation(reservationDTO,principal, meetingTimeDTO)));
+    public ResponseEntity<ResponseDTO> createReservation(@ModelAttribute ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal) {
+        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + reservationDTO);
+        String result = reservationService.createReservation(reservationDTO, principal);
+        if (result.equals("등록성공")) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "예약 생성 실패", null));
+        }
     }
+
+
 
     //예약내역 수정
     @Operation(summary = "예약 수정하기")

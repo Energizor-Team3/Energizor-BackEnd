@@ -1,5 +1,6 @@
 package com.energizor.restapi.reservation.entity;
 
+import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -79,12 +80,10 @@ public class Reservation {
         return this;
     }
 
+
     public Reservation build() {
         return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
     }
-
-
-
 
 
 }
