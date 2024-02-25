@@ -17,6 +17,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class UserController {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
         System.out.println("principal ==-=-=-=-=-=-=- " + principal);
 
-        Criteria cri = new Criteria(Integer.valueOf(offset), 20);
+        Criteria cri = new Criteria(Integer.valueOf(offset), 15);
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         Page<UserDTO> userDTOPage = userService.selectUserListWithPagingForAdmin(cri);
@@ -67,6 +68,8 @@ public class UserController {
                                                           @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("principal =============>>>>>>>>>> " + principal);
+        System.out.println("userCode = " + userCode);
+        System.out.println("userDTO =>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + userDTO);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "직원 정보 수정 성공", userService.updateUserForAdmin(userCode, userDTO, principal)));
     }
 
@@ -115,6 +118,7 @@ public class UserController {
                 .body(new ResponseDTO(HttpStatus.OK, "비밀번호 변경 성공", null));
     }
 
+    @Operation(summary = "팀 목록 조회", description = "팀 목록을 조회합니다.")
     @GetMapping(value = "/teams")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<List<TeamDTO>> getAllTeams() {
@@ -122,5 +126,25 @@ public class UserController {
         return ResponseEntity.ok(teams);
     }
 
+    @Operation(summary = "프로필 이미지 변경", description = "사용자의 프로필 이미지 변경합니다.")
+    @PutMapping(value = "/change-profile")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ResponseDTO> updateProfile(@AuthenticationPrincipal UserDTO principal, MultipartFile profilePath) {
+
+        System.out.println("principal =============>>>>>>>>>> " + principal);
+        System.out.println("profilePath =>>>>>>>>>>>>>>>>>>>>>>>>>>>>> " + profilePath);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "프로필 이미지 수정 성공",  userService.updateProfile(principal, profilePath)));
+    }
+
+    @Operation(summary = "프로필 이미지 삭제", description = "사용자의 프로필 이미지를 기본이미지로 변경합니다.")
+    @PutMapping(value = "/delete-profile")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<ResponseDTO> deleteProfile(@AuthenticationPrincipal UserDTO principal) {
+
+        System.out.println("principal =============>>>>>>>>>> " + principal);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "프로필 이미지 삭제 성공",  userService.deleteProfile(principal)));
+    }
 
 }

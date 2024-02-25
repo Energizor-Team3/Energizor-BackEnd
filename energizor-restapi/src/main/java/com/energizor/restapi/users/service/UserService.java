@@ -4,6 +4,7 @@ import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.users.dto.*;
 import com.energizor.restapi.users.entity.*;
 import com.energizor.restapi.users.repository.*;
+import com.energizor.restapi.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -15,14 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -72,7 +72,7 @@ public class UserService {
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count, Sort.by("userCode").descending());
 
-        Page<User> result = userRepository.findAll(paging);
+        Page<User> result = userRepository.findByUserStatus("Y", paging);
 
         Page<UserDTO> resultList = result.map(user -> {
             UserDTO userDTO = modelMapper.map(user, UserDTO.class);
@@ -103,8 +103,11 @@ public class UserService {
 
         log.info("[UserService] selectUserDetailForAdmin End ===================================");
 
+
+
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         System.out.println("userDTO =0000000000000000000000 " + userDTO);
+
 
         return userDTO;
     }
@@ -130,18 +133,6 @@ public class UserService {
             user.userName(userDTO.getUserName());
         }
 
-        // TeamDTO를 이용한 업데이트
-        if (userDTO.getTeam() != null) {
-            TeamDTO teamDTO = userDTO.getTeam();
-
-            // 데이터베이스에서 기존 Team 찾기
-            Team team = teamRepository.findById(teamDTO.getTeamCode())
-                    .orElseThrow(() -> new RuntimeException("해당 팀을 찾을 수 없습니다."));
-
-            user.team(team);
-        }
-
-
         if (userDTO.getUserRank() != null) {
             user.userRank(userDTO.getUserRank());
         }
@@ -162,7 +153,7 @@ public class UserService {
             user.resignDate(userDTO.getResignDate());
 
             Instant instant = userDTO.getResignDate().toInstant();
-            LocalDate resignDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate resignDate = instant.atZone(ZoneId.of("UTC")).toLocalDate();
 
             if (resignDate.equals(LocalDate.of(9999, 12, 31))) {
                 user.userStatus("Y");
@@ -172,41 +163,71 @@ public class UserService {
         }
 
         // UserRole 업데이트
-        updateUserRoleInfo(user, userDTO);
+        if (userDTO.isAdminRole() == true) {
+            addRoleAdmin(user, userDTO);
+        }
+        if (userDTO.isAdminRole() == false) {
+            deleteRoleAdmin(user, userDTO);
+        }
+
+
+
+        // TeamDTO를 이용한 업데이트
+        if (userDTO.getTeam() != null) {
+            TeamDTO teamDTO = userDTO.getTeam();
+
+            // 데이터베이스에서 기존 Team 찾기
+            Team team = teamRepository.findById(teamDTO.getTeamCode())
+                    .orElseThrow(() -> new RuntimeException("해당 팀을 찾을 수 없습니다."));
+
+            user.team(team);
+        }
 
         // Dayoff 업데이트!!!
-        if (userDTO.getDayoff() != null) {
-            DayOffDTO dayoffDTO = userDTO.getDayoff();
-            Dayoff dayoff = new Dayoff()
-                    .offYear(dayoffDTO.getOffYear())
-                    .offCount(dayoffDTO.getOffCount())
-                    .offUsed(dayoffDTO.getOffUsed())
-                    .user(user);
-            user.dayoff(dayoffRepository.save(dayoff));
+        if (userDTO.getOffUsed() > 0) {
+            // UserDTO에서 직접 받은 offUsed 값으로 Dayoff 정보 업데이트
+            Dayoff existingDayoff = dayoffRepository.findByUser_UserCode(userCode)
+                    .orElseThrow(() -> new RuntimeException("연차 정보를 찾을 수 없습니다."));
+
+            // offUsed 값 업데이트
+            existingDayoff.offUsed(userDTO.getOffUsed());
+
+            // 변경된 정보 저장
+            dayoffRepository.save(existingDayoff);
+
+            user.dayoff(existingDayoff);
         }
 
         userRepository.save(user);
         log.info("After saving user: {}", user);
+        System.out.println("After saving user =========================== " + user);
 
         return "직원 정보 업데이트 성공";
     }
 
-    private void updateUserRoleInfo(User user, UserDTO userDTO) {
-        // 'ROLE_ADMIN' 권한 확인
-        boolean adminRolePresent = userDTO.getUserRole().stream()
-                .anyMatch(role -> role.getAuthority().getAuthName().equals("ROLE_ADMIN"));
-
+    @Transactional
+    public void addRoleAdmin(User user, UserDTO userDTO) {
         Authority adminAuthority = (Authority) authorityRepository.findByAuthName("ROLE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("ROLE_ADMIN 권한을 찾을 수 없습니다."));
 
+        // Check if the user already has the ROLE_ADMIN role
         UserRole adminRole = userRoleRepository.findByUserCodeAndAuthCode(user.getUserCode(), adminAuthority.getAuthCode());
-
-        if (adminRolePresent && adminRole == null) {
-            // 'ROLE_ADMIN' 권한이 DTO에 있고 데이터베이스에는 없는 경우 권한 추가
-            UserRole newUserRole = new UserRole(user.getUserCode(), adminAuthority.getAuthCode(), adminAuthority);
+        if (adminRole == null) {
+            // The user does not have the ROLE_ADMIN, so add it
+            UserRole newUserRole = new UserRole(user.getUserCode(), adminAuthority.getAuthCode());
             userRoleRepository.save(newUserRole);
-        } else if (!adminRolePresent && adminRole != null) {
-            // DTO에서 'ROLE_ADMIN' 권한이 제거되었고 데이터베이스에는 있는 경우 권한 제거
+        }
+    }
+
+    @Transactional
+    public void deleteRoleAdmin(User user, UserDTO userDTO) {
+        Authority adminAuthority = (Authority) authorityRepository.findByAuthName("ROLE_ADMIN")
+                .orElseThrow(() -> new RuntimeException("ROLE_ADMIN 권한을 찾을 수 없습니다."));
+
+        // Check if the user has the ROLE_ADMIN role
+        UserRole adminRole = userRoleRepository.findByUserCodeAndAuthCode(user.getUserCode(), adminAuthority.getAuthCode());
+        if (adminRole != null) {
+            // The user has the ROLE_ADMIN, so remove it
             userRoleRepository.delete(adminRole);
         }
     }
@@ -254,6 +275,7 @@ public class UserService {
         return false;
     }
 
+    @Transactional
     public void changePassword(int userCode, String newPassword) {
         Optional<User> optionalUser = userRepository.findById(userCode);
 
@@ -284,5 +306,71 @@ public class UserService {
         System.out.println("teamList = " + teamList);
 
         return teamList;
+    }
+
+    @Transactional
+    public Object updateProfile(UserDTO principal, MultipartFile profilePath) {
+
+        log.info("[ProductService] updateProfile Start ===================================");
+        log.info("[ProductService] principal : " + principal);
+
+        String replaceFileName = null;
+        int result = 0;
+
+        try {
+
+            User user = userRepository.findByUserCode(principal.getUserCode());
+            String oriImage = user.getProfilePath();
+            log.info("[updateProfile] oriImage: " + oriImage);
+
+            if (profilePath != null) {
+                String imageName = UUID.randomUUID().toString().replace("-", "");
+                System.out.println("imageName ===== " + imageName);
+                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, profilePath);
+                log.info("[updateProfile] replaceFileName : " + replaceFileName);
+
+                user = user.profilePath(replaceFileName).build();
+
+                if (!"defaultprofile.png".equals(oriImage)) {
+                    boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
+                    log.info("[update] isDelete : " + isDelete);
+                }
+
+            } else {
+                user = user.profilePath(oriImage).build();
+            }
+
+            result = 1;
+
+        } catch (IOException e) {
+            log.info("[updateProfile] Exception!!");
+            FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+            throw new RuntimeException(e);
+        }
+
+        log.info("[UserService] updateProfile End ===================================");
+        return (result > 0) ? "프로필이미지 업데이트 성공" : "프로필이미지 업데이트 실패";
+    }
+
+    @Transactional
+    public Object deleteProfile(UserDTO principal) {
+
+        log.info("[ProductService] deleteProfile Start ===================================");
+        log.info("[ProductService] principal : " + principal);
+
+        int result = 0;
+
+        User user = userRepository.findByUserCode(principal.getUserCode());
+        String oriImage = user.getProfilePath();
+        log.info("[updateProfile] oriImage: " + oriImage);
+
+        user = user.profilePath("defaultprofile.png").build();
+        userRepository.save(user);
+
+        result = 1;
+
+        log.info("[UserService] deleteProfile End ===================================");
+
+        return (result > 0) ? "프로필이미지 삭제 성공" : "프로필이미지 삭제 실패";
     }
 }

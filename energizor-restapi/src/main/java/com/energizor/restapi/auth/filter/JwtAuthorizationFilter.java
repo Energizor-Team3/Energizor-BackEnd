@@ -70,6 +70,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     authentication.setUserName(claims.get("userName").toString());
                     authentication.setUserRank(claims.get("userRank").toString());
                     authentication.setEmail(claims.get("email").toString());
+                    authentication.setProfilePath(claims.get("profilePath").toString());
                     System.out.println("claims userRole ==================== " + claims.get("userRole")); // [{userCode=2, authCode=1, authority={authCode=1, authName=ROLE_USER}}]
                     System.out.println("claims offCode ==================== " + claims.get("dayoff"));
                     authentication.setUserPw(claims.get("userPw").toString());
