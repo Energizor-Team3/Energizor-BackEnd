@@ -26,8 +26,11 @@ public class FileUploadUtils {
 
         // 파일 확장자를 포함한 고유한 파일 이름 생성
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        String fileName = UUID.randomUUID().toString(); // UUID를 이용해 고유한 문자열 생성
+        System.out.println("extension = " + extension);
+        String fileName = UUID.randomUUID().toString().replace("-", ""); // UUID를 이용해 고유한 문자열 생성
+        System.out.println("fileName = " + fileName);
         String uniqueFileName = fileName + "." + extension; // 실제 저장될 고유 파일 이름
+        System.out.println("uniqueFileName = " + uniqueFileName);
 
         try(InputStream inputStream = multipartFile.getInputStream()) {
             Path filePath = uploadPath.resolve(uniqueFileName);
