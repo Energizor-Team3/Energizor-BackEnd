@@ -9,5 +9,5 @@ import java.util.List;
 public interface ApprovalCommentRepository extends JpaRepository<ApprovalComment, Integer> {
 
 
-
+    List<ApprovalComment> findByDocument(Document document);
 }

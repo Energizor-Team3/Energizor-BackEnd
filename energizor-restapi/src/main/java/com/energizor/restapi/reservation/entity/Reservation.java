@@ -9,6 +9,8 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Table(name = "reservation")
 @AllArgsConstructor
@@ -18,6 +20,7 @@ public class Reservation {
 
     @Id
     @Column(name = "reservation_code")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reservationCode;
 
     @Column(name = "reservation_date")
@@ -33,6 +36,14 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "meet_code")
     private Meet meetCode;
+
+
+
+
+
+
+
+
 
     public Reservation() {
 
@@ -71,6 +82,9 @@ public class Reservation {
     public Reservation build() {
         return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
     }
+
+
+
 
 
 }

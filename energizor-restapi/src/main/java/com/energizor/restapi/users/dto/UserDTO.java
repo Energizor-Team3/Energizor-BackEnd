@@ -1,5 +1,7 @@
 package com.energizor.restapi.users.dto;
 
+import com.energizor.restapi.group.dto.TeamGroupDTO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,14 +25,23 @@ public class UserDTO implements UserDetails {
     private String userRank;
     private String email;
     private String phone;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date entDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date resignDate;
+
     private String userStatus;
     private List<UserRoleDTO> userRole;
     private Collection<GrantedAuthority> authorities;
 
-    private int teamCode;
+    private TeamDTO team;
     private DayOffDTO dayoff;
+    private int offUsed;
+
+    private String profilePath;
+    private boolean adminRole;
 
     public String getUserId() {
         return userId;
@@ -39,6 +50,7 @@ public class UserDTO implements UserDetails {
     public String getUserName() {
         return userName;
     }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

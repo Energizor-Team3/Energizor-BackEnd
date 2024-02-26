@@ -1,7 +1,6 @@
-package com.energizor.restapi.group.repository;
+package com.energizor.restapi.users.repository;
 
-
-import com.energizor.restapi.group.entity.Team;
+import com.energizor.restapi.users.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TeamRepository extends JpaRepository<Team, Integer> {

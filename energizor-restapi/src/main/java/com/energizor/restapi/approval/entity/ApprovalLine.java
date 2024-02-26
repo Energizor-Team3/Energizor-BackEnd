@@ -32,8 +32,6 @@ public class ApprovalLine {
     private String approvalLineStatus;
     @Column(name = "processingdate")
     private LocalDateTime processingDate;
-    @Column(name = "reason")
-    private String reason;
 
 
     public ApprovalLine() {
@@ -64,13 +62,11 @@ public class ApprovalLine {
         this.processingDate = processingDate;
         return this;
     }
-    public ApprovalLine reason(String reason) {
-        this.reason = reason;
-        return this;
-    }
+
+
 
 
     public ApprovalLine build() {
-        return new ApprovalLine(approvalLineCode, document, user, sequence, approvalLineStatus, processingDate, reason);
+        return new ApprovalLine(approvalLineCode, document, user, sequence, approvalLineStatus, processingDate);
     }
 }
