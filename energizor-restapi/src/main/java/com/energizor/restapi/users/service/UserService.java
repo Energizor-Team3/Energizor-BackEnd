@@ -4,6 +4,7 @@ import com.energizor.restapi.common.Criteria;
 import com.energizor.restapi.users.dto.*;
 import com.energizor.restapi.users.entity.*;
 import com.energizor.restapi.users.repository.*;
+import com.energizor.restapi.util.FileUploadUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -15,14 +16,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -205,7 +205,8 @@ public class UserService {
         return "직원 정보 업데이트 성공";
     }
 
-    private void addRoleAdmin(User user, UserDTO userDTO) {
+    @Transactional
+    public void addRoleAdmin(User user, UserDTO userDTO) {
         Authority adminAuthority = (Authority) authorityRepository.findByAuthName("ROLE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("ROLE_ADMIN 권한을 찾을 수 없습니다."));
 
@@ -218,7 +219,8 @@ public class UserService {
         }
     }
 
-    private void deleteRoleAdmin(User user, UserDTO userDTO) {
+    @Transactional
+    public void deleteRoleAdmin(User user, UserDTO userDTO) {
         Authority adminAuthority = (Authority) authorityRepository.findByAuthName("ROLE_ADMIN")
                 .orElseThrow(() -> new RuntimeException("ROLE_ADMIN 권한을 찾을 수 없습니다."));
 
@@ -273,6 +275,7 @@ public class UserService {
         return false;
     }
 
+    @Transactional
     public void changePassword(int userCode, String newPassword) {
         Optional<User> optionalUser = userRepository.findById(userCode);
 
@@ -303,5 +306,71 @@ public class UserService {
         System.out.println("teamList = " + teamList);
 
         return teamList;
+    }
+
+    @Transactional
+    public Object updateProfile(UserDTO principal, MultipartFile profilePath) {
+
+        log.info("[ProductService] updateProfile Start ===================================");
+        log.info("[ProductService] principal : " + principal);
+
+        String replaceFileName = null;
+        int result = 0;
+
+        try {
+
+            User user = userRepository.findByUserCode(principal.getUserCode());
+            String oriImage = user.getProfilePath();
+            log.info("[updateProfile] oriImage: " + oriImage);
+
+            if (profilePath != null) {
+                String imageName = UUID.randomUUID().toString().replace("-", "");
+                System.out.println("imageName ===== " + imageName);
+                replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, profilePath);
+                log.info("[updateProfile] replaceFileName : " + replaceFileName);
+
+                user = user.profilePath(replaceFileName).build();
+
+                if (!"defaultprofile.png".equals(oriImage)) {
+                    boolean isDelete = FileUploadUtils.deleteFile(IMAGE_DIR, oriImage);
+                    log.info("[update] isDelete : " + isDelete);
+                }
+
+            } else {
+                user = user.profilePath(oriImage).build();
+            }
+
+            result = 1;
+
+        } catch (IOException e) {
+            log.info("[updateProfile] Exception!!");
+            FileUploadUtils.deleteFile(IMAGE_DIR, replaceFileName);
+            throw new RuntimeException(e);
+        }
+
+        log.info("[UserService] updateProfile End ===================================");
+        return (result > 0) ? "프로필이미지 업데이트 성공" : "프로필이미지 업데이트 실패";
+    }
+
+    @Transactional
+    public Object deleteProfile(UserDTO principal) {
+
+        log.info("[ProductService] deleteProfile Start ===================================");
+        log.info("[ProductService] principal : " + principal);
+
+        int result = 0;
+
+        User user = userRepository.findByUserCode(principal.getUserCode());
+        String oriImage = user.getProfilePath();
+        log.info("[updateProfile] oriImage: " + oriImage);
+
+        user = user.profilePath("defaultprofile.png").build();
+        userRepository.save(user);
+
+        result = 1;
+
+        log.info("[UserService] deleteProfile End ===================================");
+
+        return (result > 0) ? "프로필이미지 삭제 성공" : "프로필이미지 삭제 실패";
     }
 }

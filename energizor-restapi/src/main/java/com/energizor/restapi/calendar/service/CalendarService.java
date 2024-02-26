@@ -136,66 +136,45 @@ public class CalendarService {
 
         return "캘린더 추가 성공";
     }
-//개인 캘린더는-> 참석자 나만있음  -> 개인에서 공유로 변경 못함, 참석자도 추가못함
-    //공유 캘린더는 -> 나 포함 여러명
-    @Transactional
-    public void updateCalendar(int calNo, CalendarAndParticipantDTO calendarAndParticipantDTO,UserDTO principal) {
-        System.out.println("principal@@@@@@@@@@@@@@@@@@@@ = " + principal);
-
-        User user1 = userRepository.findByUserCode(principal.getUserCode());
-        User user = modelMapper.map(user1, User.class);
-
-        // 캘린더가 존재하는지 확인
-        Calendar calendar = findCalendarEntity(calNo);
-
-        // 로그인한 사용자의 캘린더 목록 조회
-        List<CalendarDTO> userCalendars = findCalendarsForLoggedInUser(principal);
-
-        // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
-        boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
-        if (calendar == null || !calendarExists) {
-            return;
-        }
-
-        // 캘린더 이름 및 색상 업데이트
-        if (calendarAndParticipantDTO.getCalName() != null) {
-            calendar.setCalName(calendarAndParticipantDTO.getCalName());
-        }
-        if (calendarAndParticipantDTO.getCalColor() != null) {
-            calendar.setCalColor(calendarAndParticipantDTO.getCalColor());
-        }
-        if (calendarAndParticipantDTO.getCalType() != null) {
-            calendar.setCalType(calendarAndParticipantDTO.getCalType());
-        }
-
-        // 캘린더 저장
-        calendarRepository.save(calendar);
-
-        if ("개인 캘린더".equals(calendarAndParticipantDTO.getCalType())) {
-
-            CalendarParticipantPK participantPK = new CalendarParticipantPK();
-            participantPK.setUserCode(user.getUserCode()); // 로그인 사용자의 코드 설정
-            CalendarParticipant participant = new CalendarParticipant();
-            participant.setCalParticipant(participantPK);
-            calendarParticipantRepository.save(participant); // 참석자 정보 저장
-
-        } else if ("공유 캘린더".equals(calendarAndParticipantDTO.getCalType())) {
-            // 공유 캘린더인 경우 전달된 사용자 코드들로 업데이트
-            List<Integer> userCodes = calendarAndParticipantDTO.getUserCodes();
-            for (Integer userCode : userCodes) {
-                CalendarParticipantPK participantPK = new CalendarParticipantPK();
-                participantPK.setCalNo(calendar.getCalNo());
-                participantPK.setUserCode(userCode); // 전달된 사용자 코드
 
 
-                CalendarParticipant participant = new CalendarParticipant();
-                participant.setCalParticipant(participantPK);
-                calendarParticipantRepository.save(participant); // 참석자 저장
-            }
-        }
-
+//    캘린더 수정
+@Transactional
+public String updateCalendar(int calNo, CalendarAndParticipantDTO calendarDTO) {
+    Calendar calendar = calendarRepository.findById(calNo).orElse(null);
+    if (calendar == null) {
+        return "캘린더가 존재하지 않습니다.";
     }
 
+
+    if (calendarDTO.getCalColor() != null) {
+        calendar.setCalColor(calendarDTO.getCalColor());
+    }
+    if (calendarDTO.getCalName() != null) {
+        calendar.setCalName(calendarDTO.getCalName());
+    }
+
+    // 공유 캘린더일 경우 참가자 목록 수정
+    if ("공유 캘린더".equals(calendar.getCalType()) && calendarDTO.getUserCodes() != null) {
+        // 기존 참가자 목록 삭제
+        calendarParticipantRepository.deleteByCalParticipant_CalNo(calNo);
+
+        // 새로운 참가자 목록 추가
+        for (Integer userCode : calendarDTO.getUserCodes()) {
+            CalendarParticipantPK participantPK = new CalendarParticipantPK();
+            participantPK.setCalNo(calNo);
+            participantPK.setUserCode(userCode);
+
+            CalendarParticipant participant = new CalendarParticipant();
+            participant.setCalParticipant(participantPK);
+            calendarParticipantRepository.save(participant);
+        }
+    }
+
+    calendarRepository.save(calendar); // 변경된 엔티티 저장
+
+    return "캘린더 업데이트 성공";
+}
 
     public Calendar findCalendarEntity(int calNo) {
 
