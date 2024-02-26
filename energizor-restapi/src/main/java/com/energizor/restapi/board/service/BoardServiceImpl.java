@@ -286,6 +286,9 @@ public class BoardServiceImpl implements BoardService{
         board.content((updateBoardDTO.getUpdateContent()));
         board.title(boardDTO.getTitle());
         board.title(updateBoardDTO.getUpdateTitle());
+        // Board 클래스의 boardType 필드에 접근하여 boardTypeCode 값을 변경
+        board.setBoardType(boardTypeRepository.findByBoardTypeCode(updateBoardDTO.getBoardTypeCode()));
+
         Board updateBoard=boardRepository.save(board);
 
         BoardDTO saveBoardDTO=modelMapper.map(updateBoard,BoardDTO.class);
@@ -308,6 +311,8 @@ public class BoardServiceImpl implements BoardService{
 
         Board board=boardResult.get();
 
+        log.info("####board : "+board);
+
         if (board.getUser().getUserCode()!=principal.getUserCode()) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
@@ -326,6 +331,7 @@ public class BoardServiceImpl implements BoardService{
                 });
             }
         board.changeBoardDeletedAt(dateTime);
+
         Board boardEntity=boardRepository.save(board);
 
         BoardDTO response=modelMapper.map(boardEntity, BoardDTO.class);
@@ -349,6 +355,7 @@ public class BoardServiceImpl implements BoardService{
                         boardComment.getCommentCode(),
                         boardComment.getCommentContent(),
                         boardComment.getRegisterDate(),
+                        boardComment.getUpdateDate(),
                         boardComment.getUser().getTeam().getDept().getDeptName(),
                         boardComment.getUser().getTeam().getTeamName(),
                         boardComment.getUser().getUserName(),
@@ -497,9 +504,14 @@ public class BoardServiceImpl implements BoardService{
 
         InterestBoard interestBoard=interestBoardRepository.findByInterestCode(interestCode);
 
+        User owner=userRepository.findByCode(ownerCode);
+
+        interestBoard.owner(owner);
+
         if(interestBoard.getOwner().getUserCode()!=ownerCode) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
+
 
         interestBoardRepository.deleteById(interestCode);
 
