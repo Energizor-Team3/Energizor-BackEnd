@@ -6,6 +6,7 @@ import com.energizor.restapi.calendar.entity.CalendarParticipant;
 import com.energizor.restapi.calendar.entity.CalendarParticipantPK;
 import com.energizor.restapi.calendar.repository.CalendarParticipantRepository;
 import com.energizor.restapi.calendar.repository.CalendarRepository;
+import com.energizor.restapi.calendar.repository.ScheduleRepository;
 import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import com.energizor.restapi.users.repository.UserRepository;
@@ -13,7 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
+
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,13 +24,15 @@ import java.util.stream.Collectors;
 public class CalendarService {
 
     private final CalendarRepository calendarRepository;
+    private final ScheduleRepository scheduleRepository;
     private final CalendarParticipantRepository calendarParticipantRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
 
 
-    public CalendarService(CalendarRepository calendarRepository, CalendarParticipantRepository calendarParticipantRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public CalendarService(CalendarRepository calendarRepository, ScheduleRepository scheduleRepository, CalendarParticipantRepository calendarParticipantRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.calendarRepository = calendarRepository;
+        this.scheduleRepository = scheduleRepository;
         this.calendarParticipantRepository = calendarParticipantRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
@@ -198,36 +201,29 @@ public String updateCalendar(int calNo, CalendarAndParticipantDTO calendarDTO) {
 
 
     // 캘린더 삭제
-
     @Transactional
     public boolean deleteCalendar(int calNo, UserDTO principal) {
-        // 캘린더가 존재하는지 확인
+        // 캘린더 존재 확인
         Calendar calendar = findCalendarEntity(calNo);
         if (calendar == null) {
-            return false; // 캘린더가 존재하지 않으면 삭제 실패
+            return false;
         }
 
         try {
-            // 로그인한 사용자의 캘린더 목록 조회
-            List<CalendarDTO> userCalendars = findCalendarsForLoggedInUser(principal);
-            // 해당 사용자의 캘린더 목록에 해당하는 calNo가 있는지 확인
-            boolean calendarExists = userCalendars.stream().anyMatch(cal -> cal.getCalNo() == calNo);
-            if (!calendarExists) {
-                return false; // 캘린더가 해당 사용자의 목록에 없으면 삭제 실패
-            }
+            // 해당 캘린더와 연결된 일정 삭제
+            scheduleRepository.deleteByCalNo(calNo);
 
-            // 관련된 참가자 정보 삭제
+            // 해당 캘린더와 연결된 참가자 정보 삭제
             calendarParticipantRepository.deleteByCalParticipant_CalNo(calNo);
 
             // 캘린더 삭제
             calendarRepository.delete(calendar);
 
-            return true; // 삭제 성공
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // 삭제 실패
+            return false;
         }
     }
-
 
 }

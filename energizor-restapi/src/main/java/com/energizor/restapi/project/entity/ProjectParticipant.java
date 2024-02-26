@@ -25,4 +25,8 @@ public class ProjectParticipant {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_code", referencedColumnName = "user_code", insertable = false, updatable = false)
     private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pro_no", insertable = false, updatable = false)
+    private Project project;
 }
