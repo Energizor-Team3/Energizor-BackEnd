@@ -4,6 +4,8 @@ import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -16,4 +18,5 @@ public class ProjectDTO {
     private Date proStartDate;
     private Date proEndDate;
     private String proStatus;
+    private List<ProjectParticipantDTO> participants;
 }
