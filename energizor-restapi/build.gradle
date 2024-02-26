@@ -80,7 +80,7 @@ tasks.withType(JavaCompile) {
 
 
 // querydsl
-def querydslDir = "$buildDir/generated/querydsl" // QClass 생성 위치
+def querydslDir = "src/main/generated" // QClass 생성 위치
 
 querydsl {
     jpa = true

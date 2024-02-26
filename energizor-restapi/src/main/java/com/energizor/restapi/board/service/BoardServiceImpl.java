@@ -10,7 +10,6 @@ import com.energizor.restapi.users.dto.UserDTO;
 //import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.sun.tools.jconsole.JConsoleContext;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
