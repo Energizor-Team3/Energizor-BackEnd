@@ -11,7 +11,7 @@ import lombok.ToString;
 import java.sql.Time;
 
 @Entity
-@Table(name = "meetingTime")
+@Table(name = "meetingtime")
 @AllArgsConstructor
 @Getter
 @ToString

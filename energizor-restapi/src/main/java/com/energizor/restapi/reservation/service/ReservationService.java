@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -78,13 +79,23 @@ public class ReservationService {
         User user = modelMapper.map(userDTO, User.class);
         // 예약 객체의 날짜 설정
 
-        Meet meet = meetRepository.findByMeetCode(reservationDTO.getMeetCode().getMeetCode());
-
+        MeetingTime meet = meetingTimeRepository.findByTime(reservationDTO.getStartTime());
+        MeetingTime meet1 = meetingTimeRepository.findByTime(reservationDTO.getEndTime());
+        Meet meet2 = meetRepository.findByMeetCode(reservationDTO.getMeetCode().getMeetCode());
+        System.out.println("meet1 = " + meet1);
+        System.out.println("meet2 = " + meet2);
+        System.out.println("meet = " + meet);
+        ArrayList<Integer> reservationForm = new ArrayList<>();
+        for (int i = meet.getMeetTime(); i <= meet1.getMeetTime(); i++) {
+            reservationForm.add(i);
+            System.out.println("i = " + i);
+        }
+        System.out.println("reservationForm = " + reservationForm);
 
         Reservation reservation = new Reservation();
         reservation.reservationDate(currentDate);
         reservation.userCode(user);
-        reservation.meetCode(meet);
+        reservation.meetCode(meet2);
         reservation.reservationContent(reservationDTO.getReservationContent());
         // 회의 시간 정보를 Reservation 엔티티에 설정
 
@@ -92,8 +103,7 @@ public class ReservationService {
         Reservation result = reservationRepository.save(reservation);
 
 
-        int[] meetTimes = reservationDTO.getMeetTime();
-        for (int meetTime : meetTimes) {
+        for (int meetTime : reservationForm) {
             ReservationTime reservationTime = new ReservationTime();
             reservationTime.reservationCode(reservation.getReservationCode());
             reservationTime.meetTime(meetTime);
