@@ -36,11 +36,15 @@ public class UserController {
     @Operation(summary = "인사관리 - 전체 직원 조회", description = "관리자 권한을 가진 인사담당자가 전체 직원을 조회할 수 있습니다.")
     @GetMapping("/users-management")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<ResponseDTO> selectUserListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset, @AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> selectUserListWithPagingForAdmin(@RequestParam(name="offset", defaultValue="1") String offset,
+                                                                        @RequestParam(name = "search", required = false) String search,
+                                                                        @AuthenticationPrincipal UserDTO principal) {
         log.info("[UserController] selectUserListWithPagingForAdmin : " + offset);
         System.out.println("principal ==-=-=-=-=-=-=- " + principal);
+        System.out.println("search =-==-=-=-====----------- " + search);
 
         Criteria cri = new Criteria(Integer.valueOf(offset), 15);
+        cri.setSearch(search); // 검색어 설정
         PagingResponseDTO pagingResponseDTO = new PagingResponseDTO();
 
         Page<UserDTO> userDTOPage = userService.selectUserListWithPagingForAdmin(cri);

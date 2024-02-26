@@ -17,10 +17,7 @@ spring:
       max-request-size: 10MB
   web:
     resources:
-      static-locations: classpath:/imgs/
-  devtools:
-    restart:
-      enabled: false
+      static-locations: build/resources/main/static/imgs/
   mail:
     host: smtp.gmail.com
     port: 587
@@ -55,7 +52,7 @@ image:
   add-resource-locations: classpath:/static/imgs/
   add-resource-handler: /imgs/**
 
-  image-dir: src/main/resources/static/imgs
+  image-dir: build/resources/main/static/imgs/
   image-url: http://localhost:8031/imgs/
 jwt:
   key: wERjtIdxQ8lNjF0w/AAiN6HqTASaCAUzSq6nbKefMwf5CbPE8GvwLsClz94uVt9Q1esxYwwXVU+BYn7/mR01Qg==
