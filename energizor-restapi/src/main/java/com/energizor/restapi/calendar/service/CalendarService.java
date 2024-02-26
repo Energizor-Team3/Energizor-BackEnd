@@ -63,9 +63,23 @@ public class CalendarService {
     // 유저 코드로 캘린더 조회
     public List<CalendarDTO> findCalendarsByUserCode(int userCode) {
         List<CalendarParticipant> calendarParticipants = calendarParticipantRepository.findByCalParticipant_UserCode(userCode);
-        List<Calendar> calendars = calendarParticipants.stream().map(participant -> participant.getCalParticipant().getCalNo()).map(calendarRepository::findById).flatMap(Optional::stream).collect(Collectors.toList());
+        List<Calendar> calendars = calendarParticipants.stream()
+                .map(participant -> participant.getCalParticipant().getCalNo())
+                .map(calendarRepository::findById)
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
+
         return calendars.stream()
-                .map(calendar -> modelMapper.map(calendar, CalendarDTO.class))
+                .map(calendar -> {
+                    CalendarDTO dto = modelMapper.map(calendar, CalendarDTO.class);
+                    // 공유 캘린더일 경우 참여자의 이름을 조회합니다.
+                    if ("공유 캘린더".equals(calendar.getCalType())) {
+                        List<String> participantNames = // 여기서 참여자 이름을 조회하는 로직을 구현합니다.
+                                calendarParticipantRepository.findParticipantNamesByCalNo(calendar.getCalNo());
+                        dto.setParticipantNames(participantNames);
+                    }
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 

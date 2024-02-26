@@ -88,6 +88,9 @@ public class CalendarController {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "로그인한 유저의 캘린더 목록 조회 성공", userCalendars));
     }
 
+
+    //캘린더 수정
+
     @Operation(summary = "캘린더 수정  ", description = " 캘린더를 수정 한다  ")
     @PatchMapping("/update/{calNo}")
     public ResponseEntity<ResponseDTO> updateCalendar(@PathVariable int calNo, @RequestBody CalendarAndParticipantDTO calendarDTO) {

@@ -17,6 +17,9 @@ public interface CalendarParticipantRepository extends JpaRepository<CalendarPar
     @Query("DELETE FROM CalendarParticipant cp WHERE cp.calParticipant.calNo = :calNo")
     void deleteByCalParticipant_CalNo(@Param("calNo") int calNo);
 
+    @Query("SELECT u.userName FROM User u WHERE u.userCode IN (SELECT cp.calParticipant.userCode FROM CalendarParticipant cp WHERE cp.calParticipant.calNo = :calNo)")
+    List<String> findParticipantNamesByCalNo(@Param("calNo") int calNo);
+
 
 
 }
