@@ -5,12 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Date;
-import java.sql.Time;
 
 @Entity(name = "commute")
 @Table(name = "commute")
@@ -41,7 +38,10 @@ public class Commute {
     @JoinColumn(name = "user_code", nullable = false)
     private User user;
 
+
+
     public Commute() {
 
     }
+
 }

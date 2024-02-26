@@ -1,9 +1,13 @@
 package com.energizor.restapi.attendance.entity;
 
+import com.energizor.restapi.users.entity.Team;
+import com.energizor.restapi.users.entity.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity(name = "AttendanceUser")
 @Table(name = "users")
@@ -20,6 +24,15 @@ public class User {
     @Column(name = "user_name")
     private String userName;
 
+    @OneToMany
+    @JoinColumn(name = "user_code")
+    private List<UserRole> userRole;
+
+    @ManyToOne
+    @JoinColumn(name = "team_code")
+    private Team team;
+
+
 
     public User() {}
 
@@ -32,6 +45,5 @@ public class User {
         this.userName = userName;
         return this;
     }
-
 
 }

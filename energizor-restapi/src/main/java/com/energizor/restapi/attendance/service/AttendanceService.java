@@ -6,6 +6,7 @@ import com.energizor.restapi.attendance.entity.User;
 import com.energizor.restapi.attendance.repository.CommuteRepository;
 import com.energizor.restapi.attendance.repository.UserAttendanceRepository;
 import com.energizor.restapi.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class AttendanceService {
 
     private final CommuteRepository commuteRepository;
     private final UserAttendanceRepository userAttendanceRepository;
+
+
     private final ModelMapper modelMapper;
 
     public AttendanceService(CommuteRepository commuteRepository, UserAttendanceRepository userAttendanceRepository) {
@@ -46,6 +49,8 @@ public class AttendanceService {
                 .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
 
 
+
+
         return commuteList.stream()
                 .map(commute -> modelMapper.map(commute, CommuteDTO.class))
                 .collect(Collectors.toList());
@@ -69,32 +74,26 @@ public class AttendanceService {
                 .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
                 .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
 
+
         return commuteList.stream()
                 .map(commute -> modelMapper.map(commute, CommuteDTO.class))
                 .collect(Collectors.toList());
     }
 
     /* 출근 등록 */
-    // public CommuteDTO startRegister(int userCode, CommuteDTO commuteDTO) {
-    //     User user = userAttendanceRepository.findById(userCode)
-    //             .orElseThrow(() -> new NotFoundException("User not found"));
-    //     Commute commute = modelMapper.map(commuteDTO, Commute.class);
-    //     commute.setUser(user);
-    //     Commute saveCommute = commuteRepository.save(commute);
-    //
-    //     return modelMapper.map(saveCommute, CommuteDTO.class);
-    // }
-
+    @Transactional
     public CommuteDTO startRegister(int userCode, CommuteDTO commuteDTO) {
         // 사용자 조회
         User user = userAttendanceRepository.findById(userCode)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         // CommuteDTO를 Commute 엔티티로 매핑
-        Commute commute = new Commute();
+        Commute commute = modelMapper.map(commuteDTO, Commute.class);
+        commute.setUser(user);
+
         commute.setCDate(commuteDTO.getCDate());
         commute.setCStartTime(commuteDTO.getCStartTime());
-        commute.setCEndTime(commuteDTO.getCEndTime());
+        // commute.setCEndTime(commuteDTO.getCEndTime());
         commute.setCState(commuteDTO.getCState());
         commute.setUser(user);
 
@@ -117,7 +116,7 @@ public class AttendanceService {
         modelMapper.typeMap(Commute.class, CommuteDTO.class)
                 .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
                 .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
-                .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
+                // .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
                 .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
                 .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
 
