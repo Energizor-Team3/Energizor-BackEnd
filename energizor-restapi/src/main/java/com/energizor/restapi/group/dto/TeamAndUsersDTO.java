@@ -6,7 +6,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class TeamAndUsersDTO {
 
     private int teamCode;
@@ -15,4 +14,12 @@ public class TeamAndUsersDTO {
 
     private List<UserGroupDTO> userList;
 
+    @Override
+    public String toString() {
+        return "TeamAndUsersDTO{" +
+                "teamCode=" + teamCode +
+                ", teamName='" + teamName + '\'' +
+                ", deptCode=" + deptCode +
+                '}';
+    }
 }

@@ -5,9 +5,17 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
+
 public class DeptGroupDTO {
 
     private int deptCode;
     private String deptName;
+
+    @Override
+    public String toString() {
+        return "DeptGroupDTO{" +
+                "deptCode=" + deptCode +
+                ", deptName='" + deptName + '\'' +
+                '}';
+    }
 }
