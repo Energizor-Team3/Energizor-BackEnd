@@ -12,4 +12,5 @@
                 private int proParNo;
                 private int proNo;
                 private int userCode;
+                private String userName;
         }
