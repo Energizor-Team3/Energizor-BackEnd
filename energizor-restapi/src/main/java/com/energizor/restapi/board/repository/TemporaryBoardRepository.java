@@ -2,7 +2,7 @@ package com.energizor.restapi.board.repository;
 
 import com.energizor.restapi.board.entity.InterestBoard;
 import com.energizor.restapi.board.entity.TemporaryBoard;
-import com.querydsl.core.BooleanBuilder;
+//import com.querydsl.core.BooleanBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

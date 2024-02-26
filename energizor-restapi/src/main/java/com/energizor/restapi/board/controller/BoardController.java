@@ -1,47 +1,27 @@
 package com.energizor.restapi.board.controller;
 
 import com.energizor.restapi.board.dto.*;
-import com.energizor.restapi.board.entity.Board;
-import com.energizor.restapi.board.entity.BoardFile;
 import com.energizor.restapi.board.service.BoardService;
-import com.energizor.restapi.common.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.ServerEndpoint;
-import lombok.AllArgsConstructor;
-import net.coobird.thumbnailator.Thumbnailator;
-import org.apache.tomcat.util.descriptor.web.ErrorPage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import com.energizor.restapi.common.PageDTO;
-import com.energizor.restapi.common.PagingResponseDTO;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-//import org.springframework.web.bind.annotation.*;
 
 @Tag(name="게시판")
 @RestController

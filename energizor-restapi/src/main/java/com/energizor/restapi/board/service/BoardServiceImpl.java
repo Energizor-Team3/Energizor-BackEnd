@@ -6,8 +6,6 @@ import com.energizor.restapi.board.repository.*;
 import com.energizor.restapi.exception.DuplicatedInterestBoardException;
 import com.energizor.restapi.users.entity.User;
 import com.energizor.restapi.users.dto.UserDTO;
-//import com.querydsl.core.BooleanBuilder;
-//import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import io.swagger.v3.oas.annotations.Operation;
