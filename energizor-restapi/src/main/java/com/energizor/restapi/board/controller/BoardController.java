@@ -136,6 +136,8 @@ public class BoardController {
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO> findAllList(PageRequestDTO pageRequestDTO, @AuthenticationPrincipal UserDTO principal,@RequestParam("boardTypeCode")int boardTypeCode) {
 
+        System.out.println("boardTypeCode :"+boardTypeCode);
+
         log.info("[BoardController] boardTypeCode : "+boardTypeCode);
         log.info("pageRequestDTO : "+pageRequestDTO);
         pageRequestDTO.setBoardTypeCode(boardTypeCode);
@@ -170,8 +172,14 @@ public class BoardController {
         public ResponseEntity<ResponseDTO> register(@RequestParam("title") String title, @RequestParam("boardTypeCode") int boardTypeCode, @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles, @RequestParam("content") String content, @RequestParam(value = "isTemporaryOpt", required = false) Boolean temporaryOpt, @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("title = " + title);
+        System.out.println("boardTypeCode = " + boardTypeCode);
+        System.out.println("content = " + content);
+        System.out.println("temporaryOpt = " + temporaryOpt);
+        if(temporaryOpt == null) temporaryOpt = false;
+
 //        log.info("boardDTO : "+boardDTO);
 //        log.info("principal : "+principal);
+
 
         if (uploadFiles == null) {
             uploadFiles = new MultipartFile[0];
@@ -275,7 +283,7 @@ public class BoardController {
 
     @Operation(summary="관심게시글 삭제",description="로그인한 사용자는 관심게시글을 삭제할 수 있습니다.")
     @DeleteMapping("/interest/delete/{interestCode}")
-    public ResponseEntity<ResponseDTO> deleteInterestBoard(@PathVariable int interestCode,@AuthenticationPrincipal UserDTO owner) {
+    public ResponseEntity<ResponseDTO> deleteInterestBoard(@PathVariable(name="interestCode") int interestCode,@AuthenticationPrincipal UserDTO owner) {
 
         int ownerCode=owner.getUserCode();
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"관심게시글 삭제",boardService.deleteInterestBoard(interestCode,ownerCode)));

@@ -12,4 +12,5 @@ public interface BoardTypeRepository extends JpaRepository<BoardType,Integer> {
             "from BoardType bt "+
             "where bt.boardTypeCode= :boardTypeCode")
     BoardType findByCode(@Param("boardTypeCode") int boardTypeCode);
+    BoardType findByBoardTypeCode(int boardTypeCode);
 }
