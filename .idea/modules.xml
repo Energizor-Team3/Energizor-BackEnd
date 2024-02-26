@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Energizor-BackEnd.iml" filepath="$PROJECT_DIR$/.idea/Energizor-BackEnd.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.energizor.restapi.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.energizor.restapi.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/energizor-restapi.restapi.main.iml" filepath="$PROJECT_DIR$/.idea/modules/energizor-restapi.restapi.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/restapi.main.iml" filepath="$PROJECT_DIR$/.idea/modules/restapi.main.iml" />
     </modules>
   </component>
