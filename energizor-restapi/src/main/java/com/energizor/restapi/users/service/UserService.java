@@ -79,7 +79,7 @@ public class UserService {
             result = userRepository.findByUserStatusAndUserNameContaining("Y", cri.getSearch(), paging);
         } else {
             // 검색어가 없는 경우, 모든 활성 사용자를 조회합니다.
-            result = userRepository.findByUserStatus("Y", paging);
+            result = userRepository.findAll(paging);
         }
 
         Page<UserDTO> resultList = result.map(user -> {
