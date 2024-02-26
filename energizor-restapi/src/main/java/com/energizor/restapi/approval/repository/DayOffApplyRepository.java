@@ -8,4 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DayOffApplyRepository extends JpaRepository<DayOffApply, Integer> {
     DayOffApply findByDocument(Document document);
+
+
+
+
+
+    void deleteByDocument(Document document);
 }

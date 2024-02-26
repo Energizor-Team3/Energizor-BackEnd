@@ -10,4 +10,8 @@ public interface BusinessTripRepository extends JpaRepository<BusinessTrip, Inte
 
 
     BusinessTrip findByDocument(Document document);
+
+
+
+    void deleteByDocument(Document document);
 }

@@ -18,6 +18,9 @@ spring:
   web:
     resources:
       static-locations: build/resources/main/static/imgs/
+  devtools:
+    restart:
+      enabled: false
   mail:
     host: smtp.gmail.com
     port: 587
