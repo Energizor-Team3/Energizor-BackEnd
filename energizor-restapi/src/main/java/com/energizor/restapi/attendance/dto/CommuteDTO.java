@@ -17,8 +17,9 @@ public class CommuteDTO {
 
     private int cCode;
     private LocalDate cDate = LocalDate.now();
-    private LocalTime cStartTime;
-    private LocalTime cEndTime;
+    private LocalTime cStartTime = LocalTime.now();;
+    private LocalTime cEndTime = LocalTime.now();;
     private String cState;
     private int userCode;
+    private String userName;
 }
