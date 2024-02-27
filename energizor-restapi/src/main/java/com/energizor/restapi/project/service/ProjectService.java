@@ -1,6 +1,7 @@
 package com.energizor.restapi.project.service;
 
 
+import com.energizor.restapi.project.dto.ProjectAndParticipantDTO;
 import com.energizor.restapi.project.dto.ProjectDTO;
 import com.energizor.restapi.project.dto.ProjectParticipantDTO;
 import com.energizor.restapi.project.dto.TaskDTO;
@@ -10,6 +11,8 @@ import com.energizor.restapi.project.entity.Task;
 import com.energizor.restapi.project.repository.ProjectParticipantRepository;
 import com.energizor.restapi.project.repository.ProjectRepository;
 import com.energizor.restapi.project.repository.TaskRepository;
+import com.energizor.restapi.users.entity.User;
+import com.energizor.restapi.users.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +25,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProjectService {
     private final ProjectRepository projectRepository;
+
     private final ModelMapper modelMapper;
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
     private final ProjectParticipantRepository projectParticipantRepository;
 
-    public ProjectService(ProjectRepository projectRepository, ModelMapper modelMapper, TaskRepository taskRepository, ProjectParticipantRepository projectParticipantRepository) {
+    public ProjectService(ProjectRepository projectRepository, ModelMapper modelMapper, TaskRepository taskRepository, UserRepository userRepository, ProjectParticipantRepository projectParticipantRepository) {
         this.projectRepository = projectRepository;
         this.modelMapper = modelMapper;
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
 
         this.projectParticipantRepository = projectParticipantRepository;
     }
@@ -89,22 +95,34 @@ public class ProjectService {
         taskRepository.deleteById(taskNo);
     }
 
+
     @Transactional
-    public ProjectDTO addProject(ProjectDTO projectDTO) {
+    public ProjectDTO addProjectAndParticipants(ProjectAndParticipantDTO projectAndParticipantDTO) {
+        // DTO로부터 Project 엔티티 객체 생성
+        Project project = new Project();
+        project.setProTitle(projectAndParticipantDTO.getProTitle());
+        project.setProContent(projectAndParticipantDTO.getProContent());
+        project.setProStartDate(projectAndParticipantDTO.getProStartDate());
+        project.setProEndDate(projectAndParticipantDTO.getProEndDate());
+        project.setProStatus(projectAndParticipantDTO.getProStatus());
 
-        Project project = modelMapper.map(projectDTO, Project.class);
-        project = projectRepository.save(project);
+        // 프로젝트 저장
+        Project savedProject = projectRepository.save(project);
 
-        // 프로젝트 참여자들 저장
-        for (ProjectParticipantDTO participantDTO : projectDTO.getParticipants()) {
-            ProjectParticipant participant = modelMapper.map(participantDTO, ProjectParticipant.class);
-            participant.setProject(project); // 이렇게 변경
-            projectParticipantRepository.save(participant);
-        }
+        // 참여자 등록
+        List<ProjectParticipant> participants = projectAndParticipantDTO.getUserCodes().stream()
+                .map(userCode -> {
+                    ProjectParticipant participant = new ProjectParticipant();
+                    participant.setProNo(savedProject.getProNo());
+                    participant.setUserCode(userCode);
+                    return participant;
+                }).collect(Collectors.toList());
 
-        // 저장된 프로젝트 정보를 다시 DTO로 변환하여 반환
-        return modelMapper.map(project, ProjectDTO.class);
+        // 참여자 정보 저장
+        projectParticipantRepository.saveAll(participants);
 
+        // 저장된 프로젝트를 DTO로 변환하여 반환
+        return modelMapper.map(savedProject, ProjectDTO.class);
     }
 
 }

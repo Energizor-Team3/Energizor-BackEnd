@@ -1,6 +1,7 @@
 package com.energizor.restapi.project.controller;
 
 import com.energizor.restapi.common.ResponseDTO;
+import com.energizor.restapi.project.dto.ProjectAndParticipantDTO;
 import com.energizor.restapi.project.dto.ProjectDTO;
 import com.energizor.restapi.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class ProjectController {
 
     private final ProjectService projectService;
+
 
     public ProjectController(ProjectService projectService) {
         this.projectService = projectService;
@@ -60,10 +62,11 @@ public class ProjectController {
     }
 
 
+
     @Operation(summary = "프로젝트 추가", description = "새로운 프로젝트와 참여자들을 추가한다")
     @PostMapping("/addProject")
-    public ResponseEntity<ResponseDTO> addProject(@RequestBody ProjectDTO projectDTO) {
-        ProjectDTO createdProject = projectService.addProject(projectDTO);
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.CREATED, "프로젝트 추가 성공", createdProject));
+    public ResponseEntity<ResponseDTO> addProject(@RequestBody ProjectAndParticipantDTO projectAndParticipantDTO) {
+        projectService.addProjectAndParticipants(projectAndParticipantDTO);
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "프로젝트 및 참여자 등록 성공", projectAndParticipantDTO));
     }
 }
