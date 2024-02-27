@@ -12,7 +12,6 @@ import java.util.List;
 @Table(name = "team")
 @AllArgsConstructor
 @Getter
-@ToString
 public class TeamGroup {
 
 
@@ -59,4 +58,13 @@ public class TeamGroup {
         return new TeamGroup(teamCode, teamName, deptCode, userList);
     }
 
+
+    @Override
+    public String toString() {
+        return "TeamGroup{" +
+                "teamCode=" + teamCode +
+                ", teamName='" + teamName + '\'' +
+                ", deptCode=" + deptCode +
+                '}';
+    }
 }

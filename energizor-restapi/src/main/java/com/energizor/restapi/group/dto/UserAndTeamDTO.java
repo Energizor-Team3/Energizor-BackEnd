@@ -5,12 +5,18 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
 public class UserAndTeamDTO {
 
     private int userCode;
     private String userName;
     private TeamGroupDTO team;
 
-
+    @Override
+    public String toString() {
+        return "UserAndTeamDTO{" +
+                "userCode=" + userCode +
+                ", userName='" + userName + '\'' +
+                ", team=" + team +
+                '}';
+    }
 }

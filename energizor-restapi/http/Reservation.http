@@ -2,7 +2,7 @@
 GET http://localhost:8031/reservation/total
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4NTcwMDA0OTI2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODU4ODAwNCwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.QJ3GhRQ-vkwYcLC0YMeovUDkG21EqFl8i91rgux730A
+Authorization: Bearer eyJkYXRlIjoxNzA5MDI5Mzg3ODQ0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJwcm9maWxlUGF0aCI6IjM0MjA3ZDk2MGJlMjRlMDM5NzI1ZDljZTIyYjg3YWJhLnBuZyIsInVzZXJOYW1lIjoi66y47IKs7JuQIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwOTA0NzM4NywidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.GT6fm9fMUjpWkf6_kYD0gCFxKM8E6vlFoX_LsRRKLEk
 
 
 
@@ -10,7 +10,7 @@ Authorization: Bearer eyJkYXRlIjoxNzA4NTcwMDA0OTI2LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 GET http://localhost:8031/reservation/all
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4NTcwMDA0OTI2LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODU4ODAwNCwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.QJ3GhRQ-vkwYcLC0YMeovUDkG21EqFl8i91rgux730A
+Authorization: Bearer eyJkYXRlIjoxNzA4ODYxNzMyMDcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDg4Nzk3MzIsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.Krgn0_8Wo8jJEzq_kw2RFR_inlb1UD-QNwKoUoNzoJc
 
 ### 예약내역 상세조회
 GET http://localhost:8031/reservation/21
@@ -23,14 +23,58 @@ Authorization: Bearer eyJkYXRlIjoxNzA3OTcwNjk0MjA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 POST http://localhost:8031/reservation/create
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA3MzUyNTMwNTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDczNzA1MzAsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.pAZ1ABCX6JgPBWoJVZj0hh9-DRUKjznBe6jgGIiTYV0
-
+Authorization: Bearer eyJkYXRlIjoxNzA4ODYxNzMyMDcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDg4Nzk3MzIsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.Krgn0_8Wo8jJEzq_kw2RFR_inlb1UD-QNwKoUoNzoJc
 
 {
-  "reservationContent": "시간이 자동으로",
-  "meetCode": 2,
-  "member": [21,22,19,20,23,3,2]
+  "reservationContent": "내용",
+  "meet": {
+    "meetCode": 1,
+    "meetName": "GREEN ROOM"
+  },
+  "startTime": "13:00",
+  "endTime": "14:00",
+  "member": [
+    {
+      "userCode": 1,
+      "name": "value1"
+    },
+    {
+      "userCode": "user2",
+      "name": "value2"
+    }
+
+  ]
 }
+
+### 예약내역 추가
+#POST http://localhost:8031/reservation/create
+#Accept: */*
+#Content-Type: multipart/form-data; boundary=WebAppBoundary
+#Authorization: Bearer eyJkYXRlIjoxNzA5MDAyNzU4Njc3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDkwMjA3NTgsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.I26WAZk0HIOTU3vDleQqv77LUzFq01-6Fv4AJY5Vkyo
+#
+#
+#--WebAppBoundary
+#Content-Disposition: form-data; name="reservationContent"
+#
+#들어가?
+#--WebAppBoundary
+#Content-Disposition: form-data; name="meet"
+#
+#
+#--WebAppBoundary
+#Content-Disposition: form-data; name="member"
+#
+#21, 22, 19, 20
+#--WebAppBoundary
+#Content-Disposition: form-data; name="startTime"
+#
+#08:00:00
+#--WebAppBoundary
+#Content-Disposition: form-data; name="endTime"
+#
+#10:30:00
+#--WebAppBoundary
+
 
 ### 예약내역 수정
 PUT http://localhost:8031/reservation/modify
@@ -38,12 +82,7 @@ Content-Type: application/json
 Accept: */*
 Authorization: Bearer eyJkYXRlIjoxNzA3MzUyNTMwNTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDczNzA1MzAsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.pAZ1ABCX6JgPBWoJVZj0hh9-DRUKjznBe6jgGIiTYV0
 
-{
-  "reservationCode": 55,
-  "reservationContent": "회의실3번참석자2번들어간다",
-  "meetCode": 3,
-  "member": [2]
-}
+
 
 
 ### 예약내역 삭제
@@ -64,6 +103,5 @@ Authorization: Bearer eyJkYXRlIjoxNzA3MzUyNTMwNTI5LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 GET http://localhost:8031/reservation/attendee/1
 Content-Type: application/json
 Accept: */*
-Authorization: Bearer eyJkYXRlIjoxNzA4MDQ1NDkyODM1LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODA2MzQ5MiwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.xQnlX4JRFjbQFDqraSy6OaAikV2uMUjPeOJHlLAdXQQ
-
+Authorization: Bearer eyJkYXRlIjoxNzA4MTYwOTE0Mjc0LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ1c2VyUmFuayI6IuqzvOyepSIsInVzZXJOYW1lIjoiMjAwMzAyMDAyIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoyLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fV0sImV4cCI6MTcwODE3ODkxNCwidXNlcklkIjoiMjAwMzAyMDAyIiwidXNlckNvZGUiOjIsImVtYWlsIjoiZGV2QGdtYWlsLmNvbSJ9.uqh21HGYRDctls3_zeTYU6-KXA5ij9kOXMG3_C_JmKs
 

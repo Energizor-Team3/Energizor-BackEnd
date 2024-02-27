@@ -17,7 +17,7 @@ public interface InterestBoardRepository extends JpaRepository<InterestBoard,Int
     @Query("select ib "+
             "from InterestBoard ib "+
             "where ib.interestCode= :interestCode")
-    InterestBoard findByInterestCode(@Param("interestCode")int interestCode);
+    InterestBoard findByInterestCode(@Param("interestCode") int interestCode);
 
 
     @Query(value = "select ib, b, u, count(bc) "+

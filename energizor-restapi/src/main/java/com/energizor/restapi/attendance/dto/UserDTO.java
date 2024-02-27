@@ -10,5 +10,5 @@ public class UserDTO {
 
     private int userCode;
     private String userName;
-
+    private String teamName;
 }

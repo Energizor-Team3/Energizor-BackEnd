@@ -11,5 +11,5 @@ import java.sql.Time;
 public class ReservationTimeDTO {
     private int reservationTimeCode;
     private int reservationCode;
-    private String meetTime;
+    private int meetTime;
 }

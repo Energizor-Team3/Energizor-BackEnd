@@ -647,6 +647,9 @@ public class ApprovalService {
     @Transactional
     public String approvement(int documentCode, UserDTO userDTO) {
 
+
+
+
         //결재 대상 조회
         int approvalLineUser = approvalLineRepository.approvalSubjectUserCode(documentCode);
         User changeUser = modelMapper.map(userDTO, User.class);
@@ -654,7 +657,7 @@ public class ApprovalService {
 
         // 대리위임자 결재
         ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
-
+        System.out.println("proxyApproval대리결재 가능한지 조회  " + proxyApproval);
 
         if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y") && proxyApproval.getOriginUser().getUserCode() == approvalLineUser) {
             ApprovalLine porxyApprovalLine = approvalLineRepository.findByDocumentDocumentCodeAndUserUserCodeAndApprovalLineStatus(documentCode, proxyApproval.getOriginUser().getUserCode(), "미결");
@@ -663,15 +666,15 @@ public class ApprovalService {
             // 결재 상태 업데이트
             porxyApprovalLine.processingDate(LocalDateTime.now());
             porxyApprovalLine.approvalLineStatus("결재");
-            porxyApprovalLine.getUser().userCode(proxyApproval.getChangeUser().getUserCode());
+            
             approvalLineRepository.save(porxyApprovalLine);
-
+            System.out.println("porxyApprovalLine 업데이트 되었는지 확인 = " + porxyApprovalLine);
 
             // 휴가일수 차감
-            Document document = documentRepository.findByDocumentCodeAndForm(documentCode, "휴가신청서");
 
-            if (document != null) {
-                List<ApprovalLine> checkStatus = approvalLineRepository.findByDocument(document);
+
+            if (porxyApprovalLine.getDocument().getForm().equals("휴가신청서")) {
+                List<ApprovalLine> checkStatus = approvalLineRepository.findByDocument(porxyApprovalLine.getDocument());
                 int check = 0;
                 for (ApprovalLine lineCheckStatus : checkStatus) {
 
@@ -682,8 +685,8 @@ public class ApprovalService {
                 }
                 if (check == checkStatus.size()) {
 
-                    DayOff dayOff = dayOffRepository.findByUser(document.getUserDTO());
-                    DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(document);
+                    DayOff dayOff = dayOffRepository.findByUser(porxyApprovalLine.getDocument().getUserDTO());
+                    DayOffApply dayOffApply = dayOffApplyRepository.findByDocument(porxyApprovalLine.getDocument());
 
 
                     dayOff.offUsed(dayOff.getOffUsed() + dayOffApply.getOffDay());
@@ -1437,6 +1440,8 @@ public class ApprovalService {
                 .collect(Collectors.toList());
     }
 
+
+    // 대리결재 조회
     public Object selectProxy(UserDTO userDTO) {
 
         ProxyApproval proxyApproval = proxyApprovalRepository.findByOriginUserUserCodeAndProxyStatus(userDTO.getUserCode(), "N");
@@ -1480,7 +1485,7 @@ public class ApprovalService {
 
         System.out.println("proxyApproval1 = " + proxyApproval1);
 
-        proxyApproval1.proxyStatus("Y");
+        proxyApproval1.proxyStatus("F");
 
         proxyApprovalRepository.save(proxyApproval1);
         return "대리결재 위임 취소 성공";
@@ -1827,5 +1832,22 @@ public class ApprovalService {
 
         ApprovalFileDTO approvalFileDTO = modelMapper.map(approvalFile, ApprovalFileDTO.class);
         return approvalFileDTO;
+    }
+
+    // 대리 결재 시 대리결재자 조건용
+    public Object selectProxy2(UserDTO userDTO) {
+
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserUserCodeAndProxyStatus(userDTO.getUserCode(),"Y");
+
+        if(proxyApproval != null){
+            ProxyApprovalDTO proxyApprovalDTO = modelMapper.map(proxyApproval, ProxyApprovalDTO.class);
+
+            System.out.println("proxyApprovalDTO = " + proxyApprovalDTO);
+            proxyApprovalDTO.getChangeUser().setProfilePath(IMAGE_URL + proxyApprovalDTO.getChangeUser().getProfilePath());
+
+            return proxyApprovalDTO;
+        }
+
+        return "조회성공";
     }
 }
