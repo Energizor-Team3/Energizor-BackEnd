@@ -48,7 +48,7 @@ Authorization: Bearer eyJkYXRlIjoxNzA5MDAwMzY2NDI4LCJ0eXBlIjoiand0IiwiYWxnIjoiSF
 
 {
   "proTitle": "다시다시",
-  "proStartDate": "2024-03-06",
+  "proStartDate": "2024-03-08",
   "proEndDate": "2024-12-31",
   "proContent": "이 프로젝트는 새로운 서비스 개발을 목표로 합니다.",
   "userCodes": [1,2,3]
