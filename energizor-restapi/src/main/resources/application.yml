@@ -15,7 +15,7 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
-      location: C:\\upload
+      location: build/resources/main//static/upload
   web:
     resources:
       static-locations: classpath:/imgs/
@@ -35,7 +35,6 @@ spring:
           starttls:
             enable: true
 
-
   # jpa config
   jpa:
     hibernate:
@@ -44,6 +43,8 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
+  mvc:
+    static-path-pattern: /static/**
 
 # Logging Level
 logging:
@@ -54,10 +55,11 @@ logging:
 image:
   ## WebConfig에 세팅
   add-resource-locations: classpath:/static/imgs/
+#  add-resource-locations: file:////imgs
   add-resource-handler: /imgs/**
+  image-dir: build/resources/main//static/imgs
+  image-url: http://43.201.136.92:8031/imgs/
 
-  image-dir: src/main/resources/static/imgs
-  image-url: http://localhost:8031/imgs/
 jwt:
   key: wERjtIdxQ8lNjF0w/AAiN6HqTASaCAUzSq6nbKefMwf5CbPE8GvwLsClz94uVt9Q1esxYwwXVU+BYn7/mR01Qg==
   time: 18000000
@@ -71,4 +73,4 @@ springdoc:
 
 board:
   upload:
-    path: C:\\upload
+    path: build/resources/main//static/upload
