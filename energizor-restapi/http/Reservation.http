@@ -19,50 +19,61 @@ Accept: */*
 Authorization: Bearer eyJkYXRlIjoxNzA3OTcwNjk0MjA4LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDEiLCJ1c2VyUmFuayI6IuuMgOumrCIsInVzZXJOYW1lIjoiMjAwMzAyMDAxIiwidXNlclJvbGUiOlt7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MSwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoxLCJhdXRoTmFtZSI6IlJPTEVfVVNFUiJ9fSx7InVzZXJDb2RlIjoxLCJhdXRoQ29kZSI6MiwiYXV0aG9yaXR5Ijp7ImF1dGhDb2RlIjoyLCJhdXRoTmFtZSI6IlJPTEVfQURNSU4ifX1dLCJleHAiOjE3MDc5ODg2OTQsInVzZXJJZCI6IjIwMDMwMjAwMSIsInVzZXJDb2RlIjoxLCJlbWFpbCI6ImhybUBnbWFpbC5jb20ifQ.Cj6BG2kePLLaE6TzquCnfsGEocb5mKgAKfYmtOGEYZc
 
 
-#### 예약내역 추가
-#POST http://localhost:8031/reservation/create
-#Content-Type: application/json
-#Accept: */*
-#Authorization: Bearer eyJkYXRlIjoxNzA4ODYxNzMyMDcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDg4Nzk3MzIsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.Krgn0_8Wo8jJEzq_kw2RFR_inlb1UD-QNwKoUoNzoJc
-#
-#
-#{
-#  "reservationContent": "시간 내가 지정11",
-#  "meetCode": {
-#    "meetCode": 1
-#  },
-#  "member": [21, 22, 19, 20],
-#  "meetTime": [1, 2, 3, 4, 5]
-#}
-
 ### 예약내역 추가
 POST http://localhost:8031/reservation/create
+Content-Type: application/json
 Accept: */*
-Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJkYXRlIjoxNzA4OTA1OTU0ODY5LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDg5MjM5NTQsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.s7twOvVI8fQjh8b-CvQMWC8ki93zIXbQJTPIafC3s6Y
+Authorization: Bearer eyJkYXRlIjoxNzA4ODYxNzMyMDcyLCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDg4Nzk3MzIsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.Krgn0_8Wo8jJEzq_kw2RFR_inlb1UD-QNwKoUoNzoJc
 
+{
+  "reservationContent": "내용",
+  "meet": {
+    "meetCode": 1,
+    "meetName": "GREEN ROOM"
+  },
+  "startTime": "13:00",
+  "endTime": "14:00",
+  "member": [
+    {
+      "userCode": 1,
+      "name": "value1"
+    },
+    {
+      "userCode": "user2",
+      "name": "value2"
+    }
 
---WebAppBoundary
-Content-Disposition: form-data; name="reservationContent"
+  ]
+}
 
-시간 내가 지정11
---WebAppBoundary
-Content-Disposition: form-data; name="meetCode"
-
-1
---WebAppBoundary
-Content-Disposition: form-data; name="member"
-
-21, 22, 19, 20
---WebAppBoundary
-Content-Disposition: form-data; name="startTime"
-
-08:00:00
---WebAppBoundary
-Content-Disposition: form-data; name="endTime"
-
-10:30:00
---WebAppBoundary
+### 예약내역 추가
+#POST http://localhost:8031/reservation/create
+#Accept: */*
+#Content-Type: multipart/form-data; boundary=WebAppBoundary
+#Authorization: Bearer eyJkYXRlIjoxNzA5MDAyNzU4Njc3LCJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJzdWIiOiIyMDAzMDIwMDIiLCJ0ZWFtRFRPIjp7InRlYW1Db2RlIjo1LCJkZXB0Ijp7ImRlcHRDb2RlIjozLCJkZXB0TmFtZSI6Iuq4sOyIoOuzuOu2gCJ9LCJ0ZWFtTmFtZSI6IuqwnOuwnDHtjIAifSwidXNlclB3IjoiJDJhJDEwJENPdmF6eXdnWlBYc2VlS2FZaHJ1aC5wQVlZZmNTZUdPNWFTckhPc0xaTjBYOGpvTndXMmRXIiwidXNlclJhbmsiOiLqs7zsnqUiLCJ1c2VyTmFtZSI6IuyepeqwnOuwnCIsInVzZXJSb2xlIjpbeyJ1c2VyQ29kZSI6MiwiYXV0aENvZGUiOjEsImF1dGhvcml0eSI6eyJhdXRoQ29kZSI6MSwiYXV0aE5hbWUiOiJST0xFX1VTRVIifX1dLCJleHAiOjE3MDkwMjA3NTgsInVzZXJJZCI6IjIwMDMwMjAwMiIsInVzZXJDb2RlIjoyLCJlbWFpbCI6ImRldkBnbWFpbC5jb20ifQ.I26WAZk0HIOTU3vDleQqv77LUzFq01-6Fv4AJY5Vkyo
+#
+#
+#--WebAppBoundary
+#Content-Disposition: form-data; name="reservationContent"
+#
+#들어가?
+#--WebAppBoundary
+#Content-Disposition: form-data; name="meet"
+#
+#
+#--WebAppBoundary
+#Content-Disposition: form-data; name="member"
+#
+#21, 22, 19, 20
+#--WebAppBoundary
+#Content-Disposition: form-data; name="startTime"
+#
+#08:00:00
+#--WebAppBoundary
+#Content-Disposition: form-data; name="endTime"
+#
+#10:30:00
+#--WebAppBoundary
 
 
 ### 예약내역 수정

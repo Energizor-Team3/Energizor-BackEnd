@@ -5,11 +5,13 @@ import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "reservation_time")
 @AllArgsConstructor
 @Getter
+@Setter
 public class ReservationTime {
     @Id
     @Column(name = "reservation_time_code")

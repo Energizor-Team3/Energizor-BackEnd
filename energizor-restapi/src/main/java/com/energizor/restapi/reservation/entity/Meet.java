@@ -19,10 +19,19 @@ public class Meet {
     @Id
     @Column(name = "meet_code")
     private int meetCode;
+
     @Column(name = "meet_name")
     private String meetName;
 
     public Meet() {}
+
+    public Meet(int meetCode) {
+        this.meetCode = meetCode;
+    }
+
+    public Meet(String meetCode) {
+        this.meetCode = Integer.parseInt(meetCode);
+    }
 
     public Meet meetCode(int meetCode){
         this.meetCode = meetCode;
@@ -33,6 +42,4 @@ public class Meet {
         this.meetName = meetName;
         return this;
     }
-
-
 }

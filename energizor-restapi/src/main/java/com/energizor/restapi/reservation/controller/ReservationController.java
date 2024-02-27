@@ -58,13 +58,12 @@ public class ReservationController {
         }
     }
 
-    //예약내역 추가
     @Operation(summary = "예약 추가하기")
     @PostMapping("/create")
-    public ResponseEntity<ResponseDTO> createReservation(@ModelAttribute ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal) {
-        System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% " + reservationDTO);
+    public ResponseEntity<ResponseDTO> createReservation(@RequestBody ReservationDTO reservationDTO, @AuthenticationPrincipal UserDTO principal) {
+        System.out.println("Received reservation data from client: " + reservationDTO);
         String result = reservationService.createReservation(reservationDTO, principal);
-        if (result.equals("등록성공")) {
+        if ("등록 성공".equals(result)) {
             return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDTO(HttpStatus.OK, "예약 생성 성공", null));
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "예약 생성 실패", null));
@@ -73,18 +72,18 @@ public class ReservationController {
 
 
 
-    //예약내역 수정
-    @Operation(summary = "예약 수정하기")
-    @PutMapping("/modify")
-    public ResponseEntity<ResponseDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) {
-        String result = reservationService.updateReservation(reservationDTO);
-        if (result.equals("Reservation updated successfully")) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 수정 성공", null));
-        } else {
-            // 예약이 실패한 경우를 처리할 수 있도록 적절한 응답을 반환합니다.
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "예약 수정 실패", null));
-        }
-    }
+//    //예약내역 수정
+//    @Operation(summary = "예약 수정하기")
+//    @PutMapping("/modify")
+//    public ResponseEntity<ResponseDTO> updateReservation(@RequestBody ReservationDTO reservationDTO) {
+//        String result = reservationService.updateReservation(reservationDTO);
+//        if (result.equals("Reservation updated successfully")) {
+//            return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "예약 수정 성공", null));
+//        } else {
+//            // 예약이 실패한 경우를 처리할 수 있도록 적절한 응답을 반환합니다.
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "예약 수정 실패", null));
+//        }
+//    }
     // 예약내역 삭제
     @Operation(summary = "예약 삭제하기")
     @DeleteMapping("/delete/{reservationCode}")
