@@ -15,25 +15,10 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+      location: C:\\upload
   web:
     resources:
       static-locations: classpath:/imgs/
-  devtools:
-    restart:
-      enabled: false
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: sueyeon777@gmail.com
-    password: "olhhxfidajppagmv"
-    properties:
-      debug: true
-      smtp:
-        auth: true
-        timeout:
-          starttls:
-            enable: true
-
 
   # jpa config
   jpa:
@@ -61,9 +46,6 @@ jwt:
   key: wERjtIdxQ8lNjF0w/AAiN6HqTASaCAUzSq6nbKefMwf5CbPE8GvwLsClz94uVt9Q1esxYwwXVU+BYn7/mR01Qg==
   time: 18000000
 
-## swagger 확인 url
-## http://localhost:8031/swagger-ui/index.html
-springdoc:
-  packages-to-scan: com.energizor.restapi
-  default-consumes-media-type: application/json;charset=UTF-8
-  default-produces-media-type: application/json;charset=UTF-8
+board:
+  upload:
+    path: C:\\upload

@@ -21,4 +21,14 @@ public class BoardCommentDTO extends BaseEntity {
     private String userName;
     private String userRank;
     private int boardCode;
+
+    public BoardCommentDTO(int commentCode,String commentContent,LocalDateTime registerDate,String deptName,String teamName,String userName,String userRank){
+        this.commentCode=commentCode;
+        this.commentContent=commentContent;
+        this.registerDate=registerDate;
+        this.deptName=deptName;
+        this.teamName=teamName;
+        this.userName=userName;
+        this.userRank=userRank;
+    }
 }

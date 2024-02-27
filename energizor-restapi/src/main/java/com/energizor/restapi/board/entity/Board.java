@@ -7,12 +7,14 @@ import org.springframework.cglib.core.Local;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.energizor.restapi.users.entity.User;
 
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString(exclude="user")
 public class Board extends BaseEntity{
 
@@ -42,7 +44,10 @@ public class Board extends BaseEntity{
     private BoardType boardType;
 
     @OneToMany(mappedBy = "board")
-    private List<InterestBoard> interestBoards=new ArrayList<>();
+    private List<InterestBoard> interestBoards = new ArrayList<>();
+
+    @Column(name="temporary_opt")
+    private Boolean temporaryOpt;
 
     public Board boardCode(int boardCode) {
         this.boardCode=boardCode;
@@ -64,8 +69,18 @@ public class Board extends BaseEntity{
         return this;
     }
 
+    public Board user(User user) {
+        this.user=user;
+        return this;
+    }
+
+    public Board boardType(BoardType boardType){
+        this.boardType=boardType;
+        return this;
+    }
+
     public Board build() {
-        return new Board(boardCode,title,content,viewCount,deleteDate,user,boardType,interestBoards);
+        return new Board(boardCode,title,content,viewCount,deleteDate,user, boardType,interestBoards,temporaryOpt);
     }
 
     public void changeBoardDeletedAt(LocalDateTime deleteDate) {this.deleteDate=deleteDate;}

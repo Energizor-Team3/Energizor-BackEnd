@@ -1,5 +1,6 @@
 package com.energizor.restapi.board.entity;
 
+import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
