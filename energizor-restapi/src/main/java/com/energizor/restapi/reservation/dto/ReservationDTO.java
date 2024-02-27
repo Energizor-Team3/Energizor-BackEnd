@@ -6,6 +6,7 @@ import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,10 +21,12 @@ public class ReservationDTO {
     private LocalDate reservationDate;
     private String reservationContent;
     private UserDTO userCode;
-    private MeetDTO meetCode;
+    private Meet meetCode;
     private int[] member;
     private int[] meetTime;
     private String[] time;
+    private String startTime;
+    private String endTime;
 
     @Override
     public String toString() {

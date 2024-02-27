@@ -66,13 +66,21 @@ public class UserService {
 
 
     public Page<UserDTO> selectUserListWithPagingForAdmin(Criteria cri) {
-        log.info("[UserService] selectUserListWithPagingForAdmin Start ===================================");
+        log.info("[UserService] selectUserListWithPagingForAdmin Start , Search: " + cri.getSearch());
 
         int index = cri.getPageNum() - 1;
         int count = cri.getAmount();
         Pageable paging = PageRequest.of(index, count, Sort.by("userCode").descending());
 
-        Page<User> result = userRepository.findByUserStatus("Y", paging);
+//        Page<User> result = userRepository.findByUserStatus("Y", paging);
+        Page<User> result;
+        if (cri.getSearch() != null && !cri.getSearch().isEmpty()) {
+            // 검색어가 있는 경우, 검색어를 포함하여 결과를 필터링합니다.
+            result = userRepository.findByUserStatusAndUserNameContaining("Y", cri.getSearch(), paging);
+        } else {
+            // 검색어가 없는 경우, 모든 활성 사용자를 조회합니다.
+            result = userRepository.findAll(paging);
+        }
 
         Page<UserDTO> resultList = result.map(user -> {
             UserDTO userDTO = modelMapper.map(user, UserDTO.class);

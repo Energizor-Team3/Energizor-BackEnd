@@ -11,7 +11,6 @@ import lombok.ToString;
 @ToString
 public class DeptGroup {
 
-    /*  */
 
     @Id
     @Column(name = "dept_code", nullable = false)
