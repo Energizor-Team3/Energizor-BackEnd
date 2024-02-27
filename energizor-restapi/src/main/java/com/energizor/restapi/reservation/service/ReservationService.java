@@ -47,10 +47,39 @@ public class ReservationService {
     //전체 예약 조회
     public List<ReservationDTO> selectTotalReservations() {
         List<Reservation> allReservations = reservationRepository.findAll();
+        List<ReservationTime> allReservationTimes = reservationTimeRepository.findAll();
+
         return allReservations.stream()
-                .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
+                .map(reservation -> mapToReservationDTO(reservation, allReservationTimes))
                 .collect(Collectors.toList());
     }
+
+    private ReservationDTO mapToReservationDTO(Reservation reservation, List<ReservationTime> allReservationTimes) {
+        ReservationDTO reservationDTO = modelMapper.map(reservation, ReservationDTO.class);
+
+        // 예약 코드에 해당하는 reservation_time 찾기
+        List<ReservationTime> reservationTimes = allReservationTimes.stream()
+                .filter(rt -> rt.getReservationCode() == reservation.getReservationCode())
+                .collect(Collectors.toList());
+
+        // 예약 코드에 해당하는 reservation_time 중에서 meet_time이 가장 작은 값을 시작 시간으로 설정
+        int startTime = reservationTimes.stream()
+                .mapToInt(ReservationTime::getMeetTime)
+                .min()
+                .orElse(0);
+
+        // 예약 코드에 해당하는 reservation_time 중에서 meet_time이 가장 큰 값을 종료 시간으로 설정
+        int endTime = reservationTimes.stream()
+                .mapToInt(ReservationTime::getMeetTime)
+                .max()
+                .orElse(0);
+
+        reservationDTO.setStartTime(String.valueOf(startTime));
+        reservationDTO.setEndTime(String.valueOf(endTime));
+
+        return reservationDTO;
+    }
+
 
     //내 예약내역 전체조회
     public List<ReservationDTO> selectAllReservations(UserDTO userDTO) {

@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "reservation")
 @AllArgsConstructor
 @Getter
+@Setter
 
 
 public class Reservation {
