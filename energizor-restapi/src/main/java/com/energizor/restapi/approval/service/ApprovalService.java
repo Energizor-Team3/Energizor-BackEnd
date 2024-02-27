@@ -1794,6 +1794,9 @@ public class ApprovalService {
         int num = documentList.size() + documentList2.size() + documentList3.size();
 
             System.out.println("num 111111111111111111= " + num);
+            if(num <= 0){
+                return "조회성공";
+            }
 
             return num;
         }
@@ -1813,7 +1816,9 @@ public class ApprovalService {
             }
         }
         int num = documentList.size() + documentList2.size() + documentList4.size();
-
+        if(num <= 0){
+            return "조회성공";
+        }
         System.out.println("num 2222222222222222= " + num);
         return num;
     }
