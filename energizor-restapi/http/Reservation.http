@@ -1,4 +1,4 @@
-###  전체 예약내역 조회
+###  전체 예약내역 조회 겨우 찾았다 타임그리드 나오는
 GET http://localhost:8031/reservation/total
 Content-Type: application/json
 Accept: */*

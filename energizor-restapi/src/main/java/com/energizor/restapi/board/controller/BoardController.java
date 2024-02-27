@@ -1,47 +1,27 @@
 package com.energizor.restapi.board.controller;
 
 import com.energizor.restapi.board.dto.*;
-import com.energizor.restapi.board.entity.Board;
-import com.energizor.restapi.board.entity.BoardFile;
 import com.energizor.restapi.board.service.BoardService;
-import com.energizor.restapi.common.Criteria;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.ServerEndpoint;
-import lombok.AllArgsConstructor;
-import net.coobird.thumbnailator.Thumbnailator;
-import org.apache.tomcat.util.descriptor.web.ErrorPage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
-import com.energizor.restapi.common.PageDTO;
-import com.energizor.restapi.common.PagingResponseDTO;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.users.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-//import org.springframework.web.bind.annotation.*;
 
 @Tag(name="게시판")
 @RestController
@@ -136,6 +116,8 @@ public class BoardController {
     @GetMapping("/list")
     public ResponseEntity<ResponseDTO> findAllList(PageRequestDTO pageRequestDTO, @AuthenticationPrincipal UserDTO principal,@RequestParam("boardTypeCode")int boardTypeCode) {
 
+        System.out.println("boardTypeCode :"+boardTypeCode);
+
         log.info("[BoardController] boardTypeCode : "+boardTypeCode);
         log.info("pageRequestDTO : "+pageRequestDTO);
         pageRequestDTO.setBoardTypeCode(boardTypeCode);
@@ -167,11 +149,17 @@ public class BoardController {
     @PostMapping("/register")
 //    public ResponseEntity<ResponseDTO> register(@RequestBody
 //                                                    BoardDTO boardDTO,@AuthenticationPrincipal UserDTO principal,@RequestParam("uploadFiles") MultipartFile[] uploadFiles) {
-        public ResponseEntity<ResponseDTO> register(@RequestParam("title") String title, @RequestParam("boardTypeCode") int boardTypeCode, @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles, @RequestParam("content") String content, @RequestParam(value = "isTemporaryOpt", required = false) Boolean temporaryOpt, @AuthenticationPrincipal UserDTO principal) {
+    public ResponseEntity<ResponseDTO> register(@RequestParam("title") String title, @RequestParam("boardTypeCode") int boardTypeCode, @RequestParam(value = "uploadFiles", required = false) MultipartFile[] uploadFiles, @RequestParam("content") String content, @RequestParam(value = "isTemporaryOpt", required = false) Boolean temporaryOpt, @AuthenticationPrincipal UserDTO principal) {
 
         System.out.println("title = " + title);
+        System.out.println("boardTypeCode = " + boardTypeCode);
+        System.out.println("content = " + content);
+        System.out.println("temporaryOpt = " + temporaryOpt);
+        if(temporaryOpt == null) temporaryOpt = false;
+
 //        log.info("boardDTO : "+boardDTO);
 //        log.info("principal : "+principal);
+
 
         if (uploadFiles == null) {
             uploadFiles = new MultipartFile[0];
@@ -248,12 +236,12 @@ public class BoardController {
     @GetMapping("/interest/list")
     public ResponseEntity<ResponseDTO> findInterestBoardList (PageRequestDTO pageRequestDTO,@AuthenticationPrincipal UserDTO principal) {
 
-       log.info("list:"+pageRequestDTO);
+        log.info("list:"+pageRequestDTO);
 
-       PageResultDTO response=boardService.findInterestBoardList(pageRequestDTO);
-       log.info("response : "+response);
+        PageResultDTO response=boardService.findInterestBoardList(pageRequestDTO);
+        log.info("response : "+response);
 
-       return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"관심게시글 조회 성공",response));
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"관심게시글 조회 성공",response));
     }
 
     @Operation(summary="관심게시판 상세 조회",description="로그인한 사용자는 관심게시글을 상세 조회할 수 있습니다.")
@@ -275,7 +263,7 @@ public class BoardController {
 
     @Operation(summary="관심게시글 삭제",description="로그인한 사용자는 관심게시글을 삭제할 수 있습니다.")
     @DeleteMapping("/interest/delete/{interestCode}")
-    public ResponseEntity<ResponseDTO> deleteInterestBoard(@PathVariable int interestCode,@AuthenticationPrincipal UserDTO owner) {
+    public ResponseEntity<ResponseDTO> deleteInterestBoard(@PathVariable(name="interestCode") int interestCode,@AuthenticationPrincipal UserDTO owner) {
 
         int ownerCode=owner.getUserCode();
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"관심게시글 삭제",boardService.deleteInterestBoard(interestCode,ownerCode)));

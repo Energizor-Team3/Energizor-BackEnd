@@ -3,7 +3,6 @@ package com.energizor.restapi.calendar.controller;
 
 import com.energizor.restapi.calendar.dto.CalendarAndParticipantDTO;
 import com.energizor.restapi.calendar.dto.CalendarDTO;
-import com.energizor.restapi.calendar.dto.ScheduleAndCalendarDTO;
 import com.energizor.restapi.calendar.dto.ScheduleDTO;
 import com.energizor.restapi.calendar.service.CalendarService;
 import com.energizor.restapi.calendar.service.ScheduleService;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "캘린더 관련 스웨거 연동 ")

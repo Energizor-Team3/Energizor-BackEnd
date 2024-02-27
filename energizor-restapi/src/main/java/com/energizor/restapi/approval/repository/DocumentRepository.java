@@ -54,5 +54,7 @@ public interface DocumentRepository extends JpaRepository<Document, Integer> {
     Page<Document> findDocByUserDTOUserCode(int userCode, Pageable paging);
 
 
+    void deleteByDocumentCode(int i);
 
+    List<Document> findDoc2ByUserDTOUserCode(int userCode);
 }

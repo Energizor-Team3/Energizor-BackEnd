@@ -328,7 +328,7 @@ public class UserService {
                 System.out.println("imageName ===== " + imageName);
                 replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, profilePath);
                 log.info("[updateProfile] replaceFileName : " + replaceFileName);
-
+                System.out.println("IMAGE_DIR = " + IMAGE_DIR);
                 user = user.profilePath(replaceFileName).build();
 
                 if (!"defaultprofile.png".equals(oriImage)) {

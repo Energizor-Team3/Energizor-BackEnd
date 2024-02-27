@@ -289,11 +289,27 @@ public class ApprovalController {
     return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회성공", approvalService.selectTempDocumentDetail(documentCode)));
     }
 
+    // 임시 기안 삭제
+    @Operation(summary = "임시 기안 삭제")
+    @DeleteMapping("/deleteTempApproval")
+    public ResponseEntity<ResponseDTO> deleteTempApproval(@RequestParam("documentCode") int[] documentCode) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "임시 기안 삭제 성공", approvalService.deleteTempApproval(documentCode)));
+    }
+
     // 대리 결재 위임
     @Operation(summary = "대리 결재 위임")
     @PostMapping("/insertProxy")
     public ResponseEntity<ResponseDTO> insertProxy(@RequestBody ProxyApprovalDTO proxyApprovalDTO, @AuthenticationPrincipal UserDTO userDTO){
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 위임 성공", approvalService.insertProxy(proxyApprovalDTO, userDTO)));
+    }
+
+    //대리 결재 취소
+    @Operation(summary = "대리 결재 위임 취소")
+    @PutMapping("/updateProxy/{proxyCode}")
+    public ResponseEntity<ResponseDTO> updateProxy(@PathVariable int proxyCode) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(new ResponseDTO(HttpStatus.OK, "대리결재 위임 취소", approvalService.updateProxy(proxyCode)));
     }
 
     // 기안 문서에 댓글 달기
@@ -353,6 +369,16 @@ public class ApprovalController {
     }
 
 
+    // 대리결재 조회
+    @Operation(summary = "대리결재 조회")
+    @GetMapping("/proxy")
+    public ResponseEntity<ResponseDTO> proxy(@AuthenticationPrincipal UserDTO userDTO)  {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 조회 성공", approvalService.selectProxy(userDTO)));
+
+    }
+
+
 
 
 
@@ -388,12 +414,69 @@ public class ApprovalController {
     }
 
 
+
     @Operation(summary = "유저정보")
     @GetMapping("/user")
     public ResponseEntity<ResponseDTO> insertgeneralDraft(@AuthenticationPrincipal UserDTO userDTO) {
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "공유 문서 조회 성공", approvalService.findUserDetail(userDTO)));
 
     }
+
+
+
+    // 참조 받은 문서 진행중 조회
+    @Operation(summary = "참조 받은 진행중문서 조회")
+    @GetMapping("/rfdocument")
+    public ResponseEntity<ResponseDTO> selectRfDocument(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "참조 받은 문서 조회 성공", approvalService.selectRfDocument(userDTO)));
+
+    }
+
+    // 참조 받은 문서 완료 조회
+    @Operation(summary = "참조 받은 완료 문서 조회")
+    @GetMapping("/rfdocumentcomplete")
+    public ResponseEntity<ResponseDTO> selectRfDocumentComplete(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "참조 받은 문서 조회 성공", approvalService.selectRfDocumentComplete(userDTO)));
+
+    }
+
+    // 결재한 문서 중에 완료 조회
+    @Operation(summary = "결재한 문서 중에 문서 조회")
+    @GetMapping("/linedocumentcomplete")
+    public ResponseEntity<ResponseDTO> selectLineDocumentComplete(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "결재한 문서 중에 완료된 문서 조회 성공", approvalService.selectLineDocumentComplete(userDTO)));
+
+    }
+
+    // 결재한 문서 중에 진행중 조회
+    @Operation(summary = "결재한 문서 중에 진행중 조회")
+    @GetMapping("/linedocument")
+    public ResponseEntity<ResponseDTO> selectLineDocument(@AuthenticationPrincipal UserDTO userDTO) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "결재한 문서 중에 완료된 문서 조회 성공", approvalService.selectLineDocument(userDTO)));
+
+    }
+
+    // 내문서함 전체 문서 갯수
+    @Operation(summary = "내문서함 전체 문서 갯수")
+    @GetMapping("/totaldocument")
+    public ResponseEntity<ResponseDTO> totaldocument(@AuthenticationPrincipal UserDTO userDTO ) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "내문서함 전체 문서 갯수 조회 성공", approvalService.totaldocument(userDTO)));
+
+    }
+    @Operation(summary = "진행중인 전체 문서 갯수")
+    @GetMapping("/totaldocumentproceeding")
+    public ResponseEntity<ResponseDTO> totaldocumentproceeding(@AuthenticationPrincipal UserDTO userDTO ) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "진행중인 문서함 전체 문서 갯수 조회 성공", approvalService.totaldocumentproceeding(userDTO)));
+
+    }
+
+    @Operation(summary = "첨부 파일 조회")
+    @GetMapping("/selectfile/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectfile(@PathVariable int documentCode ) {
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "첨부파일 조회 성공", approvalService.selectfile(documentCode)));
+
+    }
+
 
 
 

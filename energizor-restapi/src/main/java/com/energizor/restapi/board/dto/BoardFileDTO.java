@@ -20,7 +20,7 @@ public class BoardFileDTO {
 
     private int fileSize;
 
-    private LocalDateTime uploadDate=LocalDateTime.now();
+    private LocalDateTime uploadDate; //=LocalDateTime.now()
 
     private String folderPath;
 

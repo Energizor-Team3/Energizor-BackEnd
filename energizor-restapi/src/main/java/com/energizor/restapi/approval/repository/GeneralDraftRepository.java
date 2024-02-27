@@ -7,4 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface GeneralDraftRepository extends JpaRepository<GeneralDraft, Integer> {
     GeneralDraft findByDocument(Document document);
+
+
+
+    void deleteByDocument(Document document);
 }

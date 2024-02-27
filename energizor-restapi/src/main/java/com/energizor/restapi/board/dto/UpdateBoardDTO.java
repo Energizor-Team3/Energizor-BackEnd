@@ -1,16 +1,17 @@
-package com.energizor.restapi.board.dto;
+    package com.energizor.restapi.board.dto;
 
-import lombok.*;
+    import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@ToString
-@Builder
-public class UpdateBoardDTO {
-    private int boardCode;
-    private String updateTitle;
-    private String updateContent;
-    private String updateDate;
-}
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    @ToString
+    @Builder
+    public class UpdateBoardDTO {
+        private int boardCode;
+        private String updateTitle;
+        private String updateContent;
+        private int boardTypeCode;
+        private String updateDate;
+    }

@@ -89,4 +89,8 @@ public interface ApprovalLineRepository extends JpaRepository<ApprovalLine, Inte
 
 
 
+
+
+
+    List<ApprovalLine> findByUserUserCode(int userCode);
 }
