@@ -47,10 +47,39 @@ public class ReservationService {
     //전체 예약 조회
     public List<ReservationDTO> selectTotalReservations() {
         List<Reservation> allReservations = reservationRepository.findAll();
+        List<ReservationTime> allReservationTimes = reservationTimeRepository.findAll();
+
         return allReservations.stream()
-                .map(reservation -> modelMapper.map(reservation, ReservationDTO.class))
+                .map(reservation -> mapToReservationDTO(reservation, allReservationTimes))
                 .collect(Collectors.toList());
     }
+
+    private ReservationDTO mapToReservationDTO(Reservation reservation, List<ReservationTime> allReservationTimes) {
+        ReservationDTO reservationDTO = modelMapper.map(reservation, ReservationDTO.class);
+
+        // 예약 코드에 해당하는 reservation_time 찾기
+        List<ReservationTime> reservationTimes = allReservationTimes.stream()
+                .filter(rt -> rt.getReservationCode() == reservation.getReservationCode())
+                .collect(Collectors.toList());
+
+        // 예약 코드에 해당하는 reservation_time 중에서 meet_time이 가장 작은 값을 시작 시간으로 설정
+        int startTime = reservationTimes.stream()
+                .mapToInt(ReservationTime::getMeetTime)
+                .min()
+                .orElse(0);
+
+        // 예약 코드에 해당하는 reservation_time 중에서 meet_time이 가장 큰 값을 종료 시간으로 설정
+        int endTime = reservationTimes.stream()
+                .mapToInt(ReservationTime::getMeetTime)
+                .max()
+                .orElse(0);
+
+        reservationDTO.setStartTime(String.valueOf(startTime));
+        reservationDTO.setEndTime(String.valueOf(endTime));
+
+        return reservationDTO;
+    }
+
 
     //내 예약내역 전체조회
     public List<ReservationDTO> selectAllReservations(UserDTO userDTO) {
@@ -72,98 +101,101 @@ public class ReservationService {
     //예약내역추가
     @Transactional
     public String createReservation(ReservationDTO reservationDTO, UserDTO userDTO) {
-        System.out.println("userDTO service11111111111111111111111111111111 = " + userDTO);
-        // 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-
+        // 사용자 정보 매핑
         User user = modelMapper.map(userDTO, User.class);
-        // 예약 객체의 날짜 설정
 
-        MeetingTime meet = meetingTimeRepository.findByTime(reservationDTO.getStartTime());
-        MeetingTime meet1 = meetingTimeRepository.findByTime(reservationDTO.getEndTime());
-        Meet meet2 = meetRepository.findByMeetCode(reservationDTO.getMeetCode().getMeetCode());
-        System.out.println("meet1 = " + meet1);
-        System.out.println("meet2 = " + meet2);
-        System.out.println("meet = " + meet);
-        ArrayList<Integer> reservationForm = new ArrayList<>();
-        for (int i = meet.getMeetTime(); i <= meet1.getMeetTime(); i++) {
-            reservationForm.add(i);
-            System.out.println("i = " + i);
-        }
-        System.out.println("reservationForm = " + reservationForm);
-
+        // 예약 객체 생성 및 속성 설정
         Reservation reservation = new Reservation();
-        reservation.reservationDate(currentDate);
+        reservation.reservationDate(LocalDate.now());
         reservation.userCode(user);
-        reservation.meetCode(meet2);
+        // MeetCode를 문자열에서 정수형으로 변환하여 Meet 객체 조회하여 설정
+//        int meetCode = Integer.parseInt(String.valueOf(reservationDTO.getMeetCode()));
+        Meet meet = meetRepository.findByMeetCode(reservationDTO.getMeet().getMeetCode());
+        System.out.println("reservationDTO.getMeetCode().getMeetCode() = " + reservationDTO.getMeet().getMeetCode());
+        System.out.println("meet = " + meet);
+        reservation.meetCode(meet);
         reservation.reservationContent(reservationDTO.getReservationContent());
-        // 회의 시간 정보를 Reservation 엔티티에 설정
 
         // 예약 저장
-        Reservation result = reservationRepository.save(reservation);
+        Reservation savedReservation = reservationRepository.save(reservation);
 
 
-        for (int meetTime : reservationForm) {
-            ReservationTime reservationTime = new ReservationTime();
-            reservationTime.reservationCode(reservation.getReservationCode());
-            reservationTime.meetTime(meetTime);
-            reservationTimeRepository.save(reservationTime);
-
+        // 참석자 추가
+        if (reservationDTO.getMember() != null && reservationDTO.getMember().size() > 0) {
+            for (com.energizor.restapi.reservation.dto.UserDTO userId : reservationDTO.getMember()) {
+                User attendeeUser = userRepository.findByUserCode(userId.getUserCode());
+                if (attendeeUser != null) {
+                    Attendee attendee = new Attendee();
+                    attendee.setReservation(savedReservation);
+                    attendee.setUserCode(attendeeUser);
+                    attendeeRepository.save(attendee);
+                } else {
+                    // 사용자가 존재하지 않는 경우에 대한 처리
+                    System.out.println("참석자를 찾을 수 없습니다: " + userId);
+                }
+            }
         }
 
-        System.out.println("result22222222222222222222222 = " + result);
+        // 예약에 대한 시간대 추가
+        MeetingTime startTime = meetingTimeRepository.findByTime(reservationDTO.getStartTime());
+        MeetingTime endTime = meetingTimeRepository.findByTime(reservationDTO.getEndTime());
 
-        int[] attendeeUser = reservationDTO.getMember();
-        for (int i = 0; i < attendeeUser.length; i++){
-            User user123 = userRepository.findByUserCode(attendeeUser[i]);
-            System.out.println("user123 = " + user123);
-            Attendee attendee = new Attendee();
-            attendee.reservation(result);
-            attendee.userCode(user123);
-            attendeeRepository.save(attendee);
+        if (startTime != null && endTime != null) {
+            int startMeetTime = startTime.getMeetTime();
+            int endMeetTime = endTime.getMeetTime();
+            for (int meetTime = startMeetTime; meetTime <= endMeetTime; meetTime++) {
+                ReservationTime reservationTime = new ReservationTime();
+                reservationTime.setReservationCode(savedReservation.getReservationCode());
+                reservationTime.setMeetTime(meetTime);
+                reservationTimeRepository.save(reservationTime);
+            }
+        } else {
+            // 시작 시간 또는 종료 시간을 찾을 수 없는 경우에 대한 처리
+            System.out.println("시작 시간 또는 종료 시간을 찾을 수 없습니다.");
         }
 
-        return "등록성공";
+        return "등록 성공";
     }
 
     //예약내역 수정
-    @Transactional
-    public String updateReservation(ReservationDTO reservationDTO) {
-        // 현재 날짜 가져오기
-        LocalDate currentDate = LocalDate.now();
-        // 예약 객체의 날짜 설정
-        reservationDTO.setReservationDate(currentDate);
-
-        log.info("[ReservationService] updateReservation Start ===================================");
-        log.info("[ReservationService] ReservationDTO : " + reservationDTO);
-
-        Reservation reservation = reservationRepository.findById(reservationDTO.getReservationCode()).get();
-
-            attendeeRepository.deleteAllByReservationReservationCode(reservationDTO.getReservationCode());
-
-        int[] attendeeUser = reservationDTO.getMember();
-        for (int i = 0; i < attendeeUser.length; i++){
-
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa" + attendeeUser[i]);
-
-            User user123 = userRepository.findByUserCode(attendeeUser[i]);
-
-            System.out.println("user123 = " + user123);
-            Attendee attendee = new Attendee();
-            attendee.reservation(reservation);
-            attendee.userCode(user123);
-
-            attendeeRepository.save(attendee);
-        }
-        /* update를 위한 엔티티 값 수정 */
-        reservation = reservation.reservationCode(reservationDTO.getReservationCode())
-                .reservationDate(reservationDTO.getReservationDate())
-                .reservationContent(reservationDTO.getReservationContent())
-                .build();
-
-        return "Reservation updated successfully";
-
-    }
+//    @Transactional
+//    public String updateReservation(ReservationDTO reservationDTO) {
+//        // 현재 날짜 가져오기
+//        LocalDate currentDate = LocalDate.now();
+//        // 예약 객체의 날짜 설정
+//        reservationDTO.setReservationDate(currentDate);
+//
+//        log.info("[ReservationService] updateReservation Start ===================================");
+//        log.info("[ReservationService] ReservationDTO : " + reservationDTO);
+//
+//        Reservation reservation = reservationRepository.findById(reservationDTO.getReservationCode()).get();
+//
+//            attendeeRepository.deleteAllByReservationReservationCode(reservationDTO.getReservationCode());
+//
+//
+//        String[] attendeeUser = reservationDTO.getMember();
+//        for (int i = 0; i < attendeeUser.length; i++){
+//
+//            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaa" + attendeeUser[i]);
+//
+//            User user123 = userRepository.findByUserCode(Integer.parseInt(attendeeUser[Integer.valueOf(i)]));
+//
+//            System.out.println("user123 = " + user123);
+//            Attendee attendee = new Attendee();
+//            attendee.reservation(reservation);
+//            attendee.userCode(user123);
+//
+//            attendeeRepository.save(attendee);
+//        }
+//        /* update를 위한 엔티티 값 수정 */
+//        reservation = reservation.reservationCode(reservationDTO.getReservationCode())
+//                .reservationDate(reservationDTO.getReservationDate())
+//                .reservationContent(reservationDTO.getReservationContent())
+//                .build();
+//
+//        return "Reservation updated successfully";
+//
+//    }
     //참석자만 삭제
     @Transactional
     public String deleteAttendee(int reservationCode) {
