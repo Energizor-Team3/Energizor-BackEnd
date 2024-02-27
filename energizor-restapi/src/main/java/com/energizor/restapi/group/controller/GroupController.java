@@ -59,6 +59,8 @@ public class GroupController {
     @PostMapping("/dept-insert")
     public ResponseEntity<ResponseDTO> insertDept(@RequestBody DeptGroupDTO deptGroupDTO) {
 
+        System.out.println("부서추가값확인======="+ deptGroupDTO);
+
         return ResponseEntity.ok()
                 .body(new ResponseDTO(HttpStatus.OK, "부서 생성 성공" , groupService.insertDept(deptGroupDTO)));
     }

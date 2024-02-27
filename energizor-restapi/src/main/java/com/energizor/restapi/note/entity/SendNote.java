@@ -1,14 +1,11 @@
 package com.energizor.restapi.note.entity;
-
-
 import com.energizor.restapi.group.entity.UsersGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.Date;
-import java.util.List;
+import org.hibernate.annotations.CreationTimestamp;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "send_note")
@@ -29,15 +26,12 @@ public class SendNote {
     private String noteContent;
 
     @Column(name = "note_send_date")
-    private Date noteSendDate;
+    @CreationTimestamp
+    private Timestamp noteSendDate;
 
-    @JoinColumn(name = "user_code")
+    @JoinColumn(name = "send_user_code")
     @OneToOne
     private UsersGroup sendUserCode;
-
-    @JoinColumn(name = "user_code")
-    @OneToMany
-    private List<UsersGroup> renUserCode;
 
     public SendNote() {
     }
@@ -57,7 +51,7 @@ public class SendNote {
         return this;
     }
 
-    public SendNote noteSendDate(Date noteSendDate) {
+    public SendNote noteSendDate(Timestamp  noteSendDate) {
         this.noteSendDate = noteSendDate;
         return this;
     }
@@ -67,11 +61,7 @@ public class SendNote {
         return this;
     }
 
-    public SendNote renUserCode(List<UsersGroup> renUserCode) {
-        this.renUserCode = renUserCode;
-        return this;
-    }
     public SendNote build() {
-        return new SendNote(sendNoteCode, noteTitle, noteContent, noteSendDate, sendUserCode, renUserCode);
+        return new SendNote(sendNoteCode, noteTitle, noteContent, noteSendDate, sendUserCode);
     }
 }

@@ -1,8 +1,11 @@
 package com.energizor.restapi.group.entity;
+import com.energizor.restapi.note.dto.SendNoteDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+
+import java.util.List;
 
 @Entity(name="groupUsers")
 @Table(name = "users")
@@ -17,19 +20,15 @@ public class UsersGroup {
     @Id
     @Column(name = "user_code", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userCode;
+    private int userCode;
 
     @Column(name = "user_name")
     private String userName;
 
-    @JoinColumn(name = "team_code")
-    @ManyToOne
-    private TeamGroup teamGroup;
-
     public UsersGroup() {}
 
-    public UsersGroup userCode(Long userCode) {
-        this.userCode =userCode;
+    public UsersGroup userCode(int userCode) {
+        this.userCode = userCode;
         return this;
     }
 
@@ -38,13 +37,9 @@ public class UsersGroup {
         return this;
     }
 
-        public UsersGroup teamGroup(TeamGroup teamGroup) {
-        this.teamGroup = teamGroup;
-        return this;
+    public UsersGroup build() {
+        return new UsersGroup(userCode, userName);
     }
 
-    public UsersGroup build() {
-        return new UsersGroup(userCode, userName, teamGroup);
-    }
 
 }
