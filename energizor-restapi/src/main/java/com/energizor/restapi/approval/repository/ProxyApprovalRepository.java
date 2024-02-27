@@ -19,4 +19,6 @@ public interface ProxyApprovalRepository extends JpaRepository<ProxyApproval, In
     ProxyApproval findByOriginUserUserCodeAndProxyStatus(int userCode, String n);
 
     ProxyApproval findByProxyCode(int proxyCode);
+
+    ProxyApproval findByChangeUserUserCodeAndProxyStatus(int userCode, String y);
 }

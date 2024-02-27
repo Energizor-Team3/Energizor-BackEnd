@@ -379,6 +379,14 @@ public class ApprovalController {
     }
 
 
+    // 대리 결재할 시 상태값 Y인 대리자 확인용도 조회
+    @Operation(summary = "대리결재시 조건용 조회")
+    @GetMapping("/proxy2")
+    public ResponseEntity<ResponseDTO> proxy2(@AuthenticationPrincipal UserDTO userDTO)  {
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "대리결재 조회 성공", approvalService.selectProxy2(userDTO)));
+
+    }
 
 
 
