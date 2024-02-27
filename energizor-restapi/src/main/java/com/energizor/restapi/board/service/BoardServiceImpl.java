@@ -224,10 +224,12 @@ public class BoardServiceImpl implements BoardService{
 
                 Base64.Encoder encoder = Base64.getEncoder();
                 String data = "";
-                byte[] photoEncode = new byte[0];
+//                byte[] photoEncode = new byte[0];
                 try {
-                    photoEncode = encoder.encode(uploadFile.getBytes());
-                    data = new String(photoEncode, "UTF8");
+//                    photoEncode = encoder.encode(uploadFile.getBytes());
+//                    data = new String(photoEncode, "UTF8");
+                    byte[] photoBytes = uploadFile.getBytes();
+                    data = encoder.encodeToString(photoBytes);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -242,7 +244,7 @@ public class BoardServiceImpl implements BoardService{
                 boardFile.setFolderPath(folderPath);
                 boardFile.setFileType(uploadFile.getContentType());
                 boardFile.setFileSize((int) uploadFile.getSize());
-//                boardFile.setData(data);
+                boardFile.setData(data);
                 boardFile.setBoard(savedBoard);
 
 
@@ -319,14 +321,14 @@ public class BoardServiceImpl implements BoardService{
 
         Optional<List<BoardComment>> commentResult=boardCommentRepository.findByBoardCode(board.getBoardCode());
 
-            if(commentResult.isPresent()) {
-                List<BoardComment> commentEntity=commentResult.get();
+        if(commentResult.isPresent()) {
+            List<BoardComment> commentEntity=commentResult.get();
 
-                commentEntity.forEach(el-> {
-                    el.changeReplyDeleteDate(dateTime);
-                    boardCommentRepository.save(el);
-                });
-            }
+            commentEntity.forEach(el-> {
+                el.changeReplyDeleteDate(dateTime);
+                boardCommentRepository.save(el);
+            });
+        }
         board.changeBoardDeletedAt(dateTime);
 
         Board boardEntity=boardRepository.save(board);
@@ -500,15 +502,12 @@ public class BoardServiceImpl implements BoardService{
     public boolean deleteInterestBoard(int interestCode,int ownerCode) {
 
         InterestBoard interestBoard=interestBoardRepository.findByInterestCode(interestCode);
-
         User owner=userRepository.findByCode(ownerCode);
-
         interestBoard.owner(owner);
 
         if(interestBoard.getOwner().getUserCode()!=ownerCode) {
             throw new SecurityException("삭제 권한이 없습니다.");
         }
-
 
         interestBoardRepository.deleteById(interestCode);
 
