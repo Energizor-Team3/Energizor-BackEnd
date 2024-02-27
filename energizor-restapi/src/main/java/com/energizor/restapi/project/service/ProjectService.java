@@ -11,6 +11,7 @@ import com.energizor.restapi.project.repository.ProjectParticipantRepository;
 import com.energizor.restapi.project.repository.ProjectRepository;
 import com.energizor.restapi.project.repository.TaskRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -55,6 +56,20 @@ public class ProjectService {
         return projectDTO;
     }
 
+    public void deleteProject(int proNo) {
+
+        List<Task> tasks = taskRepository.findByProParNo_ProNo(proNo);
+        taskRepository.deleteAll(tasks);
+
+
+        List<ProjectParticipant> participants = projectParticipantRepository.findByProNo(proNo);
+        projectParticipantRepository.deleteAll(participants);
+
+
+        projectRepository.deleteById(proNo);
+    }
+
+
     public List<TaskDTO> findTasksByProjectNo(int proNo) {
         // 해당 프로젝트 번호에 해당하는 모든 업무를 조회합니다.
         List<Task> tasks = taskRepository.findByProParNo_ProNo(proNo);
@@ -68,4 +83,28 @@ public class ProjectService {
                     return taskDTO;
                 })
                 .collect(Collectors.toList());
-    }}
+    }
+
+    public void deleteTask(int taskNo) {
+        taskRepository.deleteById(taskNo);
+    }
+
+    @Transactional
+    public ProjectDTO addProject(ProjectDTO projectDTO) {
+
+        Project project = modelMapper.map(projectDTO, Project.class);
+        project = projectRepository.save(project);
+
+        // 프로젝트 참여자들 저장
+        for (ProjectParticipantDTO participantDTO : projectDTO.getParticipants()) {
+            ProjectParticipant participant = modelMapper.map(participantDTO, ProjectParticipant.class);
+            participant.setProject(project); // 이렇게 변경
+            projectParticipantRepository.save(participant);
+        }
+
+        // 저장된 프로젝트 정보를 다시 DTO로 변환하여 반환
+        return modelMapper.map(project, ProjectDTO.class);
+
+    }
+
+}

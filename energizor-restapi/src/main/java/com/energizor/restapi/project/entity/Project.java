@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -32,5 +35,8 @@ public class Project {
 
     @Column(name = "pro_status")
     private String proStatus;
+
+    @OneToMany(mappedBy = "project")
+    private List<ProjectParticipant> participants = new ArrayList<>();
 
 }

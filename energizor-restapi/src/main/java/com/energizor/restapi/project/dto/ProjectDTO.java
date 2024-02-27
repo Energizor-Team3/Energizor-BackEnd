@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -18,5 +19,7 @@ public class ProjectDTO {
     private Date proStartDate;
     private Date proEndDate;
     private String proStatus;
-    private List<ProjectParticipantDTO> participants;
+
+
+    private List<ProjectParticipantDTO> participants = new ArrayList<>();
 }
