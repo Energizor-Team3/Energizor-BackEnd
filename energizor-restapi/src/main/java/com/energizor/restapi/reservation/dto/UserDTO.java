@@ -4,12 +4,10 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Setter
+@Getter
 @ToString
-public class MeetDTO {
-    private int meetCode;
-    private String meetName;
-
-
+public class UserDTO {
+    private int userCode;
+    private String name;
 }

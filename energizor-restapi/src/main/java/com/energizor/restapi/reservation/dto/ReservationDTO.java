@@ -3,16 +3,20 @@ package com.energizor.restapi.reservation.dto;
 import com.energizor.restapi.reservation.entity.Meet;
 import com.energizor.restapi.reservation.entity.MeetingTime;
 import com.energizor.restapi.users.dto.UserDTO;
-import com.energizor.restapi.users.entity.User;
+
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 
 public class ReservationDTO {
 
@@ -20,19 +24,14 @@ public class ReservationDTO {
     private LocalDate reservationDate;
     private String reservationContent;
     private UserDTO userCode;
-    private MeetDTO meetCode;
-    private int[] member;
-    private int[] meetTime;
-    private String[] time;
+    private Meet meet;
+    private List<com.energizor.restapi.reservation.dto.UserDTO> member;
 
-    @Override
-    public String toString() {
-        return "ReservationDTO{" +
-                "reservationCode=" + reservationCode +
-                ", reservationDate=" + reservationDate +
-                ", reservationContent='" + reservationContent + '\'' +
-                '}';
-    }
+
+    private String startTime;
+    private String endTime;
+
+
 
     public ReservationDTO(int reservationCode) {
         this.reservationCode = reservationCode;

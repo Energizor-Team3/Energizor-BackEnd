@@ -24,7 +24,7 @@ public class MeetingTime {
 
     public MeetingTime() {}
 
-    public MeetingTime meetTIme(int meetTime){
+    public MeetingTime meetTime(int meetTime){
         this.meetTime = meetTime;
         return this;
     }
@@ -34,4 +34,12 @@ public class MeetingTime {
         return this;
     }
 
+    public void setMeetTime(int meetTime) {
+    }
+
+    public void setMeetingTime(int meetTime) {
+    }
+
+    public void setReservation(Reservation result) {
+    }
 }

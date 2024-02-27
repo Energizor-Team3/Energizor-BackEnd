@@ -1,9 +1,11 @@
 package com.energizor.restapi.reservation.entity;
 
+import com.energizor.restapi.users.dto.UserDTO;
 import com.energizor.restapi.users.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDate;
@@ -15,6 +17,7 @@ import java.util.List;
 @Table(name = "reservation")
 @AllArgsConstructor
 @Getter
+
 
 public class Reservation {
 
@@ -36,6 +39,8 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "meet_code")
     private Meet meetCode;
+
+
 
 
 
@@ -79,12 +84,10 @@ public class Reservation {
         return this;
     }
 
+
     public Reservation build() {
         return new Reservation(reservationCode,reservationDate,reservationContent,userCode,meetCode );
     }
-
-
-
 
 
 }
