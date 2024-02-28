@@ -3,6 +3,7 @@ package com.energizor.restapi.project.controller;
 import com.energizor.restapi.common.ResponseDTO;
 import com.energizor.restapi.project.dto.ProjectAndParticipantDTO;
 import com.energizor.restapi.project.dto.ProjectDTO;
+import com.energizor.restapi.project.dto.TaskDTO;
 import com.energizor.restapi.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -69,4 +70,23 @@ public class ProjectController {
         projectService.addProjectAndParticipants(projectAndParticipantDTO);
         return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "프로젝트 및 참여자 등록 성공", projectAndParticipantDTO));
     }
-}
+
+    @PostMapping("/addtask")
+    public ResponseEntity<TaskDTO> addTask(@RequestBody TaskDTO taskDTO) {
+        TaskDTO savedTask = projectService.addTask(taskDTO.getTaskContent(), taskDTO.getProParNo());
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTask);
+    }
+
+
+
+    @PatchMapping("/tasks/update/{taskNo}")
+    public ResponseEntity<ResponseDTO> updateTask(@PathVariable int taskNo, @RequestBody TaskDTO taskDTO) {
+        try {
+            TaskDTO updatedTask = projectService.updateTaskStatus(taskNo, taskDTO.getTaskStatus());
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "업무 업데이트 성공", updatedTask));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseDTO(HttpStatus.NOT_FOUND, "존재하지 않는 업무입니다", null));
+        }
+    }
+
+    }

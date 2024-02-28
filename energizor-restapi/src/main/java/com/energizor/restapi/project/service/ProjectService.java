@@ -75,6 +75,28 @@ public class ProjectService {
         projectRepository.deleteById(proNo);
     }
 
+    @Transactional
+    public TaskDTO addTask(String taskContent, int proParNo) {
+        ProjectParticipant participant = projectParticipantRepository.findById(proParNo)
+                .orElseThrow(() -> new EntityNotFoundException("Project Participant not found"));
+
+        Task newTask = new Task();
+        newTask.setTaskContent(taskContent);
+        newTask.setTaskStatus("T"); // 기본 상태 설정
+        newTask.setProParNo(participant); // 연관 관계 설정
+
+        taskRepository.save(newTask);
+
+        // TaskDTO 변환 로직
+        TaskDTO taskDTO = new TaskDTO();
+        taskDTO.setTaskNo(newTask.getTaskNo()); // ID 설정, 저장 후 생성된 ID
+        taskDTO.setTaskContent(newTask.getTaskContent());
+        taskDTO.setTaskStatus(newTask.getTaskStatus());
+        taskDTO.setProParNo(newTask.getProParNo().getProParNo()); // ProjectParticipant의 ID 설정
+
+
+        return taskDTO;
+    }
 
     public List<TaskDTO> findTasksByProjectNo(int proNo) {
         // 해당 프로젝트 번호에 해당하는 모든 업무를 조회합니다.
@@ -124,5 +146,24 @@ public class ProjectService {
         // 저장된 프로젝트를 DTO로 변환하여 반환
         return modelMapper.map(savedProject, ProjectDTO.class);
     }
+
+    @Transactional
+    public TaskDTO updateTaskStatus(int taskNo, String taskStatus) {
+        Task task = taskRepository.findById(taskNo)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found"));
+
+        task.setTaskStatus(taskStatus);
+        taskRepository.save(task);
+
+        TaskDTO taskDTO = modelMapper.map(task, TaskDTO.class);
+
+
+        return taskDTO;
+    }
+
+
+
+
+
 
 }
