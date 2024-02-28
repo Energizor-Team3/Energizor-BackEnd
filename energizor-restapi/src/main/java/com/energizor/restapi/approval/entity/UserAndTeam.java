@@ -35,6 +35,8 @@ public class UserAndTeam {
     @JoinColumn(name = "off_code")
     @OneToOne
     private DayOff dayOff;
+    @Column(name = "user_status")
+    private String userStatus;
 
     public UserAndTeam() {
     }
@@ -77,11 +79,14 @@ public class UserAndTeam {
         return this;
     }
 
-
+    public UserAndTeam dayOff(String userStatus) {
+        this.userStatus = userStatus;
+        return this;
+    }
 
 
 
     public UserAndTeam build() {
-        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, imgName, team, dayOff);
+        return new UserAndTeam(userCode, userId, userName, userRank, email, phone, imgName, team, dayOff,userStatus);
     }
 }

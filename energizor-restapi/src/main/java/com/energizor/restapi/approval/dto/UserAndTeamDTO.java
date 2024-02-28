@@ -19,4 +19,5 @@ public class UserAndTeamDTO {
     private String imgName;
     private DayOffDTO dayOff;
     private TeamDTO team;
+    private String userStatus;
 }
