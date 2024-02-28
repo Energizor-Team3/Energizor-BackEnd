@@ -12,6 +12,7 @@ public class UserGroupDTO {
 
     private int userCode;
     private String userName;
+    private String userStatus;
 
 
 

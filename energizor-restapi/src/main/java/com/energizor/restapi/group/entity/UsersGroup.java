@@ -22,14 +22,19 @@ public class UsersGroup {
     @Column(name = "user_name")
     private String userName;
 
+    @Column(name = "user_status")
+    private String userStatus;
+
     @JoinColumn(name = "team_code")
     @ManyToOne
     private TeamGroup teamGroup;
 
+
+
     public UsersGroup() {}
 
     public UsersGroup userCode(Long userCode) {
-        this.userCode =userCode;
+        this.userCode = userCode;
         return this;
     }
 
@@ -38,13 +43,17 @@ public class UsersGroup {
         return this;
     }
 
+    public UsersGroup userStatus(String userStatus) {
+        this.userStatus = userStatus;
+        return this;
+    }
         public UsersGroup teamGroup(TeamGroup teamGroup) {
         this.teamGroup = teamGroup;
         return this;
     }
 
     public UsersGroup build() {
-        return new UsersGroup(userCode, userName, teamGroup);
+        return new UsersGroup(userCode, userName, userStatus, teamGroup);
     }
 
 }
