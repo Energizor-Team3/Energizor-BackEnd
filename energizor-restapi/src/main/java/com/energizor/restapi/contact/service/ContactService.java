@@ -36,16 +36,6 @@ public class ContactService {
     }
     /*----------------------------------------------------------------------------------------------------------------*/
     /* 회사 연락처 목록 조회 */
-    // public List<CompanyContactDTO> findAllCompanyList() {
-    //     log.info("companyList start ==============================");
-    //     List<CompanyContact> companyContacts = companyContactRepository.findAll();
-    //
-    //     return companyContacts.stream()
-    //             .map(companyContact -> modelMapper.map(companyContact, CompanyContactDTO.class))
-    //             .collect(Collectors.toList());
-    // }
-
-    /* 수정본 */
     public List<UserDTO> findAllCompanyUserList() {
         log.info("company user list start --------------------------");
         List<User> users = userRepository.findAll();
@@ -97,8 +87,10 @@ public class ContactService {
     public PersonalContactDTO insert(int userCode, PersonalContactDTO personalContactDTO) {
         User user = userRepository.findById(userCode)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+
         PersonalContact personalContact = modelMapper.map(personalContactDTO, PersonalContact.class);
         personalContact.setUser(user);
+
         PersonalContact savedPersonalContact = personalContactRepository.save(personalContact);
         return modelMapper.map(savedPersonalContact, PersonalContactDTO.class);
     }
