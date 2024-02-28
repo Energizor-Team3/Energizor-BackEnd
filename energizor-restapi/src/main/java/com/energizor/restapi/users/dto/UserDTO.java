@@ -26,10 +26,10 @@ public class UserDTO implements UserDetails {
     private String email;
     private String phone;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date entDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Date resignDate;
 
     private String userStatus;
