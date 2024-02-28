@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,14 +24,11 @@ public class AttendanceService {
 
     private final CommuteRepository commuteRepository;
     private final UserAttendanceRepository userAttendanceRepository;
-
-
     private final ModelMapper modelMapper;
 
     public AttendanceService(CommuteRepository commuteRepository, UserAttendanceRepository userAttendanceRepository) {
         this.commuteRepository = commuteRepository;
         this.userAttendanceRepository = userAttendanceRepository;
-
         this.modelMapper = new ModelMapper();
     }
 
@@ -38,15 +39,15 @@ public class AttendanceService {
         log.info("allUsersList start ==========================");
         List<Commute> commuteList = commuteRepository.findAll();
 
-        ModelMapper modelMapper = new ModelMapper();
+        // ModelMapper modelMapper = new ModelMapper();
 
         // 충돌을 일으키는 매핑을 명시적으로 해결
-        modelMapper.typeMap(Commute.class, CommuteDTO.class)
-                .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
-                .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
-                .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
-                .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
-                .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
+        // modelMapper.typeMap(Commute.class, CommuteDTO.class)
+        //         .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
+        //         .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
+        //         .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
+        //         .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
+        //         .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
 
 
 
@@ -64,15 +65,15 @@ public class AttendanceService {
                 .orElseThrow(() -> new NotFoundException("User not found"));
         List<Commute> commuteList = commuteRepository.findByUser(user);
 
-        ModelMapper modelMapper = new ModelMapper();
+        // ModelMapper modelMapper = new ModelMapper();
 
         // 충돌을 일으키는 매핑을 명시적으로 해결
-        modelMapper.typeMap(Commute.class, CommuteDTO.class)
-                .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
-                .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
-                .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
-                .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
-                .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
+        // modelMapper.typeMap(Commute.class, CommuteDTO.class)
+        //         .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
+        //         .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
+        //         .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
+        //         .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
+        //         .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
 
 
         return commuteList.stream()
@@ -83,45 +84,37 @@ public class AttendanceService {
     /* 출근 등록 */
     @Transactional
     public CommuteDTO startRegister(int userCode, CommuteDTO commuteDTO) {
+
         // 사용자 조회
         User user = userAttendanceRepository.findById(userCode)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        // CommuteDTO를 Commute 엔티티로 매핑
+        // boolean hasRecordToday = commuteRepository.existsByUserAndCDate(user, LocalDate.now());
+        // if (hasRecordToday) {
+        //     throw new RuntimeException("오늘은 이미 출근하셨습니다.");
+        // }
+
         Commute commute = modelMapper.map(commuteDTO, Commute.class);
         commute.setUser(user);
+        commute.setCState("출근");
+        commute.setCEndTime(null);
 
-        commute.setCDate(commuteDTO.getCDate());
-        commute.setCStartTime(commuteDTO.getCStartTime());
-        // commute.setCEndTime(commuteDTO.getCEndTime());
-        commute.setCState(commuteDTO.getCState());
-        commute.setUser(user);
-
-        // Commute 엔티티 저장
         Commute savedCommute = commuteRepository.save(commute);
+
         return modelMapper.map(savedCommute, CommuteDTO.class);
     }
 
-    /* 퇴근 등록 */
+    /* 퇴근 등록(수정) */
+    @Transactional
     public CommuteDTO endRegister(int cCode, CommuteDTO commuteDTO) {
         Commute commute = commuteRepository.findById(cCode)
-                .orElseThrow(() -> new NotFoundException("commute not found"));
+                .orElseThrow(() -> new NotFoundException("Commute not found for cCode"));
 
         Commute endRegister = modelMapper.map(commuteDTO, Commute.class);
         endRegister.setCCode(cCode);
+        endRegister.setCState("퇴근");
+        endRegister.setCEndTime(LocalTime.now());
 
-        ModelMapper modelMapper = new ModelMapper();
-
-        // 충돌을 일으키는 매핑을 명시적으로 해결
-        modelMapper.typeMap(Commute.class, CommuteDTO.class)
-                .addMappings(mapping -> mapping.map(Commute::getCCode, CommuteDTO::setCCode))
-                .addMappings(mapping -> mapping.map(Commute::getCDate, CommuteDTO::setCDate))
-                // .addMappings(mapping -> mapping.map(Commute::getCStartTime, CommuteDTO::setCStartTime))
-                .addMappings(mapping -> mapping.map(Commute::getCEndTime, CommuteDTO::setCEndTime))
-                .addMappings(mapping -> mapping.map(Commute::getCState, CommuteDTO::setCState));
-
-        return modelMapper.map(commuteRepository.save(endRegister), CommuteDTO.class);
+        return modelMapper.map(commuteRepository.save(commute), CommuteDTO.class);
     }
-
-
 }

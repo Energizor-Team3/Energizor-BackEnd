@@ -1,5 +1,6 @@
 package com.energizor.restapi.attendance.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,14 +35,13 @@ public class Commute {
     @Column(name = "c_state")
     private String cState;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_code", nullable = false)
     private User user;
-
-
 
     public Commute() {
 
     }
+
 
 }
