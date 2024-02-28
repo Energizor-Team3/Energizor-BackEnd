@@ -25,7 +25,7 @@ public class ApprovalComment {
     private String acContent;
     @Column(name = "ac_date")
     private LocalDate acDate;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "document_code")
     private Document document;
     @ManyToOne

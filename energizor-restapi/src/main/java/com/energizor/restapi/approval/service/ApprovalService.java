@@ -589,7 +589,7 @@ public class ApprovalService {
         System.out.println("changeUser===================================== " + changeUser);
 
         // 대리결재자 조회
-        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserUserCode(changeUser.getUserCode());
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserUserCodeAndProxyStatus(changeUser.getUserCode(),"Y");
 
         System.out.println("proxyApproval========================= = " + proxyApproval);
 
@@ -666,7 +666,7 @@ public class ApprovalService {
             // 결재 상태 업데이트
             porxyApprovalLine.processingDate(LocalDateTime.now());
             porxyApprovalLine.approvalLineStatus("결재");
-            
+
             approvalLineRepository.save(porxyApprovalLine);
             System.out.println("porxyApprovalLine 업데이트 되었는지 확인 = " + porxyApprovalLine);
 
@@ -840,7 +840,7 @@ public class ApprovalService {
 
         User changeUser = modelMapper.map(userDTO, User.class);
 
-        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserAndProxyStatus(changeUser, "Y");
         if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y")) {
             // 해당 위임받은 결재문서 의 결재 상신 문서 리스트 조회
             List<Document> documents = documentRepository.findByUserDTOUserCode(proxyApproval.getOriginUser().getUserCode());
@@ -1258,9 +1258,9 @@ public class ApprovalService {
 
     // 문서 댓글 작성
     @Transactional
-    public String insertApprovalComment(int documentCode, ApprovalCommentDTO approvalCommentDTO, UserDTO userDTO) {
+    public String insertApprovalComment(ApprovalCommentDTO approvalCommentDTO, UserDTO userDTO) {
 
-        Document document = documentRepository.findByDocumentCode(documentCode);
+        Document document = documentRepository.findByDocumentCode(approvalCommentDTO.getDocument().getDocumentCode());
         User user = modelMapper.map(userDTO, User.class);
 
         ApprovalComment approvalComment = new ApprovalComment();
@@ -1707,7 +1707,7 @@ public class ApprovalService {
 
     }
 
-    public Object totaldocumentproceeding(UserDTO userDTO) {
+    public int totaldocumentproceeding(UserDTO userDTO) {
 
         List<ApprovalLine> approvalLines = approvalLineRepository.findByUserUserCode(userDTO.getUserCode());
 
@@ -1760,7 +1760,7 @@ public class ApprovalService {
 
         User changeUser = modelMapper.map(userDTO, User.class);
 
-        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUser(changeUser);
+        ProxyApproval proxyApproval = proxyApprovalRepository.findByChangeUserAndProxyStatus(changeUser, "Y");
         if (proxyApproval != null && proxyApproval.getProxyStatus().equals("Y")) {
             // 해당 위임받은 결재문서 의 결재 상신 문서 리스트 조회
             List<Document> documents = documentRepository.findByUserDTOUserCode(proxyApproval.getOriginUser().getUserCode());
@@ -1795,6 +1795,10 @@ public class ApprovalService {
 
             System.out.println("num 111111111111111111= " + num);
 
+            System.out.println("approvalComplete.size() = " + documentList3.size());
+            System.out.println("rejectionDocument.size() = " + documentList2.size());
+            System.out.println("documentList.size() = " + documentList.size());
+
             return num;
         }
 
@@ -1812,10 +1816,14 @@ public class ApprovalService {
                 documentList4.add(document1);
             }
         }
-        int num = documentList.size() + documentList2.size() + documentList4.size();
+        int num1 = documentList.size() + documentList2.size() + documentList4.size();
 
-        System.out.println("num 2222222222222222= " + num);
-        return num;
+        System.out.println("num 2222222222222222= " + num1);
+        System.out.println("documentList4.size() = " + documentList4.size());
+        System.out.println("documentList2.size() = " + documentList2.size());
+        System.out.println("documentList.size() = " + documentList.size());
+
+        return num1;
     }
 
     public Object selectfile(int documentCode) {
@@ -1849,5 +1857,22 @@ public class ApprovalService {
         }
 
         return "조회성공";
+    }
+
+    public Object selectComment(int documentCode) {
+
+        List<ApprovalComment> approvalComment = approvalCommentRepository.findByDocumentDocumentCode(documentCode);
+
+
+        System.out.println("approvalComment123123123 = " + approvalComment);
+
+        if (approvalComment == null ){
+            return "조회성공";
+        }
+
+
+        return approvalComment.stream()
+                .map(approvalComment1 -> modelMapper.map(approvalComment1, ApprovalCommentDTO.class))
+                .collect(Collectors.toList());
     }
 }

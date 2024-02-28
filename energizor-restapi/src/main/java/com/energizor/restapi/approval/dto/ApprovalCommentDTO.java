@@ -16,8 +16,8 @@ public class ApprovalCommentDTO {
     private int acCode;
     private String acContent;
     private LocalDate acDate;
-    private List<DocumentDTO> documentDTO;
-    private List<UserDTO> userDTO;
+    private DocumentDTO document;
+    private UserDTO user;
 
 
 }

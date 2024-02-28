@@ -314,10 +314,22 @@ public class ApprovalController {
 
     // 기안 문서에 댓글 달기
     @Operation(summary = "결재,반려 등 결재선에 지정된 결재자 댓글")
-    @PostMapping("/approvalComment/{documentCode}")
-    public ResponseEntity<ResponseDTO> approvalComment(@PathVariable int documentCode, @RequestBody ApprovalCommentDTO approvalCommentDTO, @AuthenticationPrincipal UserDTO userDTO){
+    @PostMapping("/approvalComment")
+    public ResponseEntity<ResponseDTO> approvalComment(@RequestBody ApprovalCommentDTO approvalCommentDTO, @AuthenticationPrincipal UserDTO userDTO){
 
-        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문서 댓글 작성 성공", approvalService.insertApprovalComment(documentCode, approvalCommentDTO, userDTO)));
+        System.out.println("approvalCommentDTO = " + approvalCommentDTO);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "문서 댓글 작성 성공", approvalService.insertApprovalComment(approvalCommentDTO, userDTO)));
+
+    }
+
+    // 댓글 조회
+    @Operation(summary = "댓글조회")
+    @GetMapping("/approvalComment1/{documentCode}")
+    public ResponseEntity<ResponseDTO> selectComment(@PathVariable int documentCode)  {
+        System.out.println("documentCode = " + documentCode);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "댓글 조회 성공", approvalService.selectComment(documentCode)));
 
     }
 

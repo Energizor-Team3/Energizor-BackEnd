@@ -10,4 +10,6 @@ public interface ApprovalCommentRepository extends JpaRepository<ApprovalComment
 
 
     List<ApprovalComment> findByDocument(Document document);
+
+    List<ApprovalComment> findByDocumentDocumentCode(int documentCode);
 }
