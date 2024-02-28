@@ -106,8 +106,9 @@ public class ReservationService {
 
         // 예약 객체 생성 및 속성 설정
         Reservation reservation = new Reservation();
-        reservation.reservationDate(LocalDate.now());
         reservation.userCode(user);
+        System.out.println("Reservation Date:4444444444444444444444 " + reservationDTO.getReservationDate());
+
         // MeetCode를 문자열에서 정수형으로 변환하여 Meet 객체 조회하여 설정
 //        int meetCode = Integer.parseInt(String.valueOf(reservationDTO.getMeetCode()));
         Meet meet = meetRepository.findByMeetCode(reservationDTO.getMeet().getMeetCode());
@@ -115,6 +116,9 @@ public class ReservationService {
         System.out.println("meet = " + meet);
         reservation.meetCode(meet);
         reservation.reservationContent(reservationDTO.getReservationContent());
+        reservation.reservationDate(reservationDTO.getReservationDate()); // 예약 날짜 설정
+        System.out.println("reservationDTO.getReservationDate()1111111111 = " + reservationDTO.getReservationDate());
+
 
         // 예약 저장
         Reservation savedReservation = reservationRepository.save(reservation);
